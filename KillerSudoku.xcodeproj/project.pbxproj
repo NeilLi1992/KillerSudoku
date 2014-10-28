@@ -17,6 +17,7 @@
 		230AD91219ED1E9B00648B01 /* GameBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 230AD91119ED1E9B00648B01 /* GameBoard.m */; };
 		230AD91319ED1E9B00648B01 /* GameBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 230AD91119ED1E9B00648B01 /* GameBoard.m */; };
 		230AD91519ED1F2700648B01 /* GameBoardTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 230AD91419ED1F2700648B01 /* GameBoardTests.m */; };
+		2374891019F65C3000A0DCE3 /* UnionFind.m in Sources */ = {isa = PBXBuildFile; fileRef = 2374890F19F65C3000A0DCE3 /* UnionFind.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,8 @@
 		230AD91019ED1E9B00648B01 /* GameBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameBoard.h; sourceTree = "<group>"; };
 		230AD91119ED1E9B00648B01 /* GameBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBoard.m; sourceTree = "<group>"; };
 		230AD91419ED1F2700648B01 /* GameBoardTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBoardTests.m; sourceTree = "<group>"; };
+		2374890E19F65C3000A0DCE3 /* UnionFind.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnionFind.h; sourceTree = "<group>"; };
+		2374890F19F65C3000A0DCE3 /* UnionFind.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnionFind.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +135,8 @@
 			children = (
 				230AD91019ED1E9B00648B01 /* GameBoard.h */,
 				230AD91119ED1E9B00648B01 /* GameBoard.m */,
+				2374890E19F65C3000A0DCE3 /* UnionFind.h */,
+				2374890F19F65C3000A0DCE3 /* UnionFind.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -238,6 +243,7 @@
 			files = (
 				230AD91219ED1E9B00648B01 /* GameBoard.m in Sources */,
 				230AD8ED19ED164E00648B01 /* ViewController.m in Sources */,
+				2374891019F65C3000A0DCE3 /* UnionFind.m in Sources */,
 				230AD8EA19ED164E00648B01 /* AppDelegate.m in Sources */,
 				230AD8E719ED164E00648B01 /* main.m in Sources */,
 			);
@@ -442,6 +448,7 @@
 				230AD90619ED164E00648B01 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		230AD90719ED164E00648B01 /* Build configuration list for PBXNativeTarget "KillerSudokuTests" */ = {
 			isa = XCConfigurationList;
@@ -450,6 +457,7 @@
 				230AD90919ED164E00648B01 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -7,15 +7,18 @@
 //
 
 #import "GameBoard.h"
+#import "UnionFind.h"
 
 @interface GameBoard()
 
 @property(nonatomic, strong)NSMutableArray* cells;
+@property(nonatomic, strong)NSMutableArray* cages;
 
 @end
 
 @implementation GameBoard
 
+#pragma mark Construct methods
 -(id)initWithCells:(NSArray*)cells {
     self = [super init];
     self.cells = [[NSMutableArray alloc] init];
@@ -43,7 +46,60 @@
         [self.cells addObject:newRow];
     }
     
+    [self buildCages:35 withMaxSize:7];
     return self;
+}
+
+/*!
+ *This method is called during the initialization to build cages division
+ *@returns An array of cages objects
+ *@param cageNumber The number of cages desired
+ *@param maxSize The maximum allowed size(inclusive) a single cage
+ */
+-(NSMutableArray*)buildCages:(NSInteger)cageNumber withMaxSize:(NSInteger)maxSize {
+    NSMutableArray* cages = [[NSMutableArray alloc] init];
+    
+    UnionFind* uf = [[UnionFind alloc] initWithCapacity: 81];
+    NSLog(@"Here");
+    while ([uf count] > cageNumber) {
+        NSInteger randomComponent = [uf getRandomComponentUnderSize:maxSize];
+        NSInteger deltaSize = maxSize - [uf sizeOfComponent:randomComponent];
+        
+        // Iterate all the indices in the random chosen component， in order to find a neighbor component to connect
+        for (NSNumber* index in [uf getIteratorForComponent:randomComponent]) {
+            // Calculat the positions of the index
+            NSInteger i = [index integerValue] / 9;
+            NSInteger j = [index integerValue] % 9;
+            
+            
+            
+            // Probe each of cells[i][j]'s neighboring cell to find a neighboring component
+            for (int delta_i = -1; delta_i <= 1; delta_i += 2) {
+                for (int delta_j = -1; delta_j <= 1; delta_j += 2) {
+                    // Ensure we are not going outside the board
+                    if (0 <= (i + delta_i) && (i + delta_i) < 9 && 0 <= (j + delta_j) && (j + delta_j) < 9) {
+                        NSInteger neighborIndex = 9 * (i + delta_i) + (j + delta_j);
+                        NSInteger neighborComponent = [uf find:neighborIndex];
+                        // Ensure we are in a real neighbor component, rather than still in the randomComponent, and its size satisfies the requirement.
+                        if (neighborComponent != randomComponent && [uf sizeOfComponent:neighborComponent] <= deltaSize) {
+                            // We find a neighbor component to connect with!
+                            [uf connect:randomComponent with:neighborComponent];
+                            goto SatisfiedNeighborComponentFound;
+                            
+                        }                    }
+                }
+            }
+        }
+        SatisfiedNeighborComponentFound:;
+        NSLog(@"UF count = %ld", [uf count]);
+    }
+    
+    // Now we have completed the connections of UF, we start to construct the cages array
+    NSLog(@"%@", uf);
+    
+    
+    
+    return cages;
 }
 
 -(NSNumber*)getNumAtRow:(NSInteger)row Column:(NSInteger)col {
