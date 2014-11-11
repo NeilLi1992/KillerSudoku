@@ -11,9 +11,9 @@
 
 @interface GameBoard()
 
-@property(nonatomic, strong)NSMutableArray* cells;
-@property(nonatomic, strong)NSMutableArray* cages;
-
+@property(nonatomic, strong)NSMutableArray* cells;  // cells array store all the numbers
+@property(nonatomic, strong)NSMutableArray* cages;  // cages array simply serve as an iterator
+@property(nonatomic, strong)UnionFind* uf;  // uf object can soles determines the state of the cage
 @end
 
 @implementation GameBoard
@@ -46,7 +46,15 @@
         [self.cells addObject:newRow];
     }
     
-    [self buildCages:35 withMaxSize:7];
+    self.cages = [[NSMutableArray alloc] init];
+    [self buildCages:28 withMaxSize:7];
+    
+    // Now the cages are divided
+    // Let's print some descriptions
+//    NSLog(@"\nGame board numbers description:\n%@", [self description]);
+//    NSLog(@"\nCages look up description:\n%@", [self cagesLookupDescription]);
+//    NSLog(@"\nCages division description:\n%@", [self cagesDescription]);
+    
     return self;
 }
 
@@ -56,61 +64,189 @@
  *@param cageNumber The number of cages desired
  *@param maxSize The maximum allowed size(inclusive) a single cage
  */
--(NSMutableArray*)buildCages:(NSInteger)cageNumber withMaxSize:(NSInteger)maxSize {
-    NSMutableArray* cages = [[NSMutableArray alloc] init];
+-(void)buildCages:(NSInteger)cageNumber withMaxSize:(NSInteger)maxSize {
     
-    UnionFind* uf = [[UnionFind alloc] initWithCapacity: 81];
-    NSLog(@"Here");
-    while ([uf count] > cageNumber) {
-        NSInteger randomComponent = [uf getRandomComponentUnderSize:maxSize];
-        NSInteger deltaSize = maxSize - [uf sizeOfComponent:randomComponent];
+//    UnionFind* uf = [[UnionFind alloc] initWithCapacity: 81];
+    self.uf = [[UnionFind alloc] initWithCapacity: 81];
+    
+    // The number of cages haven't been reduced to our desire
+    while ([self.uf count] > cageNumber) {
+        // Get the component identifier of a randomly chosen component which under the size limit
+        NSInteger randomComponent = [self.uf getRandomComponentUnderSize:maxSize];
+        // Calculate the left size for us to union a neighbor component
+        NSInteger deltaSize = maxSize - [self.uf sizeOfComponent:randomComponent];
         
-        // Iterate all the indices in the random chosen component， in order to find a neighbor component to connect
-        for (NSNumber* index in [uf getIteratorForComponent:randomComponent]) {
-            // Calculat the positions of the index
-            NSInteger i = [index integerValue] / 9;
-            NSInteger j = [index integerValue] % 9;
+        // Try a more random way to find a neighbor component to connect
+        
+        //Get the iterator which contains all the indices in the randomComponent
+        NSMutableArray* iterator = [self.uf getIteratorForComponent:randomComponent];
+        
+        while ([iterator count] > 0) {
+            // From the iterator, pop an index randomly
+            NSNumber* index = [iterator objectAtIndex:arc4random_uniform((uint)[iterator count])];
+            [iterator removeObject:index];
             
+            // Find all the indices for 4-way neighbors of index
+            NSMutableArray* neighbors = [self findFourNeighborsForCell:[index integerValue]];
             
-            
-            // Probe each of cells[i][j]'s neighboring cell to find a neighboring component
-            for (int delta_i = -1; delta_i <= 1; delta_i += 2) {
-                for (int delta_j = -1; delta_j <= 1; delta_j += 2) {
-                    // Ensure we are not going outside the board
-                    if (0 <= (i + delta_i) && (i + delta_i) < 9 && 0 <= (j + delta_j) && (j + delta_j) < 9) {
-                        NSInteger neighborIndex = 9 * (i + delta_i) + (j + delta_j);
-                        NSInteger neighborComponent = [uf find:neighborIndex];
-                        // Ensure we are in a real neighbor component, rather than still in the randomComponent, and its size satisfies the requirement.
-                        if (neighborComponent != randomComponent && [uf sizeOfComponent:neighborComponent] <= deltaSize) {
-                            // We find a neighbor component to connect with!
-                            [uf connect:randomComponent with:neighborComponent];
-                            goto SatisfiedNeighborComponentFound;
-                            
-                        }                    }
+            while ([neighbors count] > 0) {
+                // From the neighbors, pop a neighbor randomly
+                NSNumber* neighborIndex = [neighbors objectAtIndex:arc4random_uniform((uint)[neighbors count])];
+                [neighbors removeObject:neighborIndex];
+                
+                // If this neighbor is in a different component, and this component's size is in the size limit, we successfuly find a component to union
+                if ([self.uf find:[neighborIndex integerValue]] != randomComponent && [self.uf sizeOfComponent:[self.uf find:[neighborIndex integerValue]]] <= deltaSize) {
+                    [self.uf connect:[neighborIndex integerValue] with:randomComponent];
+                    goto SatisfiedNeighborComponentFound;
                 }
+                
             }
+
         }
         SatisfiedNeighborComponentFound:;
-        NSLog(@"UF count = %ld", [uf count]);
     }
     
     // Now we have completed the connections of UF, we start to construct the cages array
-    NSLog(@"%@", uf);
+    NSMutableArray* identifiers = [[NSMutableArray alloc] init];
+    for (int i = 0; i < 81; i++) {
+        if ( [identifiers containsObject:[NSNumber numberWithInteger:[self.uf find:i]]] == false) {
+            [identifiers addObject:[NSNumber numberWithInteger:[self.uf find:i]]];
+        }
+    }
     
-    
-    
-    return cages;
+    for (NSNumber* identifier in identifiers) {
+        [self.cages addObject:[self.uf getIteratorForComponent:[identifier integerValue]]];
+    }
 }
 
+/*!
+ * Return a new copy of the game
+ */
+-(GameBoard*)copy {
+    GameBoard* newBoard = [[GameBoard alloc] initWithCells:self.cells];
+    return newBoard;
+}
+
+#pragma mark Setter & Getter
+// Get an iterator for all cages. Each cage contains the indices of the cells contained within that cage.
+-(NSArray*)getIteratorForCages {
+    return [NSArray arrayWithArray:self.cages];
+}
+
+// Get cage identifier of a given position. Cage identifier is the root index in the uf of each cage
+-(NSNumber*)getCageIdAtRow:(NSInteger)row Column:(NSInteger)col {
+    NSInteger index = row * 9 + col;
+    return  [NSNumber numberWithInteger:[self.uf find:index]];
+}
+
+-(NSNumber*)getCageIdAtIndex:(NSNumber*)index {
+    return  [NSNumber numberWithInteger:[self.uf find:[index integerValue]]];
+}
+
+
+// Get the number of a given position.
 -(NSNumber*)getNumAtRow:(NSInteger)row Column:(NSInteger)col {
     return [[self.cells objectAtIndex:row] objectAtIndex:col];
     
 }
 
+-(NSNumber*)getNumAtIndex:(NSNumber*)index {
+    NSInteger row = [index integerValue] / 9;
+    NSInteger col = [index integerValue] % 9;
+    return [[self.cells objectAtIndex:row] objectAtIndex:col];
+}
+
+// Set the number of a given position.
 -(void)setNum:(NSNumber*)number AtRow:(NSInteger)row Column:(NSInteger)col {
     [[self.cells objectAtIndex:row] replaceObjectAtIndex:col withObject:number];
 }
 
+-(void)setNum:(NSNumber *)number AtIndex:(NSNumber*)index {
+    NSInteger row = [index integerValue] / 9;
+    NSInteger col = [index integerValue] % 9;
+    [[self.cells objectAtIndex:row] replaceObjectAtIndex:col withObject:number];
+}
+
+#pragma mark Helper methods
+/*!
+ * Find all the candidate numbers at a given position, according to the normal sudoku rules
+ */
+-(NSSet*)findCandidatesAtIndex:(NSNumber*)index {
+    NSInteger row = [index integerValue] / 9;
+    NSInteger col = [index integerValue] % 9;
+    return [self findCandidatesAtRow:row Column:col];
+}
+
+-(NSSet*)findCandidatesAtRow:(NSInteger)row Column:(NSInteger)col {
+    NSMutableSet* candidates = [[NSMutableSet alloc] init];
+    
+    //  If the cell is already filled, return the empty set directly
+    if ([[[self.cells objectAtIndex:row] objectAtIndex:col] intValue] == 0) {
+        for (int value = 1; value <= 9; value++) {
+            // Check the row for duplicate
+            NSMutableArray* checkingRow = [self.cells objectAtIndex:row];
+            if ([checkingRow containsObject:[NSNumber numberWithInt:value]]) {
+                continue;
+            }
+            
+            // Check the column for duplicate
+            for (int i = 0; i < 9; i++) {
+                if ([[[self.cells objectAtIndex:i] objectAtIndex:col] intValue] == value) {
+                    goto outerContinue;
+                }
+            }
+            
+            // Check the nonet for duplicate
+            int nonet = row / 3 * 3 + col / 3;
+            int i = nonet / 3 * 3;
+            int j = nonet % 3 * 3;
+            
+            for (int delta_i = 0; delta_i < 3; delta_i++) {
+                for (int delta_j = 0; delta_j < 3; delta_j++) {
+                    if ([[[self.cells objectAtIndex:(i + delta_i)] objectAtIndex:(j + delta_j)] intValue] == value) {
+                        goto outerContinue;
+                    }
+                }
+            }
+            
+            [candidates addObject:[NSNumber numberWithInt:value]];
+            
+        outerContinue:;
+        }
+    }
+    
+    return candidates;
+}
+
+/*!
+ * Find indices for all the neighboring cells for the given cage,
+ * which is represented by the cage id in the cagesLookup array
+ */
+-(NSMutableArray*)findNeighborCellsForCage:(NSNumber*)cageId {
+    NSMutableArray* neighborCells = [[NSMutableArray alloc] init];
+    
+    // Get all the indices within the given cage
+    NSArray* indices = [self.uf getIteratorForComponent:[cageId integerValue]];
+    
+    for (NSNumber* index in indices) {
+        // Find all the indices for 4-way neighbors of idnex
+        NSMutableArray* neighbors = [self findFourNeighborsForCell:[index integerValue]];
+        
+        for (NSNumber* neighborIndex in neighbors) {
+            if ([[self getCageIdAtIndex:neighborIndex] integerValue] != [cageId integerValue]) {
+                [neighborCells addObject:neighborIndex];
+            }
+        }
+    }
+    
+    return neighborCells;
+}
+
+
+
+/*!
+ * Test if the game is finished, only according to the normal sudoku rules now.
+ */
 -(Boolean)isFinished {
     // Build an array containing all the possible values 1 ~ 9
     NSMutableArray* values = [[NSMutableArray alloc] init];
@@ -162,11 +298,82 @@
         }
     }
     
-    
     return true;
 }
 
+/*!
+ * Find all the 4-way neighbors' indices for the given cell
+ */
+-(NSMutableArray*)findFourNeighborsForCell:(NSInteger)cellIndex {
+    NSMutableArray* neighbors = [[NSMutableArray alloc] init];
+    if ((cellIndex + 1) % 9 != 0) {
+        [neighbors addObject:[NSNumber numberWithInteger: cellIndex + 1]];
+    }
+    
+    if (cellIndex % 9 != 0) {
+        [neighbors addObject:[NSNumber numberWithInteger: cellIndex - 1]];
+    }
+    
+    if (cellIndex + 9 < 81) {
+        [neighbors addObject:[NSNumber numberWithInteger:cellIndex + 9]];
+    }
+    
+    if (cellIndex - 9 >= 0) {
+        [neighbors addObject:[NSNumber numberWithInteger:cellIndex - 9]];
+    }
+    return neighbors;
+}
 
+
+#pragma mark Description methods
+
+
+/*!
+ *Description of the gameBoard with cage divisions
+ */
+-(NSString*)cagesDescription {
+    
+    NSMutableString* description = [[NSMutableString alloc] init];
+    [description appendString:@"\n"];
+    
+    
+    for (int i = 0 ; i < 9; i++) {
+        NSMutableString* betweenLine = [[NSMutableString alloc] init];
+        for (int j = 0; j < 9; j++) {
+            // We only probe the cell right to it, and below it
+            if (j + 1 < 9 && ([self.uf find:(9 * i + j)] != [self.uf find:(9 * i + j + 1)])) {
+                // We need to add a split to cell's right side
+                [description appendFormat:@"%ld | ", (long)[[[self.cells objectAtIndex:i] objectAtIndex:j] integerValue]];
+            }
+            else {
+                // We doesn't need a split
+                [description appendFormat:@"%ld   ", (long)[[[self.cells objectAtIndex:i] objectAtIndex:j] integerValue]];
+            }
+            
+            
+            
+            if (i + 1 < 9 && ([self.uf find:(9 * i + j)] != [self.uf find:(9 * (i + 1) + j)])) {
+                // We need to add a split below the cell
+                [betweenLine appendString:@"--  "];
+            }
+            else {
+                [betweenLine appendString:@"    "];
+            }
+        }
+        // Need a line breaker
+        [description appendString:@"\n"];
+        [betweenLine appendString:@"\n"];
+        [description appendString:betweenLine];
+    }
+    
+    
+    
+    return [NSString stringWithString:description];
+}
+
+/*!
+ *Description of the gameBoard with only numbers
+ */
 
 - (NSString*)description {
     NSMutableString* description = [[NSMutableString alloc] init];
@@ -189,52 +396,39 @@
     return [NSString stringWithString:description];
 }
 
--(NSMutableSet*)findCandidatesAtRow:(NSInteger)row Column:(NSInteger)col {
-    NSMutableSet* candidates = [[NSMutableSet alloc] init];
-    
-    //  If the cell is already filled, return the empty set directly
-    if ([[[self.cells objectAtIndex:row] objectAtIndex:col] intValue] == 0) {
-        for (int value = 1; value <= 9; value++) {
-            // Check the row for duplicate
-            NSMutableArray* checkingRow = [self.cells objectAtIndex:row];
-            if ([checkingRow containsObject:[NSNumber numberWithInt:value]]) {
-                continue;
+/*!
+ * Return the description of cages lookup matrix. In each cell the number is the cage identifier
+ */
+- (NSString*)cagesLookupDescription {
+    NSMutableString* description = [[NSMutableString alloc] init];
+    [description appendString:@"\n    0  1  2    3  4  5    6  7  8 \n    - - - - - - - - - - - - - - - \n"];
+    for (int i = 0; i < 9; i++) {
+        [description appendString:[NSString stringWithFormat:@"%d | ",i,nil]];
+        for (int j = 0; j < 9; j++) {
+            [description appendFormat:@"%ld", (long)[self.uf find:(9 * i + j)]];
+            [description appendString:@" "];
+            if ([self.uf find:(9 * i + j)] < 10) {
+                [description appendString:@" "];
             }
-            
-            // Check the column for duplicate
-            for (int i = 0; i < 9; i++) {
-                if ([[[self.cells objectAtIndex:i] objectAtIndex:col] intValue] == value) {
-                    goto outerContinue;
-                }
+            if (j == 2 || j == 5) {
+                [description appendString:@"| "];
             }
-            
-            // Check the nonet for duplicate
-            int nonet = row / 3 * 3 + col / 3;
-            int i = nonet / 3 * 3;
-            int j = nonet % 3 * 3;
-            
-            for (int delta_i = 0; delta_i < 3; delta_i++) {
-                for (int delta_j = 0; delta_j < 3; delta_j++) {
-                    if ([[[self.cells objectAtIndex:(i + delta_i)] objectAtIndex:(j + delta_j)] intValue] == value) {
-                        goto outerContinue;
-                    }
-                }
-            }
-            
-            [candidates addObject:[NSNumber numberWithInt:value]];
-            
-        outerContinue:;
+        }
+        [description appendString:@"\n"];
+        if (i == 2 || i == 5) {
+            [description appendString:@"    - - - - - - - - - - - - - - -\n"];
         }
     }
     
-    return candidates;
+    [description appendString:@"\n"];
+    return [NSString stringWithString:description];
 }
 
--(GameBoard*)copy {
-    GameBoard* newBoard = [[GameBoard alloc] initWithCells:self.cells];
-    return newBoard;
+/*!
+ * Return the content stored in the cage array
+ */
+- (NSString*)cagesArrayDescription {
+    return [self.cages description];
 }
-
-
 
 @end

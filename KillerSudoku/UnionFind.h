@@ -17,7 +17,7 @@
 -(BOOL)isConnected:(NSInteger)p with:(NSInteger)q;
 -(NSInteger)getRandomComponentUnderSize:(NSInteger)sizeLimit;
 -(NSInteger)sizeOfComponent:(NSInteger)p;
--(NSArray*)getIteratorForComponent:(NSInteger)p;
+-(NSMutableArray*)getIteratorForComponent:(NSInteger)p;
 -(NSInteger)count;
 
 @end

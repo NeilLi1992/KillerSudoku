@@ -22,6 +22,11 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [AppDelegate testGameBoard];
     
+    NSMutableArray* keys = [[NSMutableArray alloc] initWithObjects:[NSNumber numberWithInt:3],[NSNumber numberWithInt:4],[NSNumber numberWithInt:5], nil];
+    NSNumber* sum = [NSNumber numberWithInt:10];
+    NSDictionary* testDict = [NSDictionary dictionaryWithObject:sum forKey:keys];
+    NSLog(@"%@", testDict);
+    
     return YES;
 }
 
@@ -74,8 +79,7 @@
     };
     
     GameBoard* gb = [[GameBoard alloc] initWithIntegerArray:GAME2];
-    
-//    NSLog(@"%@", gb);
+    NSLog(@"%@", [gb cagesArrayDescription]);
 }
 
 + (void)testUnionFind {

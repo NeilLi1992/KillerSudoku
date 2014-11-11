@@ -91,11 +91,9 @@
 			isa = PBXGroup;
 			children = (
 				230AD90C19ED190B00648B01 /* Model */,
+				2340E5B91A01474B00D56A3A /* View */,
 				230AD8E819ED164E00648B01 /* AppDelegate.h */,
 				230AD8E919ED164E00648B01 /* AppDelegate.m */,
-				230AD8EB19ED164E00648B01 /* ViewController.h */,
-				230AD8EC19ED164E00648B01 /* ViewController.m */,
-				230AD8EE19ED164E00648B01 /* Main.storyboard */,
 				230AD8F119ED164E00648B01 /* Images.xcassets */,
 				230AD8F319ED164E00648B01 /* LaunchScreen.xib */,
 				230AD8E419ED164E00648B01 /* Supporting Files */,
@@ -139,6 +137,16 @@
 				2374890F19F65C3000A0DCE3 /* UnionFind.m */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		2340E5B91A01474B00D56A3A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				230AD8EB19ED164E00648B01 /* ViewController.h */,
+				230AD8EC19ED164E00648B01 /* ViewController.m */,
+				230AD8EE19ED164E00648B01 /* Main.storyboard */,
+			);
+			name = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
