@@ -197,9 +197,9 @@
             }
             
             // Check the nonet for duplicate
-            int nonet = row / 3 * 3 + col / 3;
-            int i = nonet / 3 * 3;
-            int j = nonet % 3 * 3;
+            NSInteger nonet = row / 3 * 3 + col / 3;
+            NSInteger i = nonet / 3 * 3;
+            NSInteger j = nonet % 3 * 3;
             
             for (int delta_i = 0; delta_i < 3; delta_i++) {
                 for (int delta_j = 0; delta_j < 3; delta_j++) {

@@ -17,7 +17,11 @@
 		230AD91219ED1E9B00648B01 /* GameBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 230AD91119ED1E9B00648B01 /* GameBoard.m */; };
 		230AD91319ED1E9B00648B01 /* GameBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 230AD91119ED1E9B00648B01 /* GameBoard.m */; };
 		230AD91519ED1F2700648B01 /* GameBoardTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 230AD91419ED1F2700648B01 /* GameBoardTests.m */; };
+		2363BC291A1B3E430063F949 /* Solver.m in Sources */ = {isa = PBXBuildFile; fileRef = 2363BC281A1B3E430063F949 /* Solver.m */; };
+		236783781A124A0A00DF97F2 /* CageDivisionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 236783771A124A0A00DF97F2 /* CageDivisionViewController.m */; };
+		2367837B1A124CB300DF97F2 /* SolverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2367837A1A124CB300DF97F2 /* SolverViewController.m */; };
 		2374891019F65C3000A0DCE3 /* UnionFind.m in Sources */ = {isa = PBXBuildFile; fileRef = 2374890F19F65C3000A0DCE3 /* UnionFind.m */; };
+		237582961A1417660057C29B /* Constant.m in Sources */ = {isa = PBXBuildFile; fileRef = 237582951A1417660057C29B /* Constant.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,8 +51,16 @@
 		230AD91019ED1E9B00648B01 /* GameBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameBoard.h; sourceTree = "<group>"; };
 		230AD91119ED1E9B00648B01 /* GameBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBoard.m; sourceTree = "<group>"; };
 		230AD91419ED1F2700648B01 /* GameBoardTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBoardTests.m; sourceTree = "<group>"; };
+		2363BC271A1B3E430063F949 /* Solver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Solver.h; sourceTree = "<group>"; };
+		2363BC281A1B3E430063F949 /* Solver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Solver.m; sourceTree = "<group>"; };
+		236783761A124A0A00DF97F2 /* CageDivisionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CageDivisionViewController.h; sourceTree = "<group>"; };
+		236783771A124A0A00DF97F2 /* CageDivisionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CageDivisionViewController.m; sourceTree = "<group>"; };
+		236783791A124CB300DF97F2 /* SolverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SolverViewController.h; sourceTree = "<group>"; };
+		2367837A1A124CB300DF97F2 /* SolverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SolverViewController.m; sourceTree = "<group>"; };
 		2374890E19F65C3000A0DCE3 /* UnionFind.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnionFind.h; sourceTree = "<group>"; };
 		2374890F19F65C3000A0DCE3 /* UnionFind.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnionFind.m; sourceTree = "<group>"; };
+		237582941A1417660057C29B /* Constant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constant.h; sourceTree = "<group>"; };
+		237582951A1417660057C29B /* Constant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constant.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +109,8 @@
 				230AD8F119ED164E00648B01 /* Images.xcassets */,
 				230AD8F319ED164E00648B01 /* LaunchScreen.xib */,
 				230AD8E419ED164E00648B01 /* Supporting Files */,
+				237582941A1417660057C29B /* Constant.h */,
+				237582951A1417660057C29B /* Constant.m */,
 			);
 			path = KillerSudoku;
 			sourceTree = "<group>";
@@ -135,6 +149,8 @@
 				230AD91119ED1E9B00648B01 /* GameBoard.m */,
 				2374890E19F65C3000A0DCE3 /* UnionFind.h */,
 				2374890F19F65C3000A0DCE3 /* UnionFind.m */,
+				2363BC271A1B3E430063F949 /* Solver.h */,
+				2363BC281A1B3E430063F949 /* Solver.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -144,6 +160,10 @@
 			children = (
 				230AD8EB19ED164E00648B01 /* ViewController.h */,
 				230AD8EC19ED164E00648B01 /* ViewController.m */,
+				236783761A124A0A00DF97F2 /* CageDivisionViewController.h */,
+				236783771A124A0A00DF97F2 /* CageDivisionViewController.m */,
+				236783791A124CB300DF97F2 /* SolverViewController.h */,
+				2367837A1A124CB300DF97F2 /* SolverViewController.m */,
 				230AD8EE19ED164E00648B01 /* Main.storyboard */,
 			);
 			name = View;
@@ -249,11 +269,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2367837B1A124CB300DF97F2 /* SolverViewController.m in Sources */,
 				230AD91219ED1E9B00648B01 /* GameBoard.m in Sources */,
 				230AD8ED19ED164E00648B01 /* ViewController.m in Sources */,
 				2374891019F65C3000A0DCE3 /* UnionFind.m in Sources */,
 				230AD8EA19ED164E00648B01 /* AppDelegate.m in Sources */,
 				230AD8E719ED164E00648B01 /* main.m in Sources */,
+				236783781A124A0A00DF97F2 /* CageDivisionViewController.m in Sources */,
+				2363BC291A1B3E430063F949 /* Solver.m in Sources */,
+				237582961A1417660057C29B /* Constant.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
