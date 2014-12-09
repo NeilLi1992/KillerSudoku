@@ -11,6 +11,7 @@
 @interface GameBoard : NSObject
 
 // Construct methods
+-(id)initWithConfiguration:(NSMutableDictionary*)configuration;
 -(id)initWithCells:(NSArray*)cells;
 -(id)initWithIntegerArray:(int[9][9])array;
 -(GameBoard*)copy;
@@ -28,8 +29,8 @@
 -(void)setNum:(NSNumber *)number AtIndex:(NSNumber*)index;
 
 // Helper methods
--(NSSet*)findCandidatesAtRow:(NSInteger)row Column:(NSInteger)col;
--(NSSet*)findCandidatesAtIndex:(NSNumber*)index;
+-(NSMutableSet*)findCandidatesAtRow:(NSInteger)row Column:(NSInteger)col;
+-(NSMutableSet*)findCandidatesAtIndex:(NSNumber*)index;
 -(NSArray*)findNeighborCellsForCage:(NSNumber*)cageID;
 -(Boolean)isFinished;
 

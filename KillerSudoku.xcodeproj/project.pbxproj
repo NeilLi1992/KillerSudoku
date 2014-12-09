@@ -18,10 +18,15 @@
 		230AD91319ED1E9B00648B01 /* GameBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 230AD91119ED1E9B00648B01 /* GameBoard.m */; };
 		230AD91519ED1F2700648B01 /* GameBoardTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 230AD91419ED1F2700648B01 /* GameBoardTests.m */; };
 		2363BC291A1B3E430063F949 /* Solver.m in Sources */ = {isa = PBXBuildFile; fileRef = 2363BC281A1B3E430063F949 /* Solver.m */; };
+		2363BC2D1A1B412F0063F949 /* game1 in Resources */ = {isa = PBXBuildFile; fileRef = 2363BC2C1A1B412F0063F949 /* game1 */; };
 		236783781A124A0A00DF97F2 /* CageDivisionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 236783771A124A0A00DF97F2 /* CageDivisionViewController.m */; };
 		2367837B1A124CB300DF97F2 /* SolverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2367837A1A124CB300DF97F2 /* SolverViewController.m */; };
 		2374891019F65C3000A0DCE3 /* UnionFind.m in Sources */ = {isa = PBXBuildFile; fileRef = 2374890F19F65C3000A0DCE3 /* UnionFind.m */; };
 		237582961A1417660057C29B /* Constant.m in Sources */ = {isa = PBXBuildFile; fileRef = 237582951A1417660057C29B /* Constant.m */; };
+		2375D0C31A2135370044898A /* allSingleGame in Resources */ = {isa = PBXBuildFile; fileRef = 2375D0C21A2135370044898A /* allSingleGame */; };
+		2375D0C51A2141690044898A /* easy1 in Resources */ = {isa = PBXBuildFile; fileRef = 2375D0C41A2141690044898A /* easy1 */; };
+		23E2BC541A1B869C000342CE /* Combination.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E2BC531A1B869C000342CE /* Combination.m */; };
+		23E2BC561A1B8EED000342CE /* combination in Resources */ = {isa = PBXBuildFile; fileRef = 23E2BC551A1B8EED000342CE /* combination */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +58,7 @@
 		230AD91419ED1F2700648B01 /* GameBoardTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBoardTests.m; sourceTree = "<group>"; };
 		2363BC271A1B3E430063F949 /* Solver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Solver.h; sourceTree = "<group>"; };
 		2363BC281A1B3E430063F949 /* Solver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Solver.m; sourceTree = "<group>"; };
+		2363BC2C1A1B412F0063F949 /* game1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game1; sourceTree = "<group>"; };
 		236783761A124A0A00DF97F2 /* CageDivisionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CageDivisionViewController.h; sourceTree = "<group>"; };
 		236783771A124A0A00DF97F2 /* CageDivisionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CageDivisionViewController.m; sourceTree = "<group>"; };
 		236783791A124CB300DF97F2 /* SolverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SolverViewController.h; sourceTree = "<group>"; };
@@ -61,6 +67,11 @@
 		2374890F19F65C3000A0DCE3 /* UnionFind.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnionFind.m; sourceTree = "<group>"; };
 		237582941A1417660057C29B /* Constant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constant.h; sourceTree = "<group>"; };
 		237582951A1417660057C29B /* Constant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constant.m; sourceTree = "<group>"; };
+		2375D0C21A2135370044898A /* allSingleGame */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = allSingleGame; sourceTree = "<group>"; };
+		2375D0C41A2141690044898A /* easy1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = easy1; sourceTree = "<group>"; };
+		23E2BC521A1B869C000342CE /* Combination.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Combination.h; sourceTree = "<group>"; };
+		23E2BC531A1B869C000342CE /* Combination.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 1; path = Combination.m; sourceTree = "<group>"; };
+		23E2BC551A1B8EED000342CE /* combination */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; lineEnding = 1; path = combination; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +122,10 @@
 				230AD8E419ED164E00648B01 /* Supporting Files */,
 				237582941A1417660057C29B /* Constant.h */,
 				237582951A1417660057C29B /* Constant.m */,
+				2363BC2C1A1B412F0063F949 /* game1 */,
+				23E2BC551A1B8EED000342CE /* combination */,
+				2375D0C21A2135370044898A /* allSingleGame */,
+				2375D0C41A2141690044898A /* easy1 */,
 			);
 			path = KillerSudoku;
 			sourceTree = "<group>";
@@ -151,6 +166,8 @@
 				2374890F19F65C3000A0DCE3 /* UnionFind.m */,
 				2363BC271A1B3E430063F949 /* Solver.h */,
 				2363BC281A1B3E430063F949 /* Solver.m */,
+				23E2BC521A1B869C000342CE /* Combination.h */,
+				23E2BC531A1B869C000342CE /* Combination.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -249,6 +266,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2375D0C51A2141690044898A /* easy1 in Resources */,
+				23E2BC561A1B8EED000342CE /* combination in Resources */,
+				2363BC2D1A1B412F0063F949 /* game1 in Resources */,
+				2375D0C31A2135370044898A /* allSingleGame in Resources */,
 				230AD8F019ED164E00648B01 /* Main.storyboard in Resources */,
 				230AD8F519ED164E00648B01 /* LaunchScreen.xib in Resources */,
 				230AD8F219ED164E00648B01 /* Images.xcassets in Resources */,
@@ -278,6 +299,7 @@
 				236783781A124A0A00DF97F2 /* CageDivisionViewController.m in Sources */,
 				2363BC291A1B3E430063F949 /* Solver.m in Sources */,
 				237582961A1417660057C29B /* Constant.m in Sources */,
+				23E2BC541A1B869C000342CE /* Combination.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

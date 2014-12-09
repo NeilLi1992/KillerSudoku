@@ -7,7 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "GameBoard.h"
+#import "Constant.h"
+static NSTimeInterval startTime;
+static NSTimeInterval endTime;
 
 @interface Solver : NSObject
-
++ (GameBoard*)solve:(NSMutableDictionary*)configuration;
 @end

@@ -8,17 +8,60 @@
 
 #import "GameBoard.h"
 #import "UnionFind.h"
+#import "Combination.h"
 
 @interface GameBoard()
 
 @property(nonatomic, strong)NSMutableArray* cells;  // cells array store all the numbers
 @property(nonatomic, strong)NSMutableArray* cages;  // cages array simply serve as an iterator
 @property(nonatomic, strong)UnionFind* uf;  // uf object can soles determines the state of the cage
+@property(nonatomic, strong)NSMutableDictionary* sums;  //represent the sums of cages, store (key=cageId, value=sum) pair
+@property(nonatomic, strong)Combination* combination;   // a combination object for reference the combinations of sum
 @end
 
 @implementation GameBoard
 
 #pragma mark Construct methods
+// A default initializor which constructs an empty board
+-(id)init {
+    self = [super init];
+    self.cells = [[NSMutableArray alloc] init];
+    for (int i = 0; i < 9; i++) {
+        NSMutableArray* new_row = [[NSMutableArray alloc] init];
+        for (int j = 0; j< 9; j++) {
+            [new_row addObject:[NSNumber numberWithInt:0]];
+        }
+        [self.cells addObject:new_row];
+    }
+    return self;
+}
+
+/*!
+ * This initializor is called in the solver module.
+ * We construct an empty grid with a configuration dictionary
+ */
+-(id)initWithConfiguration:(NSMutableDictionary*)configuration {
+    self = [super init];
+    // Build an empty board
+    self.cells = [[NSMutableArray alloc] init];
+    for (int i = 0; i < 9; i++) {
+        NSMutableArray* new_row = [[NSMutableArray alloc] init];
+        for (int j = 0; j< 9; j++) {
+            [new_row addObject:[NSNumber numberWithInt:0]];
+        }
+        [self.cells addObject:new_row];
+    }
+    
+    // Init a combination object for reference
+    self.combination = [[Combination alloc] init];
+    
+    // Convert the configuration into an uf object
+    // Also build the sum dictionnary
+    [self storeConfiguration:configuration];
+    
+    return self;
+}
+
 -(id)initWithCells:(NSArray*)cells {
     self = [super init];
     self.cells = [[NSMutableArray alloc] init];
@@ -120,6 +163,33 @@
 }
 
 /*!
+ * This method can convert a configuration dictionary into an uf object, and build the cages iterator as well
+ */
+-(void)storeConfiguration:(NSMutableDictionary*)configuration {
+    self.uf = [[UnionFind alloc] initWithCapacity: 81];
+    self.sums = [[NSMutableDictionary alloc] init];
+    self.cages = [[NSMutableArray alloc] init];
+    
+    // Iterate the configuration dictionaires to build an uf object, and a sums dict connecting cageId to sum
+    for (NSArray* indices in configuration) {
+        NSNumber* sum = [configuration objectForKey:indices];
+        NSNumber* cageID = [indices objectAtIndex:0];
+        
+        // Connect each index with the cageID
+        for (NSNumber* index in indices) {
+            [self.uf connect:[index integerValue] with:[cageID integerValue]];
+        }
+        
+        // Add the iterator for the cage into cages
+        [self.cages addObject:[self.uf getIteratorForComponent:[cageID integerValue]]];
+        
+        // Add the (cageID, sum) pair into the sums dictionary
+        [self.sums setObject:sum forKey:cageID];
+    }
+
+}
+
+/*!
  * Return a new copy of the game
  */
 -(GameBoard*)copy {
@@ -171,50 +241,77 @@
 /*!
  * Find all the candidate numbers at a given position, according to the normal sudoku rules
  */
--(NSSet*)findCandidatesAtIndex:(NSNumber*)index {
+-(NSMutableSet*)findCandidatesAtIndex:(NSNumber*)index {
     NSInteger row = [index integerValue] / 9;
     NSInteger col = [index integerValue] % 9;
     return [self findCandidatesAtRow:row Column:col];
 }
 
--(NSSet*)findCandidatesAtRow:(NSInteger)row Column:(NSInteger)col {
+-(NSMutableSet*)findCandidatesAtRow:(NSInteger)row Column:(NSInteger)col {
     NSMutableSet* candidates = [[NSMutableSet alloc] init];
     
     //  If the cell is already filled, return the empty set directly
     if ([[[self.cells objectAtIndex:row] objectAtIndex:col] intValue] == 0) {
-        for (int value = 1; value <= 9; value++) {
-            // Check the row for duplicate
-            NSMutableArray* checkingRow = [self.cells objectAtIndex:row];
-            if ([checkingRow containsObject:[NSNumber numberWithInt:value]]) {
-                continue;
-            }
-            
-            // Check the column for duplicate
-            for (int i = 0; i < 9; i++) {
-                if ([[[self.cells objectAtIndex:i] objectAtIndex:col] intValue] == value) {
-                    goto outerContinue;
-                }
-            }
-            
-            // Check the nonet for duplicate
-            NSInteger nonet = row / 3 * 3 + col / 3;
-            NSInteger i = nonet / 3 * 3;
-            NSInteger j = nonet % 3 * 3;
-            
-            for (int delta_i = 0; delta_i < 3; delta_i++) {
-                for (int delta_j = 0; delta_j < 3; delta_j++) {
-                    if ([[[self.cells objectAtIndex:(i + delta_i)] objectAtIndex:(j + delta_j)] intValue] == value) {
-                        goto outerContinue;
-                    }
-                }
-            }
-            
-            [candidates addObject:[NSNumber numberWithInt:value]];
-            
-        outerContinue:;
+        // Otherwise, add 9 numbers into it by default
+        for (int i = 1; i <= 9; i++) {
+            [candidates addObject:[NSNumber numberWithInt:i]];
         }
+        
+        // Apply normal sudoku rules
+            // Check the row for duplicate
+        NSMutableArray* checkingRow = [self.cells objectAtIndex:row];
+        [candidates minusSet:[NSSet setWithArray:checkingRow]];
+        
+            // Check the column for duplicate
+        for (int i = 0; i < 9; i++) {
+            if ([candidates containsObject:[[self.cells objectAtIndex:i] objectAtIndex:col]]) {
+                [candidates removeObject:[[self.cells objectAtIndex:i] objectAtIndex:col]];
+            }
+        }
+        
+        if ([candidates count] == 0) {
+            // All 9 numbers excluded, no need for further checking
+            return candidates;
+        }
+        
+            // Check the nonet for duplicate
+        NSInteger nonet = row / 3 * 3 + col / 3;
+        NSInteger i = nonet / 3 * 3;
+        NSInteger j = nonet % 3 * 3;
+        for (int delta_i = 0; delta_i < 3; delta_i++) {
+            for (int delta_j = 0; delta_j < 3; delta_j++) {
+                if ([candidates containsObject:[[self.cells objectAtIndex:(i + delta_i)] objectAtIndex:(j + delta_j)]]) {
+                    [candidates removeObject:[[self.cells objectAtIndex:(i + delta_i)] objectAtIndex:(j + delta_j)]];
+                }
+            }
+        }
+        
+        if ([candidates count] == 0) {
+            // All 9 numbers excluded, no need for further checking
+            return candidates;
+        }
+
+        // Consider cages
+        NSNumber* cageID = [NSNumber numberWithInteger:[self.uf find:(row * 9 + col)]];
+        NSInteger cageSize = [self.uf sizeOfComponent:[cageID integerValue]];
+        NSInteger cageSum = [[self.sums objectForKey:cageID] integerValue];
+            // Get the iterator for this cage
+        NSArray* cageCells = [self.uf getIteratorForComponent:[cageID integerValue]];
+        for (NSNumber* cellIndex in cageCells) {
+            NSNumber* cellNumber = [self getNumAtIndex:cellIndex];
+            if ([cellNumber integerValue] != 0) {
+                cageSize--;
+                cageSum -= [cellNumber integerValue];
+            }
+        }
+        
+        NSArray* remainingCageCandidates = [self.combination allNumsOfCageSize:[NSNumber numberWithInteger:cageSize] withSum:[NSNumber numberWithInteger:cageSum]];
+        [candidates intersectSet:[NSSet setWithArray:remainingCageCandidates]];
+        
     }
-    
+    else {
+        NSLog(@"This cell is alreay filled, no candidates.");
+    }
     return candidates;
 }
 

@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "GameBoard.h"
 #import "UnionFind.h"
+#import "Solver.h"
+#import "Combination.h"
 
 @interface AppDelegate ()
 // Declare test methods
@@ -20,13 +22,14 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [AppDelegate testGameBoard];
+//    [AppDelegate testGameBoard];
     
-    NSMutableArray* keys = [[NSMutableArray alloc] initWithObjects:[NSNumber numberWithInt:3],[NSNumber numberWithInt:4],[NSNumber numberWithInt:5], nil];
-    NSNumber* sum = [NSNumber numberWithInt:10];
-    NSDictionary* testDict = [NSDictionary dictionaryWithObject:sum forKey:keys];
-    NSLog(@"%@", testDict);
-    
+//    NSMutableArray* keys = [[NSMutableArray alloc] initWithObjects:[NSNumber numberWithInt:3],[NSNumber numberWithInt:4],[NSNumber numberWithInt:5], nil];
+//    NSNumber* sum = [NSNumber numberWithInt:10];
+//    NSDictionary* testDict = [NSDictionary dictionaryWithObject:sum forKey:keys];
+//    NSLog(@"%@", testDict);
+//    [AppDelegate testSolver];
+    [AppDelegate testCombination];
     return YES;
 }
 
@@ -79,7 +82,7 @@
     };
     
     GameBoard* gb = [[GameBoard alloc] initWithIntegerArray:GAME2];
-    NSLog(@"%@", [gb cagesArrayDescription]);
+//    NSLog(@"%@", [gb cagesArrayDescription]);
 }
 
 + (void)testUnionFind {
@@ -87,22 +90,50 @@
     [uf connect:5 with:8];
     [uf connect:12 with:8];
     [uf connect:12 with:5];
-    
-    
-//    NSLog(@"%ld", [uf sizeOfComponent:12]);
-//    NSLog(@"%ld", [uf count]);
-    
+}
 
-
++ (void)testSolver {
+    // This dictionary stores all the information we need as an initial configuration
+    // From the configuration dictionary, we'll be able to construct an unsolvedGame variable of GameBoard class
+    // From the solver module, we'll return a solvedGame variable of GamBoard clas
+    NSMutableDictionary* configuration = [[NSMutableDictionary alloc] init];
     
-//    NSLog(@"%d", [uf isConnected:5 with:8]);
-//    NSLog(@"%ld", [uf count]);
-//    NSLog(@"%ld", [uf find:5]);
-//    NSLog(@"%ld", [uf find:8]);
-//    
-//    NSLog(@"%ld", [uf sizeOfComponent:6]);
-//    NSLog(@"%ld", [uf sizeOfComponent:5]);
-//    NSLog(@"%ld", [uf sizeOfComponent:8]);
+    NSString* str = [[NSString alloc] initWithContentsOfFile:@"/Users/neilli1992/Y3S1/Final Year Project/Code/KillerSudoku/KillerSudoku/game1" encoding:NSUTF8StringEncoding error:nil];
+    
+    // allSingleGame solved successfully
+//    NSString* str = [[NSString alloc] initWithContentsOfFile:@"/Users/neilli1992/Y3S1/Final Year Project/Code/KillerSudoku/KillerSudoku/allSingleGame" encoding:NSUTF8StringEncoding error:nil];
+    
+    //NSString* str = [[NSString alloc] initWithContentsOfFile:@"/Users/neilli1992/Y3S1/Final Year Project/Code/KillerSudoku/KillerSudoku/easy1" encoding:NSUTF8StringEncoding error:nil];
+    
+    // Do the following process block on each line
+    [str enumerateLinesUsingBlock:^(NSString* line, BOOL *stop){
+        NSArray* components = [line componentsSeparatedByString:@":"];
+        NSArray* indices = [[components objectAtIndex:0] componentsSeparatedByString:@","];
+        NSMutableArray* indicesSet = [[NSMutableArray alloc] init];
+        // Extract each index number and store in a set
+        for (NSString* indexStr in indices) {
+            NSNumber* index = [NSNumber numberWithInteger:[indexStr integerValue]];
+            [indicesSet addObject:index];
+        }
+        // Extraact the cage sum number
+        NSNumber* sum = [NSNumber numberWithInteger:[[components objectAtIndex:1] integerValue]];
+        
+        // Add the indices-sum pair into the dictionary
+        [configuration setObject:sum forKey:indicesSet];
+    }];
+    
+    // Now the game is read from the text file, and stored in the configuration dictionnary.
+    GameBoard* solvedGame = [Solver solve:configuration];
+}
+
++ (void)testCombination {
+    Combination* comb = [[Combination alloc] init];
+//    NSLog(@"%@", [comb allComsOfCageSize:[NSNumber numberWithInt:5] withSum:[NSNumber numberWithInt:22]]);
+//    NSLog(@"%@", [comb allNumsOfCageSize:[NSNumber numberWithInteger:4] withSum:[NSNumber numberWithInteger:10]]);
+//    NSDictionary* prob = [comb probabilityDistributionOfCageSize:[NSNumber numberWithInteger:4] withSum:[NSNumber numberWithInteger:20]];
+//    NSLog(@"%@", prob);
+    NSLog(@"%@", [comb allNumsOfCageSize:[NSNumber numberWithInt:4] withSum:[NSNumber numberWithInt:20]]);
+    NSLog(@"%@", [comb allComsOfCageSize:[NSNumber numberWithInt:4] withSum:[NSNumber numberWithInt:15]]);
 }
 
 @end
