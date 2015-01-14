@@ -11,6 +11,7 @@
 #import "UnionFind.h"
 #import "Solver.h"
 #import "Combination.h"
+#import "AlgorithmX.h"
 
 @interface AppDelegate ()
 // Declare test methods
@@ -28,8 +29,9 @@
 //    NSNumber* sum = [NSNumber numberWithInt:10];
 //    NSDictionary* testDict = [NSDictionary dictionaryWithObject:sum forKey:keys];
 //    NSLog(@"%@", testDict);
-//    [AppDelegate testSolver];
-    [AppDelegate testCombination];
+    [AppDelegate testSolver];
+//    [AppDelegate testCombination];
+//    [AlgorithmX test];
     return YES;
 }
 
@@ -94,16 +96,18 @@
 
 + (void)testSolver {
     // This dictionary stores all the information we need as an initial configuration
-    // From the configuration dictionary, we'll be able to construct an unsolvedGame variable of GameBoard class
+    // From the configuration dictionary, we'll be able to construct an unsolvedGame instance of GameBoard class
     // From the solver module, we'll return a solvedGame variable of GamBoard clas
     NSMutableDictionary* configuration = [[NSMutableDictionary alloc] init];
     
     NSString* str = [[NSString alloc] initWithContentsOfFile:@"/Users/neilli1992/Y3S1/Final Year Project/Code/KillerSudoku/KillerSudoku/game1" encoding:NSUTF8StringEncoding error:nil];
     
+//    NSString* str = [[NSString alloc] initWithContentsOfFile:@"/Users/neilli1992/Y3S1/Final Year Project/Code/KillerSudoku/KillerSudoku/game2" encoding:NSUTF8StringEncoding error:nil];
+    
     // allSingleGame solved successfully
 //    NSString* str = [[NSString alloc] initWithContentsOfFile:@"/Users/neilli1992/Y3S1/Final Year Project/Code/KillerSudoku/KillerSudoku/allSingleGame" encoding:NSUTF8StringEncoding error:nil];
     
-    //NSString* str = [[NSString alloc] initWithContentsOfFile:@"/Users/neilli1992/Y3S1/Final Year Project/Code/KillerSudoku/KillerSudoku/easy1" encoding:NSUTF8StringEncoding error:nil];
+//    NSString* str = [[NSString alloc] initWithContentsOfFile:@"/Users/neilli1992/Y3S1/Final Year Project/Code/KillerSudoku/KillerSudoku/easy1" encoding:NSUTF8StringEncoding error:nil];
     
     // Do the following process block on each line
     [str enumerateLinesUsingBlock:^(NSString* line, BOOL *stop){
