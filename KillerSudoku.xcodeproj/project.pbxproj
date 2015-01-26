@@ -20,6 +20,14 @@
 		231F001A1A666B56005886A1 /* Generator.m in Sources */ = {isa = PBXBuildFile; fileRef = 231F00191A666B56005886A1 /* Generator.m */; };
 		234BA0571A74EAD200B09F5B /* game3 in Resources */ = {isa = PBXBuildFile; fileRef = 234BA0561A74EAD200B09F5B /* game3 */; };
 		234BA05A1A74F0BD00B09F5B /* multiple_solutions in Resources */ = {isa = PBXBuildFile; fileRef = 234BA0591A74F0BD00B09F5B /* multiple_solutions */; };
+		234BA05D1A74FAF500B09F5B /* no_solution in Resources */ = {isa = PBXBuildFile; fileRef = 234BA05C1A74FAF500B09F5B /* no_solution */; };
+		234BA05F1A74FCDB00B09F5B /* level_50 in Resources */ = {isa = PBXBuildFile; fileRef = 234BA05E1A74FCDB00B09F5B /* level_50 */; };
+		234BA0611A74FD7800B09F5B /* level_10 in Resources */ = {isa = PBXBuildFile; fileRef = 234BA0601A74FD7800B09F5B /* level_10 */; };
+		234BA0631A74FDC000B09F5B /* level_80 in Resources */ = {isa = PBXBuildFile; fileRef = 234BA0621A74FDC000B09F5B /* level_80 */; };
+		234BA0651A74FE0B00B09F5B /* level_95 in Resources */ = {isa = PBXBuildFile; fileRef = 234BA0641A74FE0B00B09F5B /* level_95 */; };
+		234BA0671A74FE5400B09F5B /* level_0 in Resources */ = {isa = PBXBuildFile; fileRef = 234BA0661A74FE5400B09F5B /* level_0 */; };
+		234BA06A1A74FFD700B09F5B /* DfsByCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 234BA0691A74FFD700B09F5B /* DfsByCell.m */; };
+		234BA06D1A74FFE300B09F5B /* DfsByCage.m in Sources */ = {isa = PBXBuildFile; fileRef = 234BA06C1A74FFE300B09F5B /* DfsByCage.m */; };
 		2363BC291A1B3E430063F949 /* Solver.m in Sources */ = {isa = PBXBuildFile; fileRef = 2363BC281A1B3E430063F949 /* Solver.m */; };
 		2363BC2D1A1B412F0063F949 /* game1 in Resources */ = {isa = PBXBuildFile; fileRef = 2363BC2C1A1B412F0063F949 /* game1 */; };
 		236783781A124A0A00DF97F2 /* CageDivisionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 236783771A124A0A00DF97F2 /* CageDivisionViewController.m */; };
@@ -65,6 +73,16 @@
 		231F00191A666B56005886A1 /* Generator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Generator.m; sourceTree = "<group>"; };
 		234BA0561A74EAD200B09F5B /* game3 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game3; sourceTree = "<group>"; };
 		234BA0591A74F0BD00B09F5B /* multiple_solutions */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = multiple_solutions; sourceTree = "<group>"; };
+		234BA05C1A74FAF500B09F5B /* no_solution */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = no_solution; sourceTree = "<group>"; };
+		234BA05E1A74FCDB00B09F5B /* level_50 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = level_50; sourceTree = "<group>"; };
+		234BA0601A74FD7800B09F5B /* level_10 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = level_10; sourceTree = "<group>"; };
+		234BA0621A74FDC000B09F5B /* level_80 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = level_80; sourceTree = "<group>"; };
+		234BA0641A74FE0B00B09F5B /* level_95 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = level_95; sourceTree = "<group>"; };
+		234BA0661A74FE5400B09F5B /* level_0 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = level_0; sourceTree = "<group>"; };
+		234BA0681A74FFD700B09F5B /* DfsByCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DfsByCell.h; sourceTree = "<group>"; };
+		234BA0691A74FFD700B09F5B /* DfsByCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DfsByCell.m; sourceTree = "<group>"; };
+		234BA06B1A74FFE300B09F5B /* DfsByCage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DfsByCage.h; sourceTree = "<group>"; };
+		234BA06C1A74FFE300B09F5B /* DfsByCage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DfsByCage.m; sourceTree = "<group>"; };
 		2363BC271A1B3E430063F949 /* Solver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Solver.h; sourceTree = "<group>"; };
 		2363BC281A1B3E430063F949 /* Solver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Solver.m; sourceTree = "<group>"; };
 		2363BC2C1A1B412F0063F949 /* game1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game1; sourceTree = "<group>"; };
@@ -170,6 +188,7 @@
 		230AD90C19ED190B00648B01 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				234BA05B1A74F42C00B09F5B /* Solving Algorithms */,
 				230AD91019ED1E9B00648B01 /* GameBoard.h */,
 				230AD91119ED1E9B00648B01 /* GameBoard.m */,
 				2374890E19F65C3000A0DCE3 /* UnionFind.h */,
@@ -178,8 +197,6 @@
 				2363BC281A1B3E430063F949 /* Solver.m */,
 				23E2BC521A1B869C000342CE /* Combination.h */,
 				23E2BC531A1B869C000342CE /* Combination.m */,
-				2367B97F1A378BAA000852AC /* AlgorithmX.h */,
-				2367B9801A378BAA000852AC /* AlgorithmX.m */,
 				231F00181A666B56005886A1 /* Generator.h */,
 				231F00191A666B56005886A1 /* Generator.m */,
 			);
@@ -209,8 +226,27 @@
 				2363BC2C1A1B412F0063F949 /* game1 */,
 				23B927E01A38999400A64FAF /* game2 */,
 				234BA0591A74F0BD00B09F5B /* multiple_solutions */,
+				234BA05C1A74FAF500B09F5B /* no_solution */,
+				234BA05E1A74FCDB00B09F5B /* level_50 */,
+				234BA0601A74FD7800B09F5B /* level_10 */,
+				234BA0621A74FDC000B09F5B /* level_80 */,
+				234BA0641A74FE0B00B09F5B /* level_95 */,
+				234BA0661A74FE5400B09F5B /* level_0 */,
 			);
 			name = GameBoards;
+			sourceTree = "<group>";
+		};
+		234BA05B1A74F42C00B09F5B /* Solving Algorithms */ = {
+			isa = PBXGroup;
+			children = (
+				2367B97F1A378BAA000852AC /* AlgorithmX.h */,
+				2367B9801A378BAA000852AC /* AlgorithmX.m */,
+				234BA0681A74FFD700B09F5B /* DfsByCell.h */,
+				234BA0691A74FFD700B09F5B /* DfsByCell.m */,
+				234BA06B1A74FFE300B09F5B /* DfsByCage.h */,
+				234BA06C1A74FFE300B09F5B /* DfsByCage.m */,
+			);
+			name = "Solving Algorithms";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -293,16 +329,22 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				234BA0651A74FE0B00B09F5B /* level_95 in Resources */,
+				234BA05D1A74FAF500B09F5B /* no_solution in Resources */,
 				2375D0C51A2141690044898A /* easy1 in Resources */,
 				23B927E11A38999400A64FAF /* game2 in Resources */,
 				23E2BC561A1B8EED000342CE /* combination in Resources */,
+				234BA0611A74FD7800B09F5B /* level_10 in Resources */,
 				234BA0571A74EAD200B09F5B /* game3 in Resources */,
 				2363BC2D1A1B412F0063F949 /* game1 in Resources */,
 				2375D0C31A2135370044898A /* allSingleGame in Resources */,
 				230AD8F019ED164E00648B01 /* Main.storyboard in Resources */,
 				230AD8F519ED164E00648B01 /* LaunchScreen.xib in Resources */,
+				234BA05F1A74FCDB00B09F5B /* level_50 in Resources */,
 				230AD8F219ED164E00648B01 /* Images.xcassets in Resources */,
 				234BA05A1A74F0BD00B09F5B /* multiple_solutions in Resources */,
+				234BA0671A74FE5400B09F5B /* level_0 in Resources */,
+				234BA0631A74FDC000B09F5B /* level_80 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,12 +362,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				234BA06D1A74FFE300B09F5B /* DfsByCage.m in Sources */,
 				2367837B1A124CB300DF97F2 /* SolverViewController.m in Sources */,
 				230AD91219ED1E9B00648B01 /* GameBoard.m in Sources */,
 				230AD8ED19ED164E00648B01 /* ViewController.m in Sources */,
 				2374891019F65C3000A0DCE3 /* UnionFind.m in Sources */,
 				230AD8EA19ED164E00648B01 /* AppDelegate.m in Sources */,
 				231F001A1A666B56005886A1 /* Generator.m in Sources */,
+				234BA06A1A74FFD700B09F5B /* DfsByCell.m in Sources */,
 				230AD8E719ED164E00648B01 /* main.m in Sources */,
 				236783781A124A0A00DF97F2 /* CageDivisionViewController.m in Sources */,
 				2367B9811A378BAA000852AC /* AlgorithmX.m in Sources */,
