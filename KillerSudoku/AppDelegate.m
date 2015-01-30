@@ -10,6 +10,7 @@
 #import "GameBoard.h"
 #import "UnionFind.h"
 #import "Solver.h"
+#import "Generator.h"
 #import "Combination.h"
 #import "AlgorithmX.h"
 
@@ -31,7 +32,8 @@
 //    NSLog(@"%@", testDict);
     [AppDelegate testSolver];
 //    [AppDelegate testCombination];
-//    [AlgorithmX test];
+//    [AppDelegate testGenerator];
+    
     return YES;
 }
 
@@ -99,18 +101,14 @@
     // From the configuration dictionary, we'll be able to construct an unsolvedGame instance of GameBoard class
     // From the solver module, we'll return a solvedGame variable of GamBoard clas
     NSMutableDictionary* configuration = [[NSMutableDictionary alloc] init];
+    NSMutableString* game_file = [NSMutableString stringWithString:@"/Users/neilli1992/Y3S1/Final Year Project/Code/KillerSudoku/KillerSudoku/"];
+    NSString* game_name = @"level_50";
+    [game_file appendString:game_name];
     
-    NSString* str = [[NSString alloc] initWithContentsOfFile:@"/Users/neilli1992/Y3S1/Final Year Project/Code/KillerSudoku/KillerSudoku/game1" encoding:NSUTF8StringEncoding error:nil];
-    
-//    NSString* str = [[NSString alloc] initWithContentsOfFile:@"/Users/neilli1992/Y3S1/Final Year Project/Code/KillerSudoku/KillerSudoku/game2" encoding:NSUTF8StringEncoding error:nil];
-    
-    // allSingleGame solved successfully
-//    NSString* str = [[NSString alloc] initWithContentsOfFile:@"/Users/neilli1992/Y3S1/Final Year Project/Code/KillerSudoku/KillerSudoku/allSingleGame" encoding:NSUTF8StringEncoding error:nil];
-    
-//    NSString* str = [[NSString alloc] initWithContentsOfFile:@"/Users/neilli1992/Y3S1/Final Year Project/Code/KillerSudoku/KillerSudoku/easy1" encoding:NSUTF8StringEncoding error:nil];
+    NSString* file_content = [[NSString alloc] initWithContentsOfFile:game_file encoding:NSUTF8StringEncoding error:nil];
     
     // Do the following process block on each line
-    [str enumerateLinesUsingBlock:^(NSString* line, BOOL *stop){
+    [file_content enumerateLinesUsingBlock:^(NSString* line, BOOL *stop){
         NSArray* components = [line componentsSeparatedByString:@":"];
         NSArray* indices = [[components objectAtIndex:0] componentsSeparatedByString:@","];
         NSMutableArray* indicesSet = [[NSMutableArray alloc] init];
@@ -125,9 +123,23 @@
         // Add the indices-sum pair into the dictionary
         [configuration setObject:sum forKey:indicesSet];
     }];
+
+    // Construct an empty, unsolved game, and obtain an array of solutions.
+    // In valid situations, there should be only one solution
+    GameBoard* unsolvedGame = [[GameBoard alloc] initWithConfiguration:configuration];
     
-    // Now the game is read from the text file, and stored in the configuration dictionnary.
-    GameBoard* solvedGame = [Solver solve:configuration];
+    GameBoard* testGame = [[GameBoard alloc] initWithUF:[unsolvedGame getUF] andSums:[unsolvedGame getSum]];
+    
+    NSArray* solutions = [Solver solve:testGame];
+    
+    NSLog(@"Game solved with %ld solutions.", [solutions count]);
+    for (GameBoard* solution in solutions) {
+        NSLog(@"%@", solution);
+    }
+}
+
++ (void)testGenerator {
+    [Generator generate:0];
 }
 
 + (void)testCombination {
