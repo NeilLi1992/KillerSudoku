@@ -30,7 +30,7 @@
 //    NSNumber* sum = [NSNumber numberWithInt:10];
 //    NSDictionary* testDict = [NSDictionary dictionaryWithObject:sum forKey:keys];
 //    NSLog(@"%@", testDict);
-    [AppDelegate testSolver];
+//    [AppDelegate testSolver];
 //    [AppDelegate testCombination];
 //    [AppDelegate testGenerator];
     
@@ -102,7 +102,7 @@
     // From the solver module, we'll return a solvedGame variable of GamBoard clas
     NSMutableDictionary* configuration = [[NSMutableDictionary alloc] init];
     NSMutableString* game_file = [NSMutableString stringWithString:@"/Users/neilli1992/Y3S1/Final Year Project/Code/KillerSudoku/KillerSudoku/"];
-    NSString* game_name = @"level_50";
+    NSString* game_name = @"multiple_solutions_2";
     [game_file appendString:game_name];
     
     NSString* file_content = [[NSString alloc] initWithContentsOfFile:game_file encoding:NSUTF8StringEncoding error:nil];
@@ -139,7 +139,7 @@
 }
 
 + (void)testGenerator {
-    [Generator generate:0];
+    GameBoard* unsolvedGame = [Generator generate:0];
 }
 
 + (void)testCombination {

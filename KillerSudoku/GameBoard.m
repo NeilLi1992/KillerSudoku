@@ -7,14 +7,12 @@
 //
 
 #import "GameBoard.h"
-#import "UnionFind.h"
-#import "Combination.h"
 
 @interface GameBoard()
 
 @property(nonatomic, strong)NSMutableArray* cells;  // cells array store all the numbers
 @property(nonatomic, strong)NSMutableArray* cages;  // cages array simply serve as an iterator
-@property(nonatomic, strong)UnionFind* uf;  // uf object can soles determines the state of the cage
+@property(nonatomic, strong)UnionFind* uf;  // uf object can completely determines the state of the cage
 @property(nonatomic, strong)NSMutableDictionary* sums;  //represent the sums of cages, store (key=cageId, value=sum) pair
 @property(nonatomic, strong)Combination* combination;   // a combination object for reference the combinations of sum
 @end
@@ -33,6 +31,7 @@
         }
         [self.cells addObject:new_row];
     }
+    
     return self;
 }
 
@@ -62,16 +61,38 @@
     return self;
 }
 
+// To build an unsolved board, we need uf and sums
+-(id)initWithUF:(UnionFind*)uf andSums:(NSMutableDictionary*)sums {
+    self = [super init];
+    // Build an empty board
+    self.cells = [[NSMutableArray alloc] init];
+    for (int i = 0; i < 9; i++) {
+        NSMutableArray* new_row = [[NSMutableArray alloc] init];
+        for (int j = 0; j< 9; j++) {
+            [new_row addObject:[NSNumber numberWithInt:0]];
+        }
+        [self.cells addObject:new_row];
+    }
+
+    self.uf = [uf copy];
+    self.sums = [sums copy];
+    self.cages = [[NSMutableArray alloc] init];
+    self.combination = [[Combination alloc] init];
+    
+    NSArray* allCageIDs = [self.uf getAllComponents];
+    for (NSNumber* cageID in allCageIDs) {
+        NSArray* iterator = [self.uf getIteratorForComponent:[cageID integerValue]];
+        [self.cages addObject:iterator];
+    }
+    
+    return self;
+}
+
 -(id)initWithCells:(NSArray*)cells {
     self = [super init];
     self.cells = [[NSMutableArray alloc] init];
-
-    for (NSArray* row in cells) {
-        NSMutableArray* new_row = [[NSMutableArray alloc] init];
-        for (NSNumber* num in row) {
-            [new_row addObject:[NSNumber numberWithInt:[num intValue]]];
-        }
-        [self.cells addObject:new_row];
+    for (NSMutableArray* row in cells) {
+        [self.cells addObject:[NSMutableArray arrayWithArray:row]];
     }
     
     return self;
@@ -91,12 +112,6 @@
     
     self.cages = [[NSMutableArray alloc] init];
     [self buildCages:28 withMaxSize:7];
-    
-    // Now the cages are divided
-    // Let's print some descriptions
-//    NSLog(@"\nGame board numbers description:\n%@", [self description]);
-//    NSLog(@"\nCages look up description:\n%@", [self cagesLookupDescription]);
-//    NSLog(@"\nCages division description:\n%@", [self cagesDescription]);
     
     return self;
 }
@@ -129,7 +144,7 @@
             NSNumber* index = [iterator objectAtIndex:arc4random_uniform((uint)[iterator count])];
             [iterator removeObject:index];
             
-            // Find all the indices for 4-way neighbors of index
+            // Find all the indices for 4-way neighbors of index, indices out of range won't be selected
             NSMutableArray* neighbors = [self findFourNeighborsForCell:[index integerValue]];
             
             while ([neighbors count] > 0) {
@@ -144,7 +159,6 @@
                 }
                 
             }
-
         }
         SatisfiedNeighborComponentFound:;
     }
@@ -194,6 +208,11 @@
  */
 -(GameBoard*)copy {
     GameBoard* newBoard = [[GameBoard alloc] initWithCells:self.cells];
+    newBoard.cages = [NSMutableArray arrayWithArray:self.cages];
+    newBoard.uf = [self.uf copy];
+    newBoard.sums = [NSMutableDictionary dictionaryWithDictionary:self.sums];
+    newBoard.combination = [self.combination copy];
+    
     return newBoard;
 }
 
@@ -213,6 +232,16 @@
     return  [NSNumber numberWithInteger:[self.uf find:[index integerValue]]];
 }
 
+// Get cage sum for a given position.
+-(NSNumber*)getCageSumAtRow:(NSInteger)row Column:(NSInteger)col {
+    NSInteger index = row * 9 + col;
+    return [self getCageSumAtIndex:[NSNumber numberWithInteger:index]];
+}
+
+// Get cage sum for a given position.
+-(NSNumber*)getCageSumAtIndex:(NSNumber*)index {
+    return [self.sums objectForKey:[self getCageIdAtIndex:index]];
+}
 
 // Get the number of a given position.
 -(NSNumber*)getNumAtRow:(NSInteger)row Column:(NSInteger)col {
@@ -226,6 +255,11 @@
     return [[self.cells objectAtIndex:row] objectAtIndex:col];
 }
 
+// Get the combination object for reference purpose.
+-(Combination*)getCombination {
+    return self.combination;
+}
+
 // Set the number of a given position.
 -(void)setNum:(NSNumber*)number AtRow:(NSInteger)row Column:(NSInteger)col {
     [[self.cells objectAtIndex:row] replaceObjectAtIndex:col withObject:number];
@@ -235,6 +269,18 @@
     NSInteger row = [index integerValue] / 9;
     NSInteger col = [index integerValue] % 9;
     [[self.cells objectAtIndex:row] replaceObjectAtIndex:col withObject:number];
+}
+
+-(UnionFind*)getUF {
+    return self.uf;
+}
+
+-(NSMutableDictionary*)getSum {
+    return self.sums;
+}
+
+-(NSMutableArray*)getCells {
+    return self.cells;
 }
 
 #pragma mark Helper methods
@@ -290,7 +336,7 @@
             // All 9 numbers excluded, no need for further checking
             return candidates;
         }
-
+        
         // Consider cages
         NSNumber* cageID = [NSNumber numberWithInteger:[self.uf find:(row * 9 + col)]];
         NSInteger cageSize = [self.uf sizeOfComponent:[cageID integerValue]];
@@ -310,10 +356,11 @@
         
     }
     else {
-        NSLog(@"This cell is alreay filled, no candidates.");
+        //NSLog(@"This cell is alreay filled, no candidates.");
     }
     return candidates;
 }
+
 
 /*!
  * Find indices for all the neighboring cells for the given cage,
@@ -400,6 +447,7 @@
 
 /*!
  * Find all the 4-way neighbors' indices for the given cell
+ * Indices out of range won't be selected
  */
 -(NSMutableArray*)findFourNeighborsForCell:(NSInteger)cellIndex {
     NSMutableArray* neighbors = [[NSMutableArray alloc] init];

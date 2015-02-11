@@ -45,6 +45,14 @@
     return self;
 }
 
+-(UnionFind*)copy {
+    UnionFind* newUF = [UnionFind alloc];
+    newUF.components = [NSMutableArray arrayWithArray:self.components];
+    newUF.componentSizes = [NSMutableArray arrayWithArray:self.componentSizes];
+    newUF.componentNumber = [self.componentNumber copy];
+    return newUF;
+}
+
 #pragma mark Basic UF operations
 /*!
  *Quick union
@@ -142,7 +150,23 @@
     return iterator;
 }
 
+/*!
+ *Return an array containing all cageIDs
+ */
+-(NSMutableArray*)getAllComponents {
+    NSMutableArray* allComponents = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < [self.components count]; i++) {
+        if (i == [[self.components objectAtIndex:i] intValue]) {
+            [allComponents addObject:[NSNumber numberWithInt:i]];
+        }
+    }
+    return allComponents;
+}
 
+-(NSMutableArray*)getComponents {
+    return self.components;
+}
 
 #pragma mark Description method
 - (NSString*)description {

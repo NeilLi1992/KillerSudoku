@@ -13,5 +13,5 @@ static NSTimeInterval startTime;
 static NSTimeInterval endTime;
 
 @interface Solver : NSObject
-+ (GameBoard*)solve:(NSMutableDictionary*)configuration;
++ (NSArray*)solve:(GameBoard*)unsolvedGame;
 @end

@@ -13,5 +13,5 @@
 - (NSArray*)allComsOfCageSize:(NSNumber*)size withSum:(NSNumber*)sum;
 - (NSArray*)allNumsOfCageSize:(NSNumber*)size withSum:(NSNumber*)sum;
 - (NSDictionary*)probabilityDistributionOfCageSize:(NSNumber*)size withSum:(NSNumber*)sum;
-
+- (Combination*)copy;
 @end

@@ -169,6 +169,8 @@
             numLabel.text = [[self.gb getNumAtRow:i Column:j] stringValue];
             [cellView addSubview:numLabel];
             
+            NSLog(@"%@", self.gb);
+            
             // Set the cell's background according to colorMatrix
             cellView.backgroundColor = [self.candidateColors objectAtIndex:[[[colorMatrix objectAtIndex:i] objectAtIndex:j] integerValue]];
             
@@ -181,6 +183,7 @@
 }
 
 - (IBAction)generateBtnPressed:(id)sender {
+    // This is a stumb random generation method for cell numbers
     int new[9][9];
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {

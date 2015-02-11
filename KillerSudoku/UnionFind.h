@@ -11,6 +11,8 @@
 @interface UnionFind : NSObject
 
 -(id)initWithCapacity:(NSInteger)capacity;
+-(UnionFind*)copy;
+
 -(void)connect:(NSInteger)p with:(NSInteger)q;
 -(NSInteger)find:(NSInteger)p;
 
@@ -18,6 +20,8 @@
 -(NSInteger)getRandomComponentUnderSize:(NSInteger)sizeLimit;
 -(NSInteger)sizeOfComponent:(NSInteger)p;
 -(NSMutableArray*)getIteratorForComponent:(NSInteger)p;
+-(NSMutableArray*)getAllComponents;
+-(NSMutableArray*)getComponents;
 -(NSInteger)count;
 
 @end

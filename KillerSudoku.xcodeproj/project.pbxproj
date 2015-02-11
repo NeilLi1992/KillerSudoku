@@ -40,6 +40,8 @@
 		23B927E11A38999400A64FAF /* game2 in Resources */ = {isa = PBXBuildFile; fileRef = 23B927E01A38999400A64FAF /* game2 */; };
 		23E2BC541A1B869C000342CE /* Combination.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E2BC531A1B869C000342CE /* Combination.m */; };
 		23E2BC561A1B8EED000342CE /* combination in Resources */ = {isa = PBXBuildFile; fileRef = 23E2BC551A1B8EED000342CE /* combination */; };
+		23F0FC8E1A8ABCBC0034322F /* NewGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23F0FC8D1A8ABCBC0034322F /* NewGameViewController.m */; };
+		23F0FC931A8ACE870034322F /* multiple_solutions_2 in Resources */ = {isa = PBXBuildFile; fileRef = 23F0FC921A8ACE870034322F /* multiple_solutions_2 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +104,9 @@
 		23E2BC521A1B869C000342CE /* Combination.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Combination.h; sourceTree = "<group>"; };
 		23E2BC531A1B869C000342CE /* Combination.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 1; path = Combination.m; sourceTree = "<group>"; };
 		23E2BC551A1B8EED000342CE /* combination */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; lineEnding = 1; path = combination; sourceTree = "<group>"; };
+		23F0FC8C1A8ABCBC0034322F /* NewGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewGameViewController.h; sourceTree = "<group>"; };
+		23F0FC8D1A8ABCBC0034322F /* NewGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewGameViewController.m; sourceTree = "<group>"; };
+		23F0FC921A8ACE870034322F /* multiple_solutions_2 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = multiple_solutions_2; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -210,6 +215,8 @@
 				230AD8EC19ED164E00648B01 /* ViewController.m */,
 				236783761A124A0A00DF97F2 /* CageDivisionViewController.h */,
 				236783771A124A0A00DF97F2 /* CageDivisionViewController.m */,
+				23F0FC8C1A8ABCBC0034322F /* NewGameViewController.h */,
+				23F0FC8D1A8ABCBC0034322F /* NewGameViewController.m */,
 				236783791A124CB300DF97F2 /* SolverViewController.h */,
 				2367837A1A124CB300DF97F2 /* SolverViewController.m */,
 				230AD8EE19ED164E00648B01 /* Main.storyboard */,
@@ -232,6 +239,7 @@
 				234BA0621A74FDC000B09F5B /* level_80 */,
 				234BA0641A74FE0B00B09F5B /* level_95 */,
 				234BA0661A74FE5400B09F5B /* level_0 */,
+				23F0FC921A8ACE870034322F /* multiple_solutions_2 */,
 			);
 			name = GameBoards;
 			sourceTree = "<group>";
@@ -337,6 +345,7 @@
 				234BA0611A74FD7800B09F5B /* level_10 in Resources */,
 				234BA0571A74EAD200B09F5B /* game3 in Resources */,
 				2363BC2D1A1B412F0063F949 /* game1 in Resources */,
+				23F0FC931A8ACE870034322F /* multiple_solutions_2 in Resources */,
 				2375D0C31A2135370044898A /* allSingleGame in Resources */,
 				230AD8F019ED164E00648B01 /* Main.storyboard in Resources */,
 				230AD8F519ED164E00648B01 /* LaunchScreen.xib in Resources */,
@@ -372,6 +381,7 @@
 				234BA06A1A74FFD700B09F5B /* DfsByCell.m in Sources */,
 				230AD8E719ED164E00648B01 /* main.m in Sources */,
 				236783781A124A0A00DF97F2 /* CageDivisionViewController.m in Sources */,
+				23F0FC8E1A8ABCBC0034322F /* NewGameViewController.m in Sources */,
 				2367B9811A378BAA000852AC /* AlgorithmX.m in Sources */,
 				2363BC291A1B3E430063F949 /* Solver.m in Sources */,
 				237582961A1417660057C29B /* Constant.m in Sources */,

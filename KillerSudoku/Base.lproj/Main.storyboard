@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="6DK-fJ-0rC">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="6DK-fJ-0rC">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
     <scenes>
         <!--Debug-->
@@ -32,6 +32,15 @@
                                 </state>
                                 <connections>
                                     <segue destination="tK3-FB-xhR" kind="push" id="Bc1-K8-mnF"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kv2-Sa-C9z">
+                                <rect key="frame" x="16" y="148" width="76" height="30"/>
+                                <state key="normal" title="New Game">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="Ga6-ta-xAe" kind="push" id="vbx-yO-w4m"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -94,6 +103,25 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GmO-64-fyA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1215" y="664"/>
+        </scene>
+        <!--New Game View Controller-->
+        <scene sceneID="HYo-dJ-NCL">
+            <objects>
+                <viewController id="Ga6-ta-xAe" customClass="NewGameViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="0ME-Sh-YB2"/>
+                        <viewControllerLayoutGuide type="bottom" id="iIf-vs-oUF"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="AK2-Vs-gNs">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="FJi-DH-vOo"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NKv-GB-bhe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1225" y="1328"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="b5V-Pt-sIZ">
