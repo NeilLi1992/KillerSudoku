@@ -15,6 +15,7 @@
 @property(strong, nonatomic)UIView* controlView;
 @property(strong, nonatomic)NSMutableArray* boardCells;
 @property(strong, nonatomic)GameBoard* unsolvedGame;
+@property(strong, nonatomic)UIButton* selectedCell;
 @end
 
 @implementation NewGameViewController
@@ -35,6 +36,7 @@
                             [UIColor redColor],
                             [UIColor purpleColor],nil];
     self.boardCells = [[NSMutableArray alloc] init];
+    self.selectedCell = nil;
     
     // Call generator to generate a game
     self.unsolvedGame = [Generator generate:level];
@@ -81,17 +83,18 @@
     for (int i = 0; i < 9; i++) {
         [self.boardCells addObject:[[NSMutableArray alloc] init]];
         for (int j = 0; j < 9; j++) {
-            // Generate a cellView and set it properly
-            UIView* cellView = [[UIView alloc] initWithFrame:CGRectMake(j * cellLength, i * cellLength + baseY, cellLength, cellLength)];
-            cellView.layer.borderColor = [UIColor blackColor].CGColor;
-            cellView.layer.borderWidth = 0.5f;
+            // Generate a cellBtn and set it properly
+            UIButton* cellBtn = [[UIButton alloc] initWithFrame:CGRectMake(j * cellLength, i * cellLength + baseY, cellLength, cellLength)];
+            cellBtn.layer.borderColor = [UIColor blackColor].CGColor;
+            cellBtn.layer.borderWidth = 0.5f;
             
             // Set the cell's background according to colorMatrix
-            cellView.backgroundColor = [self.candidateColors objectAtIndex:[[[colorMatrix objectAtIndex:i] objectAtIndex:j] integerValue]];
+            cellBtn.backgroundColor = [self.candidateColors objectAtIndex:[[[colorMatrix objectAtIndex:i] objectAtIndex:j] integerValue]];
             
             // Save it in the boardCells array
-            [[self.boardCells objectAtIndex:i] addObject:cellView];
-            [self.view addSubview:cellView];
+            [[self.boardCells objectAtIndex:i] addObject:cellBtn];
+            [self.view addSubview:cellBtn];
+            [cellBtn addTarget:self action:@selector(cellTouched:) forControlEvents:UIControlEventTouchDown ];
         }
     }
     
@@ -111,11 +114,11 @@
         NSInteger col = [firstIndex integerValue] % 9;
         NSNumber* sum = [self.unsolvedGame getCageSumAtIndex:cageId];
         
-        UIView* cellView = [[self.boardCells objectAtIndex:row] objectAtIndex:col];
+        UIButton* cellBtn = [[self.boardCells objectAtIndex:row] objectAtIndex:col];
         UILabel* sumLabel = [[UILabel alloc] initWithFrame:CGRectMake(3, -2, 20, 20)];
         [sumLabel setFont:[UIFont systemFontOfSize:8]];
         sumLabel.text = [sum stringValue];
-        [cellView addSubview:sumLabel];
+        [cellBtn addSubview:sumLabel];
     }
     
 }
@@ -160,6 +163,25 @@
     }
     
     return [NSArray arrayWithArray:colorMatrix];
+}
+
+#pragma -mark action handlers
+
+- (void)cellTouched:(UIButton *)sender {
+    if (self.selectedCell != nil) {
+        [[self.selectedCell viewWithTag:5] removeFromSuperview];
+    }
+    self.selectedCell = sender;
+    
+    NSLog(@"get action");
+    UIView* insideBorderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, sender.frame.size.width, sender.frame.size.height)];
+    insideBorderView.backgroundColor = [UIColor clearColor];
+    insideBorderView.layer.borderWidth = 2.0f;
+    insideBorderView.layer.borderColor = [UIColor blueColor].CGColor;
+    insideBorderView.tag = 5;
+    insideBorderView.clipsToBounds = YES;
+    insideBorderView.layer.zPosition = 100;
+    [sender addSubview:insideBorderView];
 }
 
 

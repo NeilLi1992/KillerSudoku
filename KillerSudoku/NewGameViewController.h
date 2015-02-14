@@ -12,5 +12,4 @@
 #import "Solver.h"
 
 @interface NewGameViewController : UIViewController
-
 @end
