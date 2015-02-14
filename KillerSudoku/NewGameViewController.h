@@ -10,6 +10,7 @@
 #import "GameBoard.h"
 #import "Generator.h"
 #import "Solver.h"
+#import "Combination.h"
 
 @interface NewGameViewController : UIViewController
 @end
