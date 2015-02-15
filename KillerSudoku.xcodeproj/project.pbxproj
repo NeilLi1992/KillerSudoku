@@ -37,6 +37,7 @@
 		237582961A1417660057C29B /* Constant.m in Sources */ = {isa = PBXBuildFile; fileRef = 237582951A1417660057C29B /* Constant.m */; };
 		2375D0C31A2135370044898A /* allSingleGame in Resources */ = {isa = PBXBuildFile; fileRef = 2375D0C21A2135370044898A /* allSingleGame */; };
 		2375D0C51A2141690044898A /* easy1 in Resources */ = {isa = PBXBuildFile; fileRef = 2375D0C41A2141690044898A /* easy1 */; };
+		23881DC51A91404E00527917 /* cellButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 23881DC41A91404E00527917 /* cellButton.m */; };
 		23B927E11A38999400A64FAF /* game2 in Resources */ = {isa = PBXBuildFile; fileRef = 23B927E01A38999400A64FAF /* game2 */; };
 		23E2BC541A1B869C000342CE /* Combination.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E2BC531A1B869C000342CE /* Combination.m */; };
 		23E2BC561A1B8EED000342CE /* combination in Resources */ = {isa = PBXBuildFile; fileRef = 23E2BC551A1B8EED000342CE /* combination */; };
@@ -100,6 +101,8 @@
 		237582951A1417660057C29B /* Constant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constant.m; sourceTree = "<group>"; };
 		2375D0C21A2135370044898A /* allSingleGame */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = allSingleGame; sourceTree = "<group>"; };
 		2375D0C41A2141690044898A /* easy1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = easy1; sourceTree = "<group>"; };
+		23881DC31A91404E00527917 /* cellButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cellButton.h; sourceTree = "<group>"; };
+		23881DC41A91404E00527917 /* cellButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = cellButton.m; sourceTree = "<group>"; };
 		23B927E01A38999400A64FAF /* game2 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game2; sourceTree = "<group>"; };
 		23E2BC521A1B869C000342CE /* Combination.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Combination.h; sourceTree = "<group>"; };
 		23E2BC531A1B869C000342CE /* Combination.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 1; path = Combination.m; sourceTree = "<group>"; };
@@ -211,12 +214,11 @@
 		2340E5B91A01474B00D56A3A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				23881DC21A913FE700527917 /* NewGameView */,
 				230AD8EB19ED164E00648B01 /* ViewController.h */,
 				230AD8EC19ED164E00648B01 /* ViewController.m */,
 				236783761A124A0A00DF97F2 /* CageDivisionViewController.h */,
 				236783771A124A0A00DF97F2 /* CageDivisionViewController.m */,
-				23F0FC8C1A8ABCBC0034322F /* NewGameViewController.h */,
-				23F0FC8D1A8ABCBC0034322F /* NewGameViewController.m */,
 				236783791A124CB300DF97F2 /* SolverViewController.h */,
 				2367837A1A124CB300DF97F2 /* SolverViewController.m */,
 				230AD8EE19ED164E00648B01 /* Main.storyboard */,
@@ -255,6 +257,17 @@
 				234BA06C1A74FFE300B09F5B /* DfsByCage.m */,
 			);
 			name = "Solving Algorithms";
+			sourceTree = "<group>";
+		};
+		23881DC21A913FE700527917 /* NewGameView */ = {
+			isa = PBXGroup;
+			children = (
+				23F0FC8C1A8ABCBC0034322F /* NewGameViewController.h */,
+				23F0FC8D1A8ABCBC0034322F /* NewGameViewController.m */,
+				23881DC31A91404E00527917 /* cellButton.h */,
+				23881DC41A91404E00527917 /* cellButton.m */,
+			);
+			name = NewGameView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -374,6 +387,7 @@
 				234BA06D1A74FFE300B09F5B /* DfsByCage.m in Sources */,
 				2367837B1A124CB300DF97F2 /* SolverViewController.m in Sources */,
 				230AD91219ED1E9B00648B01 /* GameBoard.m in Sources */,
+				23881DC51A91404E00527917 /* cellButton.m in Sources */,
 				230AD8ED19ED164E00648B01 /* ViewController.m in Sources */,
 				2374891019F65C3000A0DCE3 /* UnionFind.m in Sources */,
 				230AD8EA19ED164E00648B01 /* AppDelegate.m in Sources */,

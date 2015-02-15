@@ -11,6 +11,7 @@
 #import "Generator.h"
 #import "Solver.h"
 #import "Combination.h"
+#import "cellButton.h"
 
 @interface NewGameViewController : UIViewController
 @end

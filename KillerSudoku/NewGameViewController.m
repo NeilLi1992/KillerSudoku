@@ -41,7 +41,20 @@
     self.selectedCage = nil;
     
     // Call generator to generate a game
-    self.unsolvedGame = [Generator generate:level];
+//    self.unsolvedGame = [Generator generate:level];
+    int GAME2[9][9] = {
+        {5,3,0,0,7,0,0,0,0},
+        {6,0,0,1,9,5,0,0,0},
+        {0,9,8,0,0,0,0,6,0},
+        {8,0,0,0,6,0,0,0,3},
+        {4,0,0,8,0,3,0,0,1},
+        {7,0,0,0,2,0,0,0,6},
+        {0,6,0,0,0,0,2,8,0},
+        {0,0,0,4,1,9,0,0,5},
+        {0,0,0,0,8,0,0,7,9}
+    };
+
+    self.unsolvedGame = [[GameBoard alloc] initWithIntegerArray:GAME2];
     
     NSLog(@"NewGameViewController: get generated game\n%@", [self.unsolvedGame cagesDescription]);
     NSLog(@"NewGameViewController: print its sums\n%@", [self.unsolvedGame getSum]);
@@ -87,7 +100,7 @@
         [self.boardCells addObject:[[NSMutableArray alloc] init]];
         for (int j = 0; j < 9; j++) {
             // Generate a cellBtn and set it properly
-            UIButton* cellBtn = [[UIButton alloc] initWithFrame:CGRectMake(j * cellLength, i * cellLength + baseY, cellLength, cellLength)];
+            cellButton* cellBtn = [[cellButton alloc] initWithFrame:CGRectMake(j * cellLength, i * cellLength + baseY, cellLength, cellLength)];
             cellBtn.tag = i * 9 + j;
             cellBtn.layer.borderColor = [UIColor blackColor].CGColor;
             cellBtn.layer.borderWidth = 0.5f;
@@ -153,6 +166,30 @@
     UIView* controlView = [[UIView alloc] initWithFrame:CGRectMake(boardLength * 0.4 - 1, baseY + boardLength, boardLength * 0.6 + 1, height)];
     controlView.layer.borderWidth = 2.0f;
     controlView.layer.borderColor = [UIColor blackColor].CGColor;
+    
+    CGFloat btnLength = controlView.frame.size.width / 6.5f;
+    CGFloat offsetX;
+    CGFloat offsetY;
+    
+    for (int i = 0; i < 4; i++) {
+        offsetX = (controlView.frame.size.width - 3 * btnLength) / 4;
+        offsetY = 0.5 * btnLength + i * 1.5 * btnLength - 4;
+        
+        for (int j = 0; j < 3; j++) {
+            if (i != 3) {
+                UIButton* controlBtn = [[UIButton alloc] initWithFrame:CGRectMake(offsetX + j * (btnLength + offsetX), offsetY, btnLength, btnLength)];
+                controlBtn.backgroundColor = [UIColor blackColor];
+                [controlView addSubview:controlBtn];
+            } else {
+                if (j == 1) {
+                    UIButton* controlBtn = [[UIButton alloc] initWithFrame:CGRectMake(offsetX + j * (btnLength + offsetX), offsetY, btnLength, btnLength)];
+                    controlBtn.backgroundColor = [UIColor blackColor];
+                    [controlView addSubview:controlBtn];
+                }
+            }
+            
+        }
+    }
     
     [self.view addSubview:controlView];
 }
