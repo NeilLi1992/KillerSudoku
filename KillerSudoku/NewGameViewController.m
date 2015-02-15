@@ -49,6 +49,7 @@
     // Draw allsubviews
     [self drawBoard];
     [self drawHint];
+    [self drawControl];
 }
 
 #pragma -mark drawing methods
@@ -138,8 +139,22 @@
     hintView.layer.borderWidth = 2.0f;
     hintView.layer.borderColor = [UIColor blackColor].CGColor;
     hintView.tag = 100;
-    
+    hintView.scrollEnabled = YES;
     [self.view addSubview:hintView];
+}
+
+- (void)drawControl {
+    CGFloat boardLength = [UIScreen mainScreen].bounds.size.width; // Length equals the screen width
+    CGFloat statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
+    CGFloat navigationBarHeight = self.navigationController.navigationBar.frame.size.height;
+    CGFloat baseY = statusBarHeight + navigationBarHeight;
+    CGFloat height = [UIScreen mainScreen].bounds.size.height - boardLength - baseY;
+    
+    UIView* controlView = [[UIView alloc] initWithFrame:CGRectMake(boardLength * 0.4 - 1, baseY + boardLength, boardLength * 0.6 + 1, height)];
+    controlView.layer.borderWidth = 2.0f;
+    controlView.layer.borderColor = [UIColor blackColor].CGColor;
+    
+    [self.view addSubview:controlView];
 }
 
 #pragma -mark helper methods
