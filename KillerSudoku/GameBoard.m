@@ -260,6 +260,14 @@
     return self.combination;
 }
 
+-(NSArray*)getCombsForCage:(NSNumber*)cageID {
+    NSNumber* cageSum = [self getCageSumAtIndex:cageID];
+    NSNumber* cageSize = [NSNumber numberWithInteger:[self.uf sizeOfComponent:[cageID integerValue]]];
+    return [self.combination allComsOfCageSize:cageSize withSum:cageSum];
+}
+
+
+
 // Set the number of a given position.
 -(void)setNum:(NSNumber*)number AtRow:(NSInteger)row Column:(NSInteger)col {
     [[self.cells objectAtIndex:row] replaceObjectAtIndex:col withObject:number];

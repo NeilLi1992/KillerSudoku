@@ -17,7 +17,7 @@
 @property(strong, nonatomic)GameBoard* unsolvedGame;
 @property(strong, nonatomic)UIButton* selectedCell;
 @property(strong, nonatomic)Combination* combination;
-@property(strong, nonatomic)NSNumber* selectedCageID;
+@property(strong, nonatomic)NSNumber* selectedCage;
 @end
 
 @implementation NewGameViewController
@@ -34,17 +34,14 @@
                             [UIColor colorWithRed:204/255.0 green:255/255.0 blue:217/255.0 alpha:1],
                             [UIColor colorWithRed:255/255.0 green:221/255.0 blue:153/255.0 alpha:1],
                             [UIColor colorWithRed:221/255.0 green:153/255.0 blue:255/255.0 alpha:1],
-                            [UIColor whiteColor],
                             [UIColor redColor],
                             [UIColor purpleColor],nil];
     self.boardCells = [[NSMutableArray alloc] init];
     self.selectedCell = nil;
-    self.selectedCageID = nil;
+    self.selectedCage = nil;
     
     // Call generator to generate a game
     self.unsolvedGame = [Generator generate:level];
-    self.combination = [self.unsolvedGame getCombination];
-    
     
     NSLog(@"NewGameViewController: get generated game\n%@", [self.unsolvedGame cagesDescription]);
     NSLog(@"NewGameViewController: print its sums\n%@", [self.unsolvedGame getSum]);
@@ -136,7 +133,7 @@
     CGFloat baseY = statusBarHeight + navigationBarHeight;
     CGFloat height = [UIScreen mainScreen].bounds.size.height - boardLength - baseY;
     
-    UITextView* hintView = [[UITextView alloc] initWithFrame:CGRectMake(0, baseY + boardLength, boardLength / 2, height)];
+    UITextView* hintView = [[UITextView alloc] initWithFrame:CGRectMake(0, baseY + boardLength, boardLength * 0.4, height)];
     hintView.editable = false;
     hintView.layer.borderWidth = 2.0f;
     hintView.layer.borderColor = [UIColor blackColor].CGColor;
@@ -195,7 +192,6 @@
     }
     self.selectedCell = sender;
     
-    NSLog(@"get action");
     UIView* insideBorderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, sender.frame.size.width, sender.frame.size.height)];
     insideBorderView.backgroundColor = [UIColor clearColor];
     insideBorderView.layer.borderWidth = 2.0f;
@@ -207,11 +203,22 @@
     
     // Modify the textView if necessary
     UITextView* hintView = (UITextView*)[self.view viewWithTag:100];
-    NSNumber* cageID = [NSNumber numberWithInteger:sender.tag];
+    NSNumber* index = [NSNumber numberWithInteger:sender.tag];
+    NSNumber* cageID = [self.unsolvedGame getCageIdAtIndex:index];
     
-    if (self.selectedCageID != cageID) {
-        self.selectedCageID = cageID;
+    
+    if (self.selectedCage != cageID) {
+        self.selectedCage = cageID;
         
+        NSMutableArray* comStrList = [[NSMutableArray alloc] initWithObjects:[NSString stringWithFormat:@"%@ =", [self.unsolvedGame getCageSumAtIndex:cageID]], nil];
+        
+        for (NSArray* comb in [self.unsolvedGame getCombsForCage:cageID]) {
+            NSString* combString = [comb componentsJoinedByString:@"+"];
+            [comStrList addObject:combString];
+        }
+        NSString* hintString = [comStrList componentsJoinedByString:@"\n"];
+
+        hintView.text = hintString;
     }
 }
 

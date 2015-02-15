@@ -30,6 +30,7 @@
 -(NSNumber*)getNumAtRow:(NSInteger)row Column:(NSInteger)col;
 -(NSNumber*)getNumAtIndex:(NSNumber*)index;
 -(Combination*)getCombination;
+-(NSArray*)getCombsForCage:(NSNumber*)cageID;
 
 -(void)setNum:(NSNumber*)number AtRow:(NSInteger)row Column:(NSInteger)col;
 -(void)setNum:(NSNumber *)number AtIndex:(NSNumber*)index;
