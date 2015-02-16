@@ -15,7 +15,7 @@
 @property(strong, nonatomic)UIView* controlView;
 @property(strong, nonatomic)NSMutableArray* boardCells;
 @property(strong, nonatomic)GameBoard* unsolvedGame;
-@property(strong, nonatomic)UIButton* selectedCell;
+@property(strong, nonatomic)cellButton* selectedCell;
 @property(strong, nonatomic)Combination* combination;
 @property(strong, nonatomic)NSNumber* selectedCage;
 @end
@@ -41,20 +41,20 @@
     self.selectedCage = nil;
     
     // Call generator to generate a game
-//    self.unsolvedGame = [Generator generate:level];
-    int GAME2[9][9] = {
-        {5,3,0,0,7,0,0,0,0},
-        {6,0,0,1,9,5,0,0,0},
-        {0,9,8,0,0,0,0,6,0},
-        {8,0,0,0,6,0,0,0,3},
-        {4,0,0,8,0,3,0,0,1},
-        {7,0,0,0,2,0,0,0,6},
-        {0,6,0,0,0,0,2,8,0},
-        {0,0,0,4,1,9,0,0,5},
-        {0,0,0,0,8,0,0,7,9}
-    };
-
-    self.unsolvedGame = [[GameBoard alloc] initWithIntegerArray:GAME2];
+    self.unsolvedGame = [Generator generate:level];
+//    int GAME2[9][9] = {
+//        {5,3,0,0,7,0,0,0,0},
+//        {6,0,0,1,9,5,0,0,0},
+//        {0,9,8,0,0,0,0,6,0},
+//        {8,0,0,0,6,0,0,0,3},
+//        {4,0,0,8,0,3,0,0,1},
+//        {7,0,0,0,2,0,0,0,6},
+//        {0,6,0,0,0,0,2,8,0},
+//        {0,0,0,4,1,9,0,0,5},
+//        {0,0,0,0,8,0,0,7,9}
+//    };
+//
+//    self.unsolvedGame = [[GameBoard alloc] initWithIntegerArray:GAME2];
     
     NSLog(@"NewGameViewController: get generated game\n%@", [self.unsolvedGame cagesDescription]);
     NSLog(@"NewGameViewController: print its sums\n%@", [self.unsolvedGame getSum]);
@@ -178,16 +178,21 @@
         for (int j = 0; j < 3; j++) {
             if (i != 3) {
                 UIButton* controlBtn = [[UIButton alloc] initWithFrame:CGRectMake(offsetX + j * (btnLength + offsetX), offsetY, btnLength, btnLength)];
-                controlBtn.backgroundColor = [UIColor blackColor];
+                controlBtn.layer.borderWidth = 1.0f;    // Set bordre width
+                controlBtn.layer.borderColor = [UIColor blackColor].CGColor;    // Set border color
+                [controlBtn setTitle:[[NSNumber numberWithInt:(i*3+j+1)] stringValue] forState:UIControlStateNormal];   // Set button title
+                [controlBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];  // Set title color
+                [controlBtn addTarget:self action:@selector(ctlBtnTouched:) forControlEvents:UIControlEventTouchDown ]; // Set button action
                 [controlView addSubview:controlBtn];
-            } else {
-                if (j == 1) {
-                    UIButton* controlBtn = [[UIButton alloc] initWithFrame:CGRectMake(offsetX + j * (btnLength + offsetX), offsetY, btnLength, btnLength)];
-                    controlBtn.backgroundColor = [UIColor blackColor];
-                    [controlView addSubview:controlBtn];
-                }
+            } else if (j == 1) {
+                UIButton* controlBtn = [[UIButton alloc] initWithFrame:CGRectMake(offsetX + j * (btnLength + offsetX), offsetY, btnLength, btnLength)];
+                controlBtn.layer.borderWidth = 1.0f;
+                controlBtn.layer.borderColor = [UIColor blackColor].CGColor;
+                [controlBtn setTitle:@"-" forState:UIControlStateNormal];
+                [controlBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+                [controlBtn addTarget:self action:@selector(ctlBtnTouched:) forControlEvents:UIControlEventTouchDown ];
+                [controlView addSubview:controlBtn];
             }
-            
         }
     }
     
@@ -274,6 +279,16 @@
     }
 }
 
-
+- (void)ctlBtnTouched:(UIButton*)sender {
+    NSString* btnLabel = sender.titleLabel.text;
+    if (self.selectedCell != nil) {
+        if ([btnLabel isEqualToString:@"-"]) {
+            [self.selectedCell clear];
+        } else {
+            NSNumber* labelNum = [NSNumber numberWithInteger:[btnLabel integerValue]];
+            [self.selectedCell setNum:labelNum];
+        }
+    }
+}
 
 @end

@@ -10,4 +10,7 @@
 
 @interface cellButton : UIButton
 
+- (void)clear;
+- (void)setNum:(NSNumber*)num;
+
 @end

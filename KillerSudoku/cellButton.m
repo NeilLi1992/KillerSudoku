@@ -18,4 +18,13 @@
 }
 */
 
+- (void)clear {
+    [self setTitle:@"" forState:UIControlStateNormal];
+}
+
+- (void)setNum:(NSNumber*)num {
+    [self setTitle:[num stringValue] forState:UIControlStateNormal];
+    [self setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+}
+
 @end
