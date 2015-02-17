@@ -9,5 +9,5 @@
 #import <Foundation/Foundation.h>
 #import "GameBoard.h"
 @interface Generator : NSObject
-+ (GameBoard*)generate:(NSInteger)level;
++ (NSArray*)generate:(NSInteger)level;
 @end

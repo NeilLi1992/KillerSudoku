@@ -13,7 +13,8 @@
 @implementation Generator
 
 //level: 0-easy, 1-midieum, 2-hard
-+ (GameBoard*)generate:(NSInteger)level {
+// Return an array with two objects. 1st is the unsolved GameBoard. 2nd is the solution grid array
++ (NSArray*)generate:(NSInteger)level {
     NSArray* solutionGrid = [Generator generateSolutionGrid];
     NSInteger cageNum = 0;
     NSInteger maxSize = 0;
@@ -53,7 +54,8 @@
 //        NSLog(@"%@", [solution cagesDescription]);
 //    }
     
-    return unsolvedGame;
+    NSArray* result = [NSArray arrayWithObjects:unsolvedGame, solutionGrid, nil];
+    return result;
 }
 
 + (NSArray*)generateSolutionGrid {

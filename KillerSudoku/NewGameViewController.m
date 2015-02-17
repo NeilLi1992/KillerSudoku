@@ -15,9 +15,11 @@
 @property(strong, nonatomic)UIView* controlView;
 @property(strong, nonatomic)NSMutableArray* boardCells;
 @property(strong, nonatomic)GameBoard* unsolvedGame;
+@property(strong, nonatomic)NSArray* solutionGrid;
 @property(strong, nonatomic)cellButton* selectedCell;
 @property(strong, nonatomic)Combination* combination;
 @property(strong, nonatomic)NSNumber* selectedCage;
+@property(nonatomic)NSInteger finishedCount;
 @end
 
 @implementation NewGameViewController
@@ -26,7 +28,7 @@
     [super viewDidLoad];
     
     // Initialization
-    NSInteger level = 1;
+    NSInteger level = 0;
     self.candidateColors = [[NSArray alloc] initWithObjects:
                             [UIColor colorWithRed:255/255.0 green:217/255.0 blue:204/255.0 alpha:1],
                             [UIColor colorWithRed:255/255.0 green:242/255.0 blue:204/255.0 alpha:1],
@@ -39,9 +41,13 @@
     self.boardCells = [[NSMutableArray alloc] init];
     self.selectedCell = nil;
     self.selectedCage = nil;
+    self.finishedCount = 0;
     
     // Call generator to generate a game
-    self.unsolvedGame = [Generator generate:level];
+    NSArray* generationResult = [Generator generate:level];
+    self.unsolvedGame = [generationResult objectAtIndex:0];
+    self.solutionGrid = [generationResult objectAtIndex:1];
+    
 //    int GAME2[9][9] = {
 //        {5,3,0,0,7,0,0,0,0},
 //        {6,0,0,1,9,5,0,0,0},
@@ -57,7 +63,8 @@
 //    self.unsolvedGame = [[GameBoard alloc] initWithIntegerArray:GAME2];
     
     NSLog(@"NewGameViewController: get generated game\n%@", [self.unsolvedGame cagesDescription]);
-    NSLog(@"NewGameViewController: print its sums\n%@", [self.unsolvedGame getSum]);
+//    NSLog(@"NewGameViewController: print its sums\n%@", [self.unsolvedGame getSum]);
+    NSLog(@"NewGameViewController: solution grid\n%@", self.solutionGrid);
     
     // Draw allsubviews
     [self drawBoard];
@@ -241,6 +248,10 @@
     return [NSArray arrayWithArray:colorMatrix];
 }
 
+- (void)gameFinish {
+    NSLog(@"Game is finished");
+}
+
 #pragma -mark action handlers
 
 - (void)cellTouched:(UIButton *)sender {
@@ -284,10 +295,28 @@
     if (self.selectedCell != nil) {
         if ([btnLabel isEqualToString:@"-"]) {
             [self.selectedCell clear];
-        } else {
-            NSNumber* labelNum = [NSNumber numberWithInteger:[btnLabel integerValue]];
-            [self.selectedCell setNum:labelNum];
+        } else if (![self.selectedCell.titleLabel.text isEqualToString:btnLabel]) {
+            NSInteger row = self.selectedCell.tag / 9;
+            NSInteger col = self.selectedCell.tag % 9;
+            NSNumber* correctNum = [[self.solutionGrid objectAtIndex:row] objectAtIndex:col];
+            
+            if (![self.selectedCell.titleLabel.text isEqualToString:[correctNum stringValue]] && [btnLabel isEqualToString:[correctNum stringValue]]) {
+                self.finishedCount++;
+                NSLog(@"increase %d", self.finishedCount);
+            }
+            
+            if ([self.selectedCell.titleLabel.text isEqualToString:[correctNum stringValue]] && ![btnLabel isEqualToString:[correctNum stringValue]]) {
+                self.finishedCount--;
+                NSLog(@"decrease %d", self.finishedCount);
+            }
+            
+            [self.selectedCell setNum:[NSNumber numberWithInteger:[btnLabel integerValue]]];
+            
+            if (self.finishedCount == 81) {
+                [self gameFinish];
+            }
         }
+        
     }
 }
 

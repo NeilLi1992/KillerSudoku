@@ -12,5 +12,7 @@
 
 - (void)clear;
 - (void)setNum:(NSNumber*)num;
+- (void)drawCross;
+- (void)clearCross;
 
 @end
