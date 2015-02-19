@@ -25,6 +25,19 @@
 - (void)setNum:(NSNumber*)num {
     [self setTitle:[num stringValue] forState:UIControlStateNormal];
     [self setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    
+    [self drawCross];
+}
+
+- (void)drawCross {
+    crossView* subview = [[crossView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+    [subview setBackgroundColor:[UIColor clearColor]];
+    subview.tag = 0;
+    [self addSubview:subview];
+}
+
+- (void)clearCross {
+    
 }
 
 @end

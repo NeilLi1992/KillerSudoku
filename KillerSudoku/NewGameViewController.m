@@ -29,15 +29,28 @@
     
     // Initialization
     NSInteger level = 0;
+//    self.candidateColors = [[NSArray alloc] initWithObjects:
+//                            [UIColor colorWithRed:255/255.0 green:217/255.0 blue:204/255.0 alpha:1],
+//                            [UIColor colorWithRed:255/255.0 green:242/255.0 blue:204/255.0 alpha:1],
+//                            [UIColor colorWithRed:184/255.0 green:0/255.0 blue:92/255.0 alpha:1],
+//                            [UIColor colorWithRed:204/255.0 green:255/255.0 blue:217/255.0 alpha:1],
+//                            [UIColor colorWithRed:255/255.0 green:221/255.0 blue:153/255.0 alpha:1],
+//                            [UIColor colorWithRed:221/255.0 green:153/255.0 blue:255/255.0 alpha:1],
+//                            [UIColor redColor],
+//                            [UIColor purpleColor],nil];
     self.candidateColors = [[NSArray alloc] initWithObjects:
-                            [UIColor colorWithRed:255/255.0 green:217/255.0 blue:204/255.0 alpha:1],
-                            [UIColor colorWithRed:255/255.0 green:242/255.0 blue:204/255.0 alpha:1],
-                            [UIColor colorWithRed:184/255.0 green:0/255.0 blue:92/255.0 alpha:1],
-                            [UIColor colorWithRed:204/255.0 green:255/255.0 blue:217/255.0 alpha:1],
-                            [UIColor colorWithRed:255/255.0 green:221/255.0 blue:153/255.0 alpha:1],
-                            [UIColor colorWithRed:221/255.0 green:153/255.0 blue:255/255.0 alpha:1],
-                            [UIColor redColor],
-                            [UIColor purpleColor],nil];
+                            [UIColor colorWithRed:240/255.0 green:128/255.0 blue:128/255.0 alpha:1],  // Light coral
+//                            [UIColor colorWithRed:238/255.0 green:232/255.0 blue:179/255.0 alpha:1],  // Khaki
+                            [UIColor colorWithRed:205/255.0 green:133/255.0 blue:63/255.0 alpha:1],  // Peru
+                            [UIColor colorWithRed:154/255.0 green:205/255.0 blue:50/255.0 alpha:1],   // Green yellow
+//                            [UIColor colorWithRed:0/255.0 green:255/255.0 blue:127/255.0 alpha:1],    // spring gree
+                            [UIColor colorWithRed:72/255.0 green:209/255.0 blue:204/255.0 alpha:1], // Medium turquoise
+                            [UIColor colorWithRed:230/255.0 green:230/255.0 blue:250/255.0 alpha:1],  // Lavender
+//                            [UIColor colorWithRed:175/255.0 green:238/255.0 blue:238/255.0 alpha:1],  // pale turquoise
+                            [UIColor colorWithRed:147/255.0 green:112/255.0 blue:219/255.0 alpha:1],  // Medium purple
+                            [UIColor colorWithRed:245/255.0 green:222/255.0 blue:179/255.0 alpha:1] ,nil];  // Wheat
+
+    
     self.boardCells = [[NSMutableArray alloc] init];
     self.selectedCell = nil;
     self.selectedCage = nil;
@@ -174,31 +187,37 @@
     controlView.layer.borderWidth = 2.0f;
     controlView.layer.borderColor = [UIColor blackColor].CGColor;
     
-    CGFloat btnLength = controlView.frame.size.width / 6.5f;
-    CGFloat offsetX;
-    CGFloat offsetY;
+    CGFloat btnWidth = controlView.frame.size.width / 3;
+    CGFloat btnHeight = controlView.frame.size.height / 4;
     
     for (int i = 0; i < 4; i++) {
-        offsetX = (controlView.frame.size.width - 3 * btnLength) / 4;
-        offsetY = 0.5 * btnLength + i * 1.5 * btnLength - 4;
-        
         for (int j = 0; j < 3; j++) {
             if (i != 3) {
-                UIButton* controlBtn = [[UIButton alloc] initWithFrame:CGRectMake(offsetX + j * (btnLength + offsetX), offsetY, btnLength, btnLength)];
+                UIButton* controlBtn = [[UIButton alloc] initWithFrame:CGRectMake(j * btnWidth, i * btnHeight, btnWidth, btnHeight)];
                 controlBtn.layer.borderWidth = 1.0f;    // Set bordre width
                 controlBtn.layer.borderColor = [UIColor blackColor].CGColor;    // Set border color
                 [controlBtn setTitle:[[NSNumber numberWithInt:(i*3+j+1)] stringValue] forState:UIControlStateNormal];   // Set button title
                 [controlBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];  // Set title color
+                [controlBtn setTitleColor:[UIColor colorWithRed: 180.0/255.0 green: 238.0/255.0 blue:180.0/255.0 alpha: 1.0] forState:UIControlStateHighlighted];
                 [controlBtn addTarget:self action:@selector(ctlBtnTouched:) forControlEvents:UIControlEventTouchDown ]; // Set button action
                 [controlView addSubview:controlBtn];
             } else if (j == 1) {
-                UIButton* controlBtn = [[UIButton alloc] initWithFrame:CGRectMake(offsetX + j * (btnLength + offsetX), offsetY, btnLength, btnLength)];
+                UIButton* controlBtn = [[UIButton alloc] initWithFrame:CGRectMake(j * btnWidth, i * btnHeight, btnWidth, btnHeight)];
                 controlBtn.layer.borderWidth = 1.0f;
                 controlBtn.layer.borderColor = [UIColor blackColor].CGColor;
                 [controlBtn setTitle:@"-" forState:UIControlStateNormal];
                 [controlBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+                [controlBtn setTitleColor:[UIColor colorWithRed: 180.0/255.0 green: 238.0/255.0 blue:180.0/255.0 alpha: 1.0] forState:UIControlStateHighlighted];
                 [controlBtn addTarget:self action:@selector(ctlBtnTouched:) forControlEvents:UIControlEventTouchDown ];
                 [controlView addSubview:controlBtn];
+            } else {
+                UIButton* controlBtn = [[UIButton alloc] initWithFrame:CGRectMake(j * btnWidth, i * btnHeight, btnWidth, btnHeight)];
+                controlBtn.layer.borderWidth = 1.0f;
+                controlBtn.layer.borderColor = [UIColor blackColor].CGColor;
+                [controlBtn setTitle:@"" forState:UIControlStateNormal];
+                [controlBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+                [controlView addSubview:controlBtn];
+
             }
         }
     }

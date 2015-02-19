@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "crossView.h"
 
 @interface cellButton : UIButton
 
