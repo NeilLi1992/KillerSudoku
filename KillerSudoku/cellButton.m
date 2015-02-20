@@ -19,25 +19,27 @@
 */
 
 - (void)clear {
-    [self setTitle:@"" forState:UIControlStateNormal];
+    [self setTitle:@" " forState:UIControlStateNormal];
 }
 
 - (void)setNum:(NSNumber*)num {
     [self setTitle:[num stringValue] forState:UIControlStateNormal];
     [self setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    
     [self drawCross];
+    [self clearCross];
 }
 
 - (void)drawCross {
+    self.isCrossed = true;
     crossView* subview = [[crossView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
     [subview setBackgroundColor:[UIColor clearColor]];
-    subview.tag = 0;
+    subview.tag = 10;
     [self addSubview:subview];
 }
 
 - (void)clearCross {
-    
+    self.isCrossed = false;
+    [[self viewWithTag:10] removeFromSuperview];
 }
 
 @end

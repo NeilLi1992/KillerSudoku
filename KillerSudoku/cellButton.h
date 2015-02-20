@@ -11,6 +11,8 @@
 
 @interface cellButton : UIButton
 
+@property(nonatomic)BOOL isCrossed;
+
 - (void)clear;
 - (void)setNum:(NSNumber*)num;
 - (void)drawCross;

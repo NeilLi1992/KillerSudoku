@@ -199,6 +199,7 @@
                 [controlBtn setTitle:[[NSNumber numberWithInt:(i*3+j+1)] stringValue] forState:UIControlStateNormal];   // Set button title
                 [controlBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];  // Set title color
                 [controlBtn setTitleColor:[UIColor colorWithRed: 180.0/255.0 green: 238.0/255.0 blue:180.0/255.0 alpha: 1.0] forState:UIControlStateHighlighted];
+                controlBtn.titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:24];
                 [controlBtn addTarget:self action:@selector(ctlBtnTouched:) forControlEvents:UIControlEventTouchDown ]; // Set button action
                 [controlView addSubview:controlBtn];
             } else if (j == 1) {
@@ -208,6 +209,7 @@
                 [controlBtn setTitle:@"-" forState:UIControlStateNormal];
                 [controlBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
                 [controlBtn setTitleColor:[UIColor colorWithRed: 180.0/255.0 green: 238.0/255.0 blue:180.0/255.0 alpha: 1.0] forState:UIControlStateHighlighted];
+                controlBtn.titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:24];
                 [controlBtn addTarget:self action:@selector(ctlBtnTouched:) forControlEvents:UIControlEventTouchDown ];
                 [controlView addSubview:controlBtn];
             } else {
@@ -267,6 +269,11 @@
     return [NSArray arrayWithArray:colorMatrix];
 }
 
+
+- (void)checkDuplicate {
+    
+}
+
 - (void)gameFinish {
     NSLog(@"Game is finished");
 }
@@ -312,13 +319,17 @@
 - (void)ctlBtnTouched:(UIButton*)sender {
     NSString* btnLabel = sender.titleLabel.text;
     if (self.selectedCell != nil) {
+        NSInteger row = self.selectedCell.tag / 9;
+        NSInteger col = self.selectedCell.tag % 9;
+        NSNumber* correctNum = [[self.solutionGrid objectAtIndex:row] objectAtIndex:col];
         if ([btnLabel isEqualToString:@"-"]) {
+            NSLog(@"%@", self.selectedCell.titleLabel.text);
+            if ([self.selectedCell.titleLabel.text isEqualToString:[correctNum stringValue]]) {
+                self.finishedCount--;
+                NSLog(@"decrease %d", self.finishedCount);
+            }
             [self.selectedCell clear];
         } else if (![self.selectedCell.titleLabel.text isEqualToString:btnLabel]) {
-            NSInteger row = self.selectedCell.tag / 9;
-            NSInteger col = self.selectedCell.tag % 9;
-            NSNumber* correctNum = [[self.solutionGrid objectAtIndex:row] objectAtIndex:col];
-            
             if (![self.selectedCell.titleLabel.text isEqualToString:[correctNum stringValue]] && [btnLabel isEqualToString:[correctNum stringValue]]) {
                 self.finishedCount++;
                 NSLog(@"increase %d", self.finishedCount);
