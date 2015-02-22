@@ -184,6 +184,7 @@
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 3; j++) {
             if (i != 3) {
+                // Number button
                 UIButton* controlBtn = [[UIButton alloc] initWithFrame:CGRectMake(j * btnWidth, i * btnHeight, btnWidth, btnHeight)];
                 controlBtn.layer.borderWidth = 1.0f;    // Set bordre width
                 controlBtn.layer.borderColor = [UIColor blackColor].CGColor;    // Set border color
@@ -193,7 +194,19 @@
                 controlBtn.titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:24];
                 [controlBtn addTarget:self action:@selector(ctlBtnTouched:) forControlEvents:UIControlEventTouchDown ]; // Set button action
                 [controlView addSubview:controlBtn];
+            } else if (j == 0) {
+                // Check button
+                UIButton* controlBtn = [[UIButton alloc] initWithFrame:CGRectMake(j * btnWidth, i * btnHeight, btnWidth, btnHeight)];
+                controlBtn.layer.borderWidth = 1.0f;
+                controlBtn.layer.borderColor = [UIColor blackColor].CGColor;
+                [controlBtn setTitle:@"Check" forState:UIControlStateNormal];
+                [controlBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+                [controlBtn setTitleColor:[UIColor colorWithRed: 180.0/255.0 green: 238.0/255.0 blue:180.0/255.0 alpha: 1.0] forState:UIControlStateHighlighted];
+                controlBtn.titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:16];
+                [controlBtn addTarget:self action:@selector(checkWithSolution:) forControlEvents:UIControlEventTouchDown ];
+                [controlView addSubview:controlBtn];
             } else if (j == 1) {
+                // Clear button
                 UIButton* controlBtn = [[UIButton alloc] initWithFrame:CGRectMake(j * btnWidth, i * btnHeight, btnWidth, btnHeight)];
                 controlBtn.layer.borderWidth = 1.0f;
                 controlBtn.layer.borderColor = [UIColor blackColor].CGColor;
@@ -203,14 +216,17 @@
                 controlBtn.titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:24];
                 [controlBtn addTarget:self action:@selector(ctlBtnTouched:) forControlEvents:UIControlEventTouchDown ];
                 [controlView addSubview:controlBtn];
-            } else {
+            } else if (j == 2) {
+                // Note button
                 UIButton* controlBtn = [[UIButton alloc] initWithFrame:CGRectMake(j * btnWidth, i * btnHeight, btnWidth, btnHeight)];
                 controlBtn.layer.borderWidth = 1.0f;
                 controlBtn.layer.borderColor = [UIColor blackColor].CGColor;
-                [controlBtn setTitle:@"" forState:UIControlStateNormal];
+                [controlBtn setTitle:@"Note" forState:UIControlStateNormal];
                 [controlBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+                [controlBtn setTitleColor:[UIColor colorWithRed: 180.0/255.0 green: 238.0/255.0 blue:180.0/255.0 alpha: 1.0] forState:UIControlStateHighlighted];
+                controlBtn.titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:16];
+                //                [controlBtn addTarget:self action:@selector(ctlBtnTouched:) forControlEvents:UIControlEventTouchDown ];
                 [controlView addSubview:controlBtn];
-
             }
         }
     }
@@ -261,6 +277,21 @@
 }
 
 
+- (void)checkWithSolution:(UIButton*)sender {
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            cellButton* cell = [[self.boardCells objectAtIndex:i] objectAtIndex:j];
+            NSString* cellLabel = cell.titleLabel.text;
+            NSNumber* correctNum = [[self.solutionGrid objectAtIndex:i] objectAtIndex:j];
+            if (![cellLabel isEqualToString:@""] && ![cellLabel isEqualToString:[correctNum stringValue]]) {
+                // This cell is wrong
+                [cell setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+            }
+            
+        }
+    }
+}
+
 - (void)checkDuplicate:(cellButton*)cell From:(NSString*)ori To:(NSString*)now{
     NSInteger index = (NSInteger)cell.tag;
     NSInteger row = index / 9;
@@ -308,7 +339,6 @@
     
     for (cellButton* checkingCell in cellsToCheck) {
         if (![checkingCell.titleLabel.text isEqualToString:@" "] && [checkingCell.titleLabel.text isEqualToString:now]) {
-            NSLog(@"going to incDupCount");
             [checkingCell incDupCount];
             [cell incDupCount];
         }
@@ -321,18 +351,16 @@
 }
 
 - (void)gameFinish {
-    NSLog(@"Game is finished");
     [self performSegueWithIdentifier:@"finish" sender:self];
 }
 
 #pragma -mark action handlers
 
-- (void)cellTouched:(UIButton *)sender {
+- (void)cellTouched:(cellButton *)sender {
     if (self.selectedCell != nil) {
         [[self.selectedCell viewWithTag:101] removeFromSuperview];
     }
     self.selectedCell = sender;
-    NSLog(@"selected %d", sender.tag);
     
     UIView* insideBorderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, sender.frame.size.width, sender.frame.size.height)];
     insideBorderView.backgroundColor = [UIColor clearColor];
@@ -371,22 +399,18 @@
         NSInteger col = self.selectedCell.tag % 9;
         NSNumber* correctNum = [[self.solutionGrid objectAtIndex:row] objectAtIndex:col];
         if ([btnLabel isEqualToString:@"-"]) {
-            NSLog(@"%@", self.selectedCell.titleLabel.text);
             if ([self.selectedCell.titleLabel.text isEqualToString:[correctNum stringValue]]) {
                 self.finishedCount--;
-                NSLog(@"decrease %d", self.finishedCount);
             }
             [self checkDuplicate:self.selectedCell From:self.selectedCell.titleLabel.text To:@" "];
             [self.selectedCell clear];
         } else if (![self.selectedCell.titleLabel.text isEqualToString:btnLabel]) {
             if (![self.selectedCell.titleLabel.text isEqualToString:[correctNum stringValue]] && [btnLabel isEqualToString:[correctNum stringValue]]) {
                 self.finishedCount++;
-                NSLog(@"increase %d", self.finishedCount);
             }
             
             if ([self.selectedCell.titleLabel.text isEqualToString:[correctNum stringValue]] && ![btnLabel isEqualToString:[correctNum stringValue]]) {
                 self.finishedCount--;
-                NSLog(@"decrease %d", self.finishedCount);
             }
             
             [self checkDuplicate:self.selectedCell From:self.selectedCell.titleLabel.text To:btnLabel];
