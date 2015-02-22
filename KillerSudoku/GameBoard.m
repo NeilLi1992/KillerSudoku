@@ -222,6 +222,10 @@
     return [NSArray arrayWithArray:self.cages];
 }
 
+-(NSArray*)getIteratorForCageID:(NSNumber*)index {
+    return  [NSArray arrayWithArray:[self.uf getIteratorForComponent:[index integerValue]]];
+}
+
 // Get cage identifier of a given position. Cage identifier is the root index in the uf of each cage
 -(NSNumber*)getCageIdAtRow:(NSInteger)row Column:(NSInteger)col {
     NSInteger index = row * 9 + col;

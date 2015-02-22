@@ -21,7 +21,7 @@
 
 // Setter & Getter
 -(NSArray*)getIteratorForCages;
-
+-(NSArray*)getIteratorForCageID:(NSNumber*)index;
 -(NSNumber*)getCageIdAtRow:(NSInteger)row Column:(NSInteger)col;
 -(NSNumber*)getCageIdAtIndex:(NSNumber*)index;
 -(NSNumber*)getCageSumAtRow:(NSInteger)row Column:(NSInteger)col;

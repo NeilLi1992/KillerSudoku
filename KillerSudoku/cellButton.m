@@ -8,6 +8,10 @@
 
 #import "cellButton.h"
 
+@interface cellButton ()
+@property(nonatomic)NSInteger dupCount;
+@end
+
 @implementation cellButton
 
 /*
@@ -25,21 +29,34 @@
 - (void)setNum:(NSNumber*)num {
     [self setTitle:[num stringValue] forState:UIControlStateNormal];
     [self setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self drawCross];
-    [self clearCross];
+    self.titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:24];
+    
+    if (self.dupCount > 0) {
+        [self markWrong];
+    }
 }
 
-- (void)drawCross {
+- (void)markWrong {
     self.isCrossed = true;
-    crossView* subview = [[crossView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
-    [subview setBackgroundColor:[UIColor clearColor]];
-    subview.tag = 10;
-    [self addSubview:subview];
+    [self setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
 }
 
-- (void)clearCross {
+- (void)deMarkWrong {
     self.isCrossed = false;
-    [[self viewWithTag:10] removeFromSuperview];
+    [self setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+}
+
+- (void)incDupCount {
+    self.dupCount++;
+    if (self.dupCount == 1) {
+        [self markWrong];
+    }
+}
+- (void)decDupCount {
+    self.dupCount--;
+    if (self.dupCount == 0) {
+        [self deMarkWrong];
+    }
 }
 
 @end

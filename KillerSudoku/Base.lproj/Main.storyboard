@@ -102,7 +102,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GmO-64-fyA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1215" y="664"/>
+            <point key="canvasLocation" x="1215" y="596"/>
         </scene>
         <!--New Game View Controller-->
         <scene sceneID="HYo-dJ-NCL">
@@ -118,10 +118,40 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="FJi-DH-vOo"/>
+                    <connections>
+                        <segue destination="bnK-Me-3HD" kind="push" identifier="finish" id="cid-6x-xwo"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NKv-GB-bhe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1225" y="1328"/>
+            <point key="canvasLocation" x="1215" y="1322"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="MJh-kx-ajr">
+            <objects>
+                <viewController id="bnK-Me-3HD" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="RKT-ZS-aKk"/>
+                        <viewControllerLayoutGuide type="bottom" id="Sf0-5T-BXN"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="r0H-C1-6Rl">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Congradualations!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tKq-NY-yUC">
+                                <rect key="frame" x="90" y="198" width="140" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="kPw-N7-oca"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uDK-dU-yka" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1732" y="1322"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="b5V-Pt-sIZ">

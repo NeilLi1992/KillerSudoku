@@ -136,14 +136,6 @@
     }
     
     // add sum number to each cage
-//    NSMutableDictionary* sums = [self.unsolvedGame getSum];
-//    NSLog(@"%@", sums);
-//    
-//    NSLog(@"%@", [self.unsolvedGame cagesDescription]);
-//    
-//    NSArray* solutions = [Solver solve:self.unsolvedGame];
-//    NSLog(@"%@", [solutions objectAtIndex:0]);
-    
     for (NSArray* indecies in [self.unsolvedGame getIteratorForCages]) {
         NSNumber* firstIndex = [indecies objectAtIndex:0];
         NSNumber* cageId = [self.unsolvedGame getCageIdAtIndex:firstIndex];
@@ -157,7 +149,6 @@
         sumLabel.text = [sum stringValue];
         [cellBtn addSubview:sumLabel];
     }
-    
 }
 
 - (void)drawHint {
@@ -270,12 +261,68 @@
 }
 
 
-- (void)checkDuplicate {
+- (void)checkDuplicate:(cellButton*)cell From:(NSString*)ori To:(NSString*)now{
+    NSInteger index = (NSInteger)cell.tag;
+    NSInteger row = index / 9;
+    NSInteger col = index % 9;
     
+    NSMutableSet* cellsToCheck = [[NSMutableSet alloc] init];
+
+    // Check for row
+    NSMutableArray* checkingRow = [self.boardCells objectAtIndex:row];
+    for (cellButton* cell in checkingRow) {
+        if (cell.tag != index) {
+            [cellsToCheck addObject:cell];
+        }
+    }
+    
+    // Check for column
+    for (int i = 0; i < 9; i++) {
+        cellButton* cell = [[self.boardCells objectAtIndex:i] objectAtIndex:col];
+        if (cell.tag != index) {
+            [cellsToCheck addObject:cell];
+        }
+    }
+
+    // Check for nonet
+    NSInteger nonet = row / 3 * 3 + col / 3;
+    NSInteger i = nonet / 3 * 3;
+    NSInteger j = nonet % 3 * 3;
+    for (int delta_i = 0; delta_i < 3; delta_i++) {
+        for (int delta_j = 0; delta_j < 3; delta_j++) {
+            cellButton* cell = [[self.boardCells objectAtIndex:(i + delta_i)] objectAtIndex:(j + delta_j)];
+            if (cell.tag != index) {
+                [cellsToCheck addObject:cell];
+            }
+        }
+    }
+    
+    // Check for cage
+    for (NSNumber* cellIndex in [self.unsolvedGame getIteratorForCageID:[self.unsolvedGame getCageIdAtIndex:[NSNumber numberWithInteger:index]]]) {
+        if ([cellIndex integerValue] != index) {
+            NSInteger i = [cellIndex integerValue] / 9;
+            NSInteger j = [cellIndex integerValue] % 9;
+            [cellsToCheck addObject:[[self.boardCells objectAtIndex:i] objectAtIndex:j]];
+        }
+    }
+    
+    for (cellButton* checkingCell in cellsToCheck) {
+        if (![checkingCell.titleLabel.text isEqualToString:@" "] && [checkingCell.titleLabel.text isEqualToString:now]) {
+            NSLog(@"going to incDupCount");
+            [checkingCell incDupCount];
+            [cell incDupCount];
+        }
+        
+        if (![checkingCell.titleLabel.text isEqualToString:@" "] && [checkingCell.titleLabel.text isEqualToString:ori]) {
+            [checkingCell decDupCount];
+            [cell decDupCount];
+        }
+    }
 }
 
 - (void)gameFinish {
     NSLog(@"Game is finished");
+    [self performSegueWithIdentifier:@"finish" sender:self];
 }
 
 #pragma -mark action handlers
@@ -285,6 +332,7 @@
         [[self.selectedCell viewWithTag:101] removeFromSuperview];
     }
     self.selectedCell = sender;
+    NSLog(@"selected %d", sender.tag);
     
     UIView* insideBorderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, sender.frame.size.width, sender.frame.size.height)];
     insideBorderView.backgroundColor = [UIColor clearColor];
@@ -328,6 +376,7 @@
                 self.finishedCount--;
                 NSLog(@"decrease %d", self.finishedCount);
             }
+            [self checkDuplicate:self.selectedCell From:self.selectedCell.titleLabel.text To:@" "];
             [self.selectedCell clear];
         } else if (![self.selectedCell.titleLabel.text isEqualToString:btnLabel]) {
             if (![self.selectedCell.titleLabel.text isEqualToString:[correctNum stringValue]] && [btnLabel isEqualToString:[correctNum stringValue]]) {
@@ -340,8 +389,8 @@
                 NSLog(@"decrease %d", self.finishedCount);
             }
             
+            [self checkDuplicate:self.selectedCell From:self.selectedCell.titleLabel.text To:btnLabel];
             [self.selectedCell setNum:[NSNumber numberWithInteger:[btnLabel integerValue]]];
-            
             if (self.finishedCount == 81) {
                 [self gameFinish];
             }
