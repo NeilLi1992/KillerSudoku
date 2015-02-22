@@ -43,7 +43,6 @@
 		23E2BC541A1B869C000342CE /* Combination.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E2BC531A1B869C000342CE /* Combination.m */; };
 		23F0FC8E1A8ABCBC0034322F /* NewGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23F0FC8D1A8ABCBC0034322F /* NewGameViewController.m */; };
 		23F0FC931A8ACE870034322F /* multiple_solutions_2 in Resources */ = {isa = PBXBuildFile; fileRef = 23F0FC921A8ACE870034322F /* multiple_solutions_2 */; };
-		23F67E2D1A96AAFF0058EE0B /* crossView.m in Sources */ = {isa = PBXBuildFile; fileRef = 23F67E2C1A96AAFF0058EE0B /* crossView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -111,8 +110,6 @@
 		23F0FC8C1A8ABCBC0034322F /* NewGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewGameViewController.h; sourceTree = "<group>"; };
 		23F0FC8D1A8ABCBC0034322F /* NewGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewGameViewController.m; sourceTree = "<group>"; };
 		23F0FC921A8ACE870034322F /* multiple_solutions_2 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = multiple_solutions_2; sourceTree = "<group>"; };
-		23F67E2B1A96AAFF0058EE0B /* crossView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crossView.h; sourceTree = "<group>"; };
-		23F67E2C1A96AAFF0058EE0B /* crossView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = crossView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -269,8 +266,6 @@
 				23F0FC8D1A8ABCBC0034322F /* NewGameViewController.m */,
 				23881DC31A91404E00527917 /* cellButton.h */,
 				23881DC41A91404E00527917 /* cellButton.m */,
-				23F67E2B1A96AAFF0058EE0B /* crossView.h */,
-				23F67E2C1A96AAFF0058EE0B /* crossView.m */,
 			);
 			name = NewGameView;
 			sourceTree = "<group>";
@@ -393,7 +388,6 @@
 				2367837B1A124CB300DF97F2 /* SolverViewController.m in Sources */,
 				230AD91219ED1E9B00648B01 /* GameBoard.m in Sources */,
 				23881DC51A91404E00527917 /* cellButton.m in Sources */,
-				23F67E2D1A96AAFF0058EE0B /* crossView.m in Sources */,
 				230AD8ED19ED164E00648B01 /* ViewController.m in Sources */,
 				2374891019F65C3000A0DCE3 /* UnionFind.m in Sources */,
 				230AD8EA19ED164E00648B01 /* AppDelegate.m in Sources */,

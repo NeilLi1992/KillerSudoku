@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "crossView.h"
 
 @interface cellButton : UIButton
 
@@ -16,5 +15,7 @@
 - (void)setNum:(NSNumber*)num;
 - (void)incDupCount;
 - (void)decDupCount;
+- (void)toggleNote:(NSString*)note;
+- (void)clearNote;
 
 @end

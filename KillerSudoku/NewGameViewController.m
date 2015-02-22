@@ -20,6 +20,7 @@
 @property(strong, nonatomic)Combination* combination;
 @property(strong, nonatomic)NSNumber* selectedCage;
 @property(nonatomic)NSInteger finishedCount;
+@property(nonatomic)BOOL noteMode;
 @end
 
 @implementation NewGameViewController
@@ -55,6 +56,7 @@
     self.selectedCell = nil;
     self.selectedCage = nil;
     self.finishedCount = 0;
+    self.noteMode = false;
     
     // Call generator to generate a game
     NSArray* generationResult = [Generator generate:level];
@@ -124,7 +126,7 @@
             cellBtn.tag = i * 9 + j;
             cellBtn.layer.borderColor = [UIColor blackColor].CGColor;
             cellBtn.layer.borderWidth = 0.5f;
-            
+            cellBtn.titleLabel.text = @" ";
             // Set the cell's background according to colorMatrix
             cellBtn.backgroundColor = [self.candidateColors objectAtIndex:[[[colorMatrix objectAtIndex:i] objectAtIndex:j] integerValue]];
             
@@ -144,7 +146,7 @@
         NSNumber* sum = [self.unsolvedGame getCageSumAtIndex:cageId];
         
         UIButton* cellBtn = [[self.boardCells objectAtIndex:row] objectAtIndex:col];
-        UILabel* sumLabel = [[UILabel alloc] initWithFrame:CGRectMake(3, -2, 20, 20)];
+        UILabel* sumLabel = [[UILabel alloc] initWithFrame:CGRectMake(3, -4, 20, 20)];
         [sumLabel setFont:[UIFont systemFontOfSize:8]];
         sumLabel.text = [sum stringValue];
         [cellBtn addSubview:sumLabel];
@@ -223,9 +225,8 @@
                 controlBtn.layer.borderColor = [UIColor blackColor].CGColor;
                 [controlBtn setTitle:@"Note" forState:UIControlStateNormal];
                 [controlBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-                [controlBtn setTitleColor:[UIColor colorWithRed: 180.0/255.0 green: 238.0/255.0 blue:180.0/255.0 alpha: 1.0] forState:UIControlStateHighlighted];
                 controlBtn.titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:16];
-                //                [controlBtn addTarget:self action:@selector(ctlBtnTouched:) forControlEvents:UIControlEventTouchDown ];
+                [controlBtn addTarget:self action:@selector(noteBtnTouched:) forControlEvents:UIControlEventTouchDown ];
                 [controlView addSubview:controlBtn];
             }
         }
@@ -276,21 +277,6 @@
     return [NSArray arrayWithArray:colorMatrix];
 }
 
-
-- (void)checkWithSolution:(UIButton*)sender {
-    for (int i = 0; i < 9; i++) {
-        for (int j = 0; j < 9; j++) {
-            cellButton* cell = [[self.boardCells objectAtIndex:i] objectAtIndex:j];
-            NSString* cellLabel = cell.titleLabel.text;
-            NSNumber* correctNum = [[self.solutionGrid objectAtIndex:i] objectAtIndex:j];
-            if (![cellLabel isEqualToString:@""] && ![cellLabel isEqualToString:[correctNum stringValue]]) {
-                // This cell is wrong
-                [cell setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-            }
-            
-        }
-    }
-}
 
 - (void)checkDuplicate:(cellButton*)cell From:(NSString*)ori To:(NSString*)now{
     NSInteger index = (NSInteger)cell.tag;
@@ -394,7 +380,16 @@
 
 - (void)ctlBtnTouched:(UIButton*)sender {
     NSString* btnLabel = sender.titleLabel.text;
-    if (self.selectedCell != nil) {
+    
+    if (self.selectedCell == nil) {
+        return;
+    } else if (self.noteMode && [self.selectedCell.titleLabel.text isEqualToString:@" "]) {
+        if ([btnLabel isEqualToString:@"-"]) {
+            [self.selectedCell clearNote];
+        } else {
+            [self.selectedCell toggleNote:btnLabel];
+        }
+    } else if (!self.noteMode) {
         NSInteger row = self.selectedCell.tag / 9;
         NSInteger col = self.selectedCell.tag % 9;
         NSNumber* correctNum = [[self.solutionGrid objectAtIndex:row] objectAtIndex:col];
@@ -419,7 +414,31 @@
                 [self gameFinish];
             }
         }
-        
+
+    }
+}
+
+- (void)checkWithSolution:(UIButton*)sender {
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            cellButton* cell = [[self.boardCells objectAtIndex:i] objectAtIndex:j];
+            NSString* cellLabel = cell.titleLabel.text;
+            NSNumber* correctNum = [[self.solutionGrid objectAtIndex:i] objectAtIndex:j];
+            if (![cellLabel isEqualToString:@""] && ![cellLabel isEqualToString:[correctNum stringValue]]) {
+                // This cell is wrong
+                [cell setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+            }
+            
+        }
+    }
+}
+
+- (void)noteBtnTouched:(UIButton*)sender {
+    self.noteMode = !self.noteMode;
+    if (self.noteMode) {
+        sender.backgroundColor = [UIColor grayColor];
+    } else {
+        sender.backgroundColor = [UIColor clearColor];
     }
 }
 
