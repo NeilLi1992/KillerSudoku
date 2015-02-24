@@ -25,20 +25,13 @@
 
 @implementation NewGameViewController
 
+CGFloat screenWidth;
+CGFloat screenHeight;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     // Initialization
-    NSInteger level = 0;
-//    self.candidateColors = [[NSArray alloc] initWithObjects:
-//                            [UIColor colorWithRed:255/255.0 green:217/255.0 blue:204/255.0 alpha:1],
-//                            [UIColor colorWithRed:255/255.0 green:242/255.0 blue:204/255.0 alpha:1],
-//                            [UIColor colorWithRed:184/255.0 green:0/255.0 blue:92/255.0 alpha:1],
-//                            [UIColor colorWithRed:204/255.0 green:255/255.0 blue:217/255.0 alpha:1],
-//                            [UIColor colorWithRed:255/255.0 green:221/255.0 blue:153/255.0 alpha:1],
-//                            [UIColor colorWithRed:221/255.0 green:153/255.0 blue:255/255.0 alpha:1],
-//                            [UIColor redColor],
-//                            [UIColor purpleColor],nil];
     self.candidateColors = [[NSArray alloc] initWithObjects:
                             [UIColor colorWithRed:240/255.0 green:128/255.0 blue:128/255.0 alpha:1],  // Light coral
 //                            [UIColor colorWithRed:238/255.0 green:232/255.0 blue:179/255.0 alpha:1],  // Khaki
@@ -57,34 +50,59 @@
     self.selectedCage = nil;
     self.finishedCount = 0;
     self.noteMode = false;
+    screenWidth = [UIScreen mainScreen].bounds.size.width;
+    screenHeight = [UIScreen mainScreen].bounds.size.height;
     
+    
+    // Add wait prompt
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    spinner.center = CGPointMake(screenWidth / 2, screenHeight / 2);
+    spinner.tag = 200;
+    [self.view addSubview:spinner];
+    [spinner startAnimating];
+    
+    UILabel* waitPrompt = [[UILabel alloc] initWithFrame:CGRectMake(screenWidth / 2 - 120, screenHeight / 2 + 20, 500, 100)];
+    waitPrompt.text = @"Please wait, generating game...";
+    waitPrompt.tag = 201;
+    waitPrompt.textColor = [UIColor blackColor];
+    [self.view addSubview:waitPrompt];
+}
+
+
+- (void)viewDidAppear:(BOOL)animated {
     // Call generator to generate a game
+    NSInteger level = 0;
     NSArray* generationResult = [Generator generate:level];
     self.unsolvedGame = [generationResult objectAtIndex:0];
     self.solutionGrid = [generationResult objectAtIndex:1];
     
-//    int GAME2[9][9] = {
-//        {5,3,0,0,7,0,0,0,0},
-//        {6,0,0,1,9,5,0,0,0},
-//        {0,9,8,0,0,0,0,6,0},
-//        {8,0,0,0,6,0,0,0,3},
-//        {4,0,0,8,0,3,0,0,1},
-//        {7,0,0,0,2,0,0,0,6},
-//        {0,6,0,0,0,0,2,8,0},
-//        {0,0,0,4,1,9,0,0,5},
-//        {0,0,0,0,8,0,0,7,9}
-//    };
-//
-//    self.unsolvedGame = [[GameBoard alloc] initWithIntegerArray:GAME2];
+    //    int GAME2[9][9] = {
+    //        {5,3,0,0,7,0,0,0,0},
+    //        {6,0,0,1,9,5,0,0,0},
+    //        {0,9,8,0,0,0,0,6,0},
+    //        {8,0,0,0,6,0,0,0,3},
+    //        {4,0,0,8,0,3,0,0,1},
+    //        {7,0,0,0,2,0,0,0,6},
+    //        {0,6,0,0,0,0,2,8,0},
+    //        {0,0,0,4,1,9,0,0,5},
+    //        {0,0,0,0,8,0,0,7,9}
+    //    };
+    //
+    //    self.unsolvedGame = [[GameBoard alloc] initWithIntegerArray:GAME2];
     
-    NSLog(@"NewGameViewController: get generated game\n%@", [self.unsolvedGame cagesDescription]);
+//    NSLog(@"NewGameViewController: get generated game\n%@", [self.unsolvedGame cagesDescription]);
 //    NSLog(@"NewGameViewController: print its sums\n%@", [self.unsolvedGame getSum]);
-    NSLog(@"NewGameViewController: solution grid\n%@", self.solutionGrid);
+//    NSLog(@"NewGameViewController: solution grid\n%@", self.solutionGrid);
     
     // Draw allsubviews
     [self drawBoard];
     [self drawHint];
     [self drawControl];
+    
+    UIActivityIndicatorView* spinner = (UIActivityIndicatorView*)[self.view viewWithTag:200];
+    [spinner stopAnimating];
+    [spinner removeFromSuperview];
+    [[self.view viewWithTag:201] removeFromSuperview];
 }
 
 #pragma -mark drawing methods
