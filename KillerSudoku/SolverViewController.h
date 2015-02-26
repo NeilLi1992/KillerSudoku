@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Constant.h"
 
 @interface SolverViewController : UIViewController
 
