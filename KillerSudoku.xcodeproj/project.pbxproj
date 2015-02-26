@@ -130,6 +130,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		230134291A9D0E5400023704 /* SolverView */ = {
+			isa = PBXGroup;
+			children = (
+				236783791A124CB300DF97F2 /* SolverViewController.h */,
+				2367837A1A124CB300DF97F2 /* SolverViewController.m */,
+			);
+			name = SolverView;
+			sourceTree = "<group>";
+		};
 		230AD8D819ED164E00648B01 = {
 			isa = PBXGroup;
 			children = (
@@ -215,12 +224,11 @@
 			isa = PBXGroup;
 			children = (
 				23881DC21A913FE700527917 /* NewGameView */,
+				230134291A9D0E5400023704 /* SolverView */,
 				230AD8EB19ED164E00648B01 /* ViewController.h */,
 				230AD8EC19ED164E00648B01 /* ViewController.m */,
 				236783761A124A0A00DF97F2 /* CageDivisionViewController.h */,
 				236783771A124A0A00DF97F2 /* CageDivisionViewController.m */,
-				236783791A124CB300DF97F2 /* SolverViewController.h */,
-				2367837A1A124CB300DF97F2 /* SolverViewController.m */,
 				230AD8EE19ED164E00648B01 /* Main.storyboard */,
 			);
 			name = View;

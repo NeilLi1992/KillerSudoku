@@ -26,8 +26,8 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vW0-Nm-YYm">
-                                <rect key="frame" x="16" y="110" width="171" height="30"/>
-                                <state key="normal" title="Killer Sudoku Solver Test">
+                                <rect key="frame" x="16" y="110" width="44" height="30"/>
+                                <state key="normal" title="Solver">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
