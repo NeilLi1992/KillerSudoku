@@ -18,8 +18,17 @@
 
 @implementation SolverViewController
 
+CGFloat screenWidth;
+CGFloat screenHeight;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    // Initialization
+    screenWidth = [UIScreen mainScreen].bounds.size.width;
+    screenHeight = [UIScreen mainScreen].bounds.size.height;
+    
+    
     // Set it to support swipe gesture
     self.gv.userInteractionEnabled = YES;
     self.gestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
@@ -30,63 +39,48 @@
     
     self.selectedCells = [[NSMutableArray alloc] init];
     
-    [self drawBoardLines];
-    [self drawBoardCells];
-    
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)initialize {
-    self.boardDict = [[NSSet alloc] init];
-    
+    [self drawBoard];
 }
 
 /*!
  * Draw the board lines
  */
-- (void)drawBoardLines {
+- (void)drawBoard {
+    CGFloat boardLength = screenWidth;
+    CGFloat statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
+    CGFloat navigationBarHeight = self.navigationController.navigationBar.frame.size.height;
+    CGFloat baseY = statusBarHeight + navigationBarHeight;
+    CGFloat cellLength = boardLength / 9.0f;
     
-    // add horizontal lines
+    // draw horizontal board lines
     for (int i = 0; i < 4; i++) {
-        UIView* horiLineView = [[UIView alloc] initWithFrame:CGRectMake(0, 20 + i * cellLength * 3 + baseY, self.view.bounds.size.width, 2)];
+        UIView* horiLineView = [[UIView alloc] initWithFrame:CGRectMake(0, i * cellLength * 3 + baseY, boardLength, 2)];
         horiLineView.backgroundColor = [UIColor blackColor];
         // Set a high z position so it remains above the cells
         horiLineView.layer.zPosition = 10;
         [self.view addSubview:horiLineView];
     }
     
-    // add vertical lines
+    // draw vertical board lines
     for (int i = 0; i < 3; i++) {
-        UIView* vertiLineView = [[UIView alloc] initWithFrame:CGRectMake(i * cellLength * 3, 20 + baseY, 2, self.view.bounds.size.width)];
+        UIView* vertiLineView = [[UIView alloc] initWithFrame:CGRectMake(i * cellLength * 3, baseY, 2, self.view.bounds.size.width)];
         vertiLineView.backgroundColor = [UIColor blackColor];
         vertiLineView.layer.zPosition = 10;
         [self.view addSubview:vertiLineView];
     }
-    UIView* vertiLineView = [[UIView alloc] initWithFrame:CGRectMake(3 * cellLength * 3 - 2, 20 + baseY, 2, self.view.bounds.size.width)];
+    UIView* vertiLineView = [[UIView alloc] initWithFrame:CGRectMake(3 * cellLength * 3 - 2, baseY, 2, self.view.bounds.size.width)];
     vertiLineView.backgroundColor = [UIColor blackColor];
     vertiLineView.layer.zPosition = 10;
     [self.view addSubview:vertiLineView];
     
-}
-
-
-/*!
- * Draw the board cells
- */
-- (void)drawBoardCells {
     [self.boardCells removeAllObjects];
-    float cellLength = 320.0f / 9;
-    // colorMatrix stores the color representatiion for coloring all the cells
-    
+
+    // draw board cells
     for (int i = 0; i < 9; i++) {
         [self.boardCells addObject:[[NSMutableArray alloc] init]];
         for (int j = 0; j < 9; j++) {
             // Generate a cellView and set it properly
-            UIView* cellView = [[UIView alloc] initWithFrame:CGRectMake(j * cellLength, 20 + i * cellLength + baseY, cellLength, cellLength)];
+            UIView* cellView = [[UIView alloc] initWithFrame:CGRectMake(j * cellLength, i * cellLength + baseY, cellLength, cellLength)];
             cellView.layer.borderColor = [UIColor blackColor].CGColor;
             cellView.layer.borderWidth = 0.5f;
             
@@ -95,7 +89,6 @@
             [self.view addSubview:cellView];
         }
     }
-    
 }
 
 #pragma mark Gesture handler
