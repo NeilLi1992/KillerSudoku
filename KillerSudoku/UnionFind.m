@@ -86,6 +86,21 @@
     return p;
 }
 
+-(void)restore:(NSArray*)indices {
+    // Restore indices
+    for (NSNumber* index in indices) {
+        NSInteger component = [self find:[index integerValue]];
+        
+        if (![[self.componentSizes objectAtIndex:component] isEqualToNumber:[NSNumber numberWithInteger:1]]) {
+            [self.componentSizes replaceObjectAtIndex:component withObject:[NSNumber numberWithInteger:1]];
+        }
+        
+        [self.components replaceObjectAtIndex:[index integerValue] withObject:index];
+        [self.componentSizes replaceObjectAtIndex:[index integerValue] withObject:[NSNumber numberWithInteger:1]];
+    }
+    self.componentNumber = [NSNumber numberWithInteger:[indices count] + [self.componentNumber integerValue]];
+}
+
 /*!
  *Test if p and q are connected
  */

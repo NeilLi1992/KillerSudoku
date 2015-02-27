@@ -160,4 +160,9 @@
     [self setNeedsDisplay];
 }
 
+-(void)clearBorderLines {
+    self.needDraw = false;
+    [self setNeedsDisplay];
+}
+
 @end

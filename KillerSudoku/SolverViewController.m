@@ -292,10 +292,21 @@ CGFloat screenHeight;
 }
 
 - (IBAction)deleteBtnPressed:(id)sender {
+    // Delete component in uf
+    NSMutableArray* toResotre = [[NSMutableArray alloc] init];
+    
     // Clear selection
     for (NSNumber* index in self.selectedCells) {
-        [self.view viewWithTag:[index integerValue] + 1].backgroundColor = [UIColor clearColor];
+        solverCellButton* cell = (solverCellButton*)[self.view viewWithTag:[index integerValue] + 1];
+        [cell clearBorderLines];
+        cell.backgroundColor = [UIColor clearColor];
+        
+        if ([self.uf find:[index integerValue]] != [index integerValue]) {
+            [toResotre addObject:index];
+        }
     }
+    
+    [self.uf restore:toResotre];
     [self.selectedCells removeAllObjects];
 }
 

@@ -11,4 +11,5 @@
 @interface solverCellButton : UIButton
 -(void)setBorderFlagsLeft:(BOOL)left Right:(BOOL)right Top:(BOOL)top Below:(BOOL)below;
 -(void)setCornerFlagsLT:(BOOL)lt RT:(BOOL)rt LB:(BOOL)lb RB:(BOOL)rb;
+-(void)clearBorderLines;
 @end

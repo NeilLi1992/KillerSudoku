@@ -15,6 +15,7 @@
 
 -(void)connect:(NSInteger)p with:(NSInteger)q;
 -(NSInteger)find:(NSInteger)p;
+-(void)restore:(NSArray*)indices;
 
 -(BOOL)isConnected:(NSInteger)p with:(NSInteger)q;
 -(NSInteger)getRandomComponentUnderSize:(NSInteger)sizeLimit;
