@@ -13,6 +13,10 @@
 @property(nonatomic)BOOL hasRight;
 @property(nonatomic)BOOL hasTop;
 @property(nonatomic)BOOL hasBelow;
+@property(nonatomic)BOOL lt;
+@property(nonatomic)BOOL rt;
+@property(nonatomic)BOOL lb;
+@property(nonatomic)BOOL rb;
 @end
 
 @implementation solverCellButton
@@ -22,7 +26,6 @@
     if (!self.needDraw) {
         return;
     }
-    NSLog(@"Here, %d", self.tag);
     
     // Drawing code
     CGFloat padding = 5.0f;
@@ -74,76 +77,71 @@
         CGContextAddLineToPoint(context, endX, endY);
     }
     
-    if (self.hasTop) {
-        if (self.hasLeft) {
-            startX = 0;
-            startY = padding;
-            endX = padding;
-            endY = padding;
-            CGContextMoveToPoint(context, startX, startY);
-            CGContextAddLineToPoint(context, endX, endY);
-            
-            startX = padding;
-            startY = 0;
-            endX = padding;
-            endY = padding;
-            CGContextMoveToPoint(context, startX, startY);
-            CGContextAddLineToPoint(context, endX, endY);
-        }
+    if (self.lt) {
+        startX = 0;
+        startY = padding;
+        endX = padding;
+        endY = padding;
+        CGContextMoveToPoint(context, startX, startY);
+        CGContextAddLineToPoint(context, endX, endY);
         
-        if (self.hasRight) {
-            startX = length - padding;
-            startY = 0;
-            endX = length - padding;
-            endY = padding;
-            CGContextMoveToPoint(context, startX, startY);
-            CGContextAddLineToPoint(context, endX, endY);
-            
-            startX = length - padding;
-            startY = padding;
-            endX = length;
-            endY = padding;
-            CGContextMoveToPoint(context, startX, startY);
-            CGContextAddLineToPoint(context, endX, endY);
-        }
+        startX = padding;
+        startY = 0;
+        endX = padding;
+        endY = padding;
+        CGContextMoveToPoint(context, startX, startY);
+        CGContextAddLineToPoint(context, endX, endY);
     }
     
-    if (self.hasBelow) {
-        if (self.hasLeft) {
-            startX = 0;
-            startY = length - padding;
-            endX = padding;
-            endY = length - padding;
-            CGContextMoveToPoint(context, startX, startY);
-            CGContextAddLineToPoint(context, endX, endY);
-            
-            startX = padding;
-            startY = length - padding;
-            endX = padding;
-            endY = length;
-            CGContextMoveToPoint(context, startX, startY);
-            CGContextAddLineToPoint(context, endX, endY);
-        }
+    if (self.rt) {
+        startX = length - padding;
+        startY = 0;
+        endX = length - padding;
+        endY = padding;
+        CGContextMoveToPoint(context, startX, startY);
+        CGContextAddLineToPoint(context, endX, endY);
         
-        if (self.hasRight) {
-            startX = length - padding;
-            startY = length - padding;
-            endX = length;
-            endY = length - padding;
-            CGContextMoveToPoint(context, startX, startY);
-            CGContextAddLineToPoint(context, endX, endY);
-            
-            startX = length - padding;
-            startY = length - padding;
-            endX = length - padding;
-            endY = length;
-            CGContextMoveToPoint(context, startX, startY);
-            CGContextAddLineToPoint(context, endX, endY);
-        }
+        startX = length - padding;
+        startY = padding;
+        endX = length;
+        endY = padding;
+        CGContextMoveToPoint(context, startX, startY);
+        CGContextAddLineToPoint(context, endX, endY);
+    }
+    
+    if (self.lb) {
+        startX = 0;
+        startY = length - padding;
+        endX = padding;
+        endY = length - padding;
+        CGContextMoveToPoint(context, startX, startY);
+        CGContextAddLineToPoint(context, endX, endY);
+        
+        startX = padding;
+        startY = length - padding;
+        endX = padding;
+        endY = length;
+        CGContextMoveToPoint(context, startX, startY);
+        CGContextAddLineToPoint(context, endX, endY);
+    }
+    
+    if (self.rb) {
+        startX = length - padding;
+        startY = length - padding;
+        endX = length;
+        endY = length - padding;
+        CGContextMoveToPoint(context, startX, startY);
+        CGContextAddLineToPoint(context, endX, endY);
+        
+        startX = length - padding;
+        startY = length - padding;
+        endX = length - padding;
+        endY = length;
+        CGContextMoveToPoint(context, startX, startY);
+        CGContextAddLineToPoint(context, endX, endY);
     }
     
     CGContextStrokePath(context);
-    self.needDraw = false;
 }
 
 -(void)setBorderFlagsLeft:(BOOL)left Right:(BOOL)right Top:(BOOL)top Below:(BOOL)below {
@@ -151,6 +149,13 @@
     self.hasRight = right;
     self.hasBelow = below;
     self.hasTop = top;
+}
+
+-(void)setCornerFlagsLT:(BOOL)lt RT:(BOOL)rt LB:(BOOL)lb RB:(BOOL)rb {
+    self.lt = lt;
+    self.rt = rt;
+    self.lb = lb;
+    self.rb = rb;
     self.needDraw = true;
     [self setNeedsDisplay];
 }

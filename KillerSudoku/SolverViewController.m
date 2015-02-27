@@ -150,33 +150,67 @@ CGFloat screenHeight;
 }
 
 -(void)drawInnerLines:(NSArray*)cells {
-    BOOL hasLeft, hasRight, hasTop, hasBelow;
+    BOOL hasLeft, hasRight, hasTop, hasBelow, lt, rt, lb, rb;
     for (NSNumber* index in cells) {
         NSInteger cellIndex = [index integerValue];
         hasLeft = false;
         hasRight = false;
         hasTop = false;
         hasBelow = false;
+        lt = false;
+        rt = false;
+        lb = false;
+        rb = false;
+        
+        NSNumber* left = [NSNumber numberWithInteger:(cellIndex - 1)];
+        NSNumber* right = [NSNumber numberWithInteger:(cellIndex + 1)];
+        NSNumber* top = [NSNumber numberWithInteger:(cellIndex - 9)];
+        NSNumber* below = [NSNumber numberWithInteger:(cellIndex + 9)];
+        NSNumber* leftTop = [NSNumber numberWithInteger:(cellIndex - 1 - 9)];
+        NSNumber* rightTop = [NSNumber numberWithInteger:(cellIndex + 1 - 9)];
+        NSNumber* leftBelow = [NSNumber numberWithInteger:(cellIndex - 1 + 9)];
+        NSNumber* rightBelow = [NSNumber numberWithInteger:(cellIndex + 1+ 9)];
         
         // Has right
-        if ((cellIndex + 1) % 9 != 0 && [cells containsObject:[NSNumber numberWithInteger:(cellIndex + 1)]]) {
+        if ([cells containsObject:right]) {
             hasRight = true;
         }
         // Has left
-        if (cellIndex % 9 != 0 && [cells containsObject:[NSNumber numberWithInteger:(cellIndex - 1)]]) {
+        if ([cells containsObject:left]) {
             hasLeft = true;
         }
         // Has below
-        if (cellIndex + 9 < 81 && [cells containsObject:[NSNumber numberWithInteger:(cellIndex + 9)]]) {
+        if ([cells containsObject:below]) {
             hasBelow = true;
         }
         // Has top
-        if (cellIndex - 9 >= 0 && [cells containsObject:[NSNumber numberWithInteger:(cellIndex - 9)]]) {
+        if ([cells containsObject:top]) {
             hasTop = true;
+        }
+        
+        // Left top corner
+        if ([cells containsObject:left] && [cells containsObject:top] && ![cells containsObject:leftTop]) {
+            lt = true;
+        }
+        
+        // Right top corner
+        if ([cells containsObject:right] && [cells containsObject:top] && ![cells containsObject:rightTop]) {
+            rt = true;
+        }
+        
+        // Left below corner
+        if ([cells containsObject:left] && [cells containsObject:below] && ![cells containsObject:leftBelow]) {
+            lb = true;
+        }
+        
+        // Right below corner
+        if ([cells containsObject:right] && [cells containsObject:below] && ![cells containsObject:rightBelow]) {
+            rb = true;
         }
         
         solverCellButton* cell = (solverCellButton*)[self.view viewWithTag:[index integerValue] + 1];
         [cell setBorderFlagsLeft:hasLeft Right:hasRight Top:hasTop Below:hasBelow];
+        [cell setCornerFlagsLT:lt RT:rt LB:lb RB:rb];
     }
 }
 
@@ -237,8 +271,8 @@ CGFloat screenHeight;
                 }
             }
             
-            // Only process when there is only one cell, or many cells with in more than one cage
-            if ([toUnion count] == 1 || [cageIDs count] > 1) {
+            // Only process when there is only one cell, or many cells within more than one cage
+            if ([toUnion count] <= 9 && ([toUnion count] == 1 || [cageIDs count] > 1)) {
                 // Union all different cages with the first cage
                 for (int i = 1; i < [cageIDs count]; i++) {
                     [self.uf connect:[[cageIDs objectAtIndex:0] integerValue] with:[[cageIDs objectAtIndex:i] integerValue]];
@@ -248,15 +282,11 @@ CGFloat screenHeight;
                 [self drawInnerLines:toUnion];
                 
                 // Deal with the sums
-                
-                for (NSNumber* index in toUnion) {  // Clear the selection color of the unioned cells
-                    [self.view viewWithTag:[index integerValue] + 1].backgroundColor = [UIColor clearColor];
-                }
-
             }
             
-
-            
+            for (NSNumber* index in toUnion) {  // Clear the selection color of the unioned cells
+                [self.view viewWithTag:[index integerValue] + 1].backgroundColor = [UIColor clearColor];
+            }
         }
     }
 }
