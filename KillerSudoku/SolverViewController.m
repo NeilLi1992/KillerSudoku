@@ -90,7 +90,7 @@ CGFloat screenHeight;
             solverCellButton* cellBtn = [[solverCellButton alloc] initWithFrame:CGRectMake(j * cellLength, i * cellLength + baseY, cellLength, cellLength)];
             cellBtn.layer.borderColor = [UIColor blackColor].CGColor;
             cellBtn.layer.borderWidth = 0.5f;
-            cellBtn.tag = i * 9 + j;
+            cellBtn.tag = i * 9 + j + 1;
 
             // Save it in the boardCells array
             [[self.boardCells objectAtIndex:i] addObject:cellBtn];
@@ -175,7 +175,7 @@ CGFloat screenHeight;
             hasTop = true;
         }
         
-        solverCellButton* cell = (solverCellButton*)[self.view viewWithTag:[index integerValue]];
+        solverCellButton* cell = (solverCellButton*)[self.view viewWithTag:[index integerValue] + 1];
         [cell setBorderFlagsLeft:hasLeft Right:hasRight Top:hasTop Below:hasBelow];
     }
 }
@@ -183,20 +183,19 @@ CGFloat screenHeight;
 #pragma -mark action handlers
 - (void)cellTouched:(solverCellButton *)sender {
     // Add all the cells within the same cage of this pressed cell into selectedCells array
-    NSArray* indices = [self.uf getIteratorForComponent:[self.uf find:sender.tag]];
+    NSArray* indices = [self.uf getIteratorForComponent:[self.uf find:sender.tag - 1]]; // Do the minus 1 bias on sender.tag
     
-    if ([self.selectedCells containsObject:[NSNumber numberWithInteger:sender.tag]]) {
+    if ([self.selectedCells containsObject:[NSNumber numberWithInteger:sender.tag - 1]]) {
         // Already selected, remove
         for (NSNumber* index in indices) {
             [self.selectedCells removeObject:index];
-            [self.view viewWithTag:[index integerValue]].backgroundColor = [UIColor clearColor];
+            [self.view viewWithTag:[index integerValue] + 1].backgroundColor = [UIColor clearColor];
         }
     } else {
         // Not selected, add
         for (NSNumber* index in indices) {
-            NSLog(@"%d", [index integerValue]);
             [self.selectedCells addObject:index];
-            [self.view viewWithTag:[index integerValue]].backgroundColor = self.selectColor;
+            [self.view viewWithTag:[index integerValue] + 1].backgroundColor = self.selectColor;
         }
     }
 }
@@ -240,7 +239,6 @@ CGFloat screenHeight;
             
             // Only process when there is only one cell, or many cells with in more than one cage
             if ([toUnion count] == 1 || [cageIDs count] > 1) {
-                NSLog(@"Going to union");
                 // Union all different cages with the first cage
                 for (int i = 1; i < [cageIDs count]; i++) {
                     [self.uf connect:[[cageIDs objectAtIndex:0] integerValue] with:[[cageIDs objectAtIndex:i] integerValue]];
@@ -252,7 +250,7 @@ CGFloat screenHeight;
                 // Deal with the sums
                 
                 for (NSNumber* index in toUnion) {  // Clear the selection color of the unioned cells
-                    [self.view viewWithTag:[index integerValue]].backgroundColor = [UIColor clearColor];
+                    [self.view viewWithTag:[index integerValue] + 1].backgroundColor = [UIColor clearColor];
                 }
 
             }
@@ -266,7 +264,7 @@ CGFloat screenHeight;
 - (IBAction)deleteBtnPressed:(id)sender {
     // Clear selection
     for (NSNumber* index in self.selectedCells) {
-        [self.view viewWithTag:[index integerValue]].backgroundColor = [UIColor clearColor];
+        [self.view viewWithTag:[index integerValue] + 1].backgroundColor = [UIColor clearColor];
     }
     [self.selectedCells removeAllObjects];
 }
