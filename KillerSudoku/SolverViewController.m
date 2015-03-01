@@ -11,6 +11,7 @@
 #import "solverCellButton.h"
 
 @interface SolverViewController ()
+@property (weak, nonatomic) IBOutlet UITextField *sumTextField;
 @property(nonatomic, strong)NSSet* boardDict;
 @property(nonatomic, strong)NSMutableArray* boardCells;
 @property(strong, nonatomic) IBOutlet UIView *gv;
@@ -296,24 +297,98 @@ CGFloat screenHeight;
     NSMutableArray* toResotre = [[NSMutableArray alloc] init];
     
     // Clear selection
+    NSMutableArray* cageIDs = [[NSMutableArray alloc] init];
     for (NSNumber* index in self.selectedCells) {
+        // Clear the selection background color for every cell
         solverCellButton* cell = (solverCellButton*)[self.view viewWithTag:[index integerValue] + 1];
-        [cell clearBorderLines];
         cell.backgroundColor = [UIColor clearColor];
         
-        if ([self.uf find:[index integerValue]] != [index integerValue]) {
-            [toResotre addObject:index];
+        // If the cell has joined a cage, remove it
+        if ([cell getHasJoined]) {
+            // Identify different cages
+            NSNumber* cageID = [NSNumber numberWithInteger:[self.uf find:[index integerValue]]];
+            if (![cageIDs containsObject:cageID]) {
+                // The first time this cage is seen
+                // This cell is the first cell within the cage, it has the sumtext on it, remove it
+                [cageIDs addObject:cageID];
+                [cell clearSum];
+                [self.sums removeObjectForKey:cageID];
+            }
+            
+            // If this cell is not the cageID cell, add it to restore
+            if ([index integerValue] != [cageID integerValue]) {
+                [toResotre addObject:index];
+            }
+            
+            // Clear the border lines for this cell
+            [cell clearBorderLines];
         }
     }
     
     [self.uf restore:toResotre];
     [self.selectedCells removeAllObjects];
+    
+    NSLog(@"self.sums: \n %@", self.sums);
 }
 
 - (IBAction)enterBtnPressed:(id)sender {
+    NSInteger sum = [self.sumTextField.text integerValue];
+    if (1 <= sum && sum <= 45) {
+        // Find all different cageIDs
+        NSMutableArray* cageIDs = [[NSMutableArray alloc] init];
+        for (NSNumber* index in self.selectedCells) {
+            solverCellButton* cell = (solverCellButton*)[self.view viewWithTag:[index integerValue] + 1];
+            if ([cell getHasJoined]) {
+                NSNumber* cageID = [NSNumber numberWithInteger:[self.uf find:[index integerValue]]];
+                if (![cageIDs containsObject:cageID]) {
+                    [cageIDs addObject:cageID];
+                }
+            }
+        }
+        
+        
+        for (NSNumber* cageID in cageIDs) {
+            
+            
+            // Set sum in the sums dictionary
+            [self.sums setObject:[NSNumber numberWithInteger:sum] forKey:cageID];
+            
+            // Set sum in the view
+            NSNumber* firstCell = [[self.uf getIteratorForComponent:[cageID integerValue]] objectAtIndex:0];
+            solverCellButton* cellToAdd = (solverCellButton*)[self.view viewWithTag:[firstCell integerValue] + 1];
+            [cellToAdd setSum:sum];
+        }
+    }
+    
+    // Clear sum text, clear selection
+    self.sumTextField.text = @"";
+    for (NSNumber* index in self.selectedCells) {
+        [self.view viewWithTag:[index integerValue] + 1].backgroundColor = [UIColor clearColor];
+    }
+    [self.selectedCells removeAllObjects];
 }
 
+// When clear is pressed, delete sums from selected cages, but keep the cages
 - (IBAction)clearBtnPressed:(id)sender {
+    NSLog(@"Clear is pressed");
+    
+    NSMutableArray* cageIDs = [[NSMutableArray alloc] init];
+    for (NSNumber* index in self.selectedCells) {
+        // Clear the selection background color for every cell
+        solverCellButton* cell = (solverCellButton*)[self.view viewWithTag:[index integerValue] + 1];
+        cell.backgroundColor = [UIColor clearColor];
+        
+        if ([cell getHasJoined]) {
+            NSNumber* cageID = [NSNumber numberWithInteger:[self.uf find:[index integerValue]]];
+            if (![cageIDs containsObject:cageID]) {
+                [cageIDs addObject:cageID];
+                [cell clearSum];
+                [self.sums removeObjectForKey:cageID];
+            }
+        }
+    }
+    
+    [self.selectedCells removeAllObjects];
 }
 
 - (IBAction)solveBtnPressed:(id)sender {

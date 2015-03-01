@@ -8,7 +8,7 @@
 
 #import "solverCellButton.h"
 @interface solverCellButton()
-@property(nonatomic)BOOL needDraw;
+@property(nonatomic)BOOL hasJoined;
 @property(nonatomic)BOOL hasLeft;
 @property(nonatomic)BOOL hasRight;
 @property(nonatomic)BOOL hasTop;
@@ -17,13 +17,14 @@
 @property(nonatomic)BOOL rt;
 @property(nonatomic)BOOL lb;
 @property(nonatomic)BOOL rb;
+@property(strong, nonatomic)UILabel* sumText;
 @end
 
 @implementation solverCellButton
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
-    if (!self.needDraw) {
+    if (!self.hasJoined) {
         return;
     }
     
@@ -156,13 +157,35 @@
     self.rt = rt;
     self.lb = lb;
     self.rb = rb;
-    self.needDraw = true;
+    self.hasJoined = true;
     [self setNeedsDisplay];
 }
 
 -(void)clearBorderLines {
-    self.needDraw = false;
+    self.hasJoined = false;
     [self setNeedsDisplay];
+}
+
+-(BOOL)getHasJoined {
+    return self.hasJoined;
+}
+
+-(void)setSum:(NSInteger)sum {
+    if (self.sumText == nil) {
+        self.sumText = [[UILabel alloc] initWithFrame:CGRectMake(7, 5, 10, 10)];
+        [self.sumText setFont:[UIFont systemFontOfSize:8]];
+        [self addSubview:self.sumText];
+    }
+    
+    self.sumText.text = [NSString stringWithFormat:@"%d", sum];
+}
+
+-(void)clearSum {
+    if (self.sumText != nil) {
+        self.sumText.text = @"";
+        [self.sumText removeFromSuperview];
+        self.sumText = nil;
+    }
 }
 
 @end

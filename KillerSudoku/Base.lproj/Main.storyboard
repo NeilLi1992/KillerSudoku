@@ -163,6 +163,7 @@
                     <navigationItem key="navigationItem" title="Solver" id="RSF-cH-fLA"/>
                     <connections>
                         <outlet property="gv" destination="VK4-dn-9u4" id="QcK-Af-8sv"/>
+                        <outlet property="sumTextField" destination="JqL-hd-5vB" id="KYa-xd-JTI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GmO-64-fyA" userLabel="First Responder" sceneMemberID="firstResponder"/>
