@@ -10,7 +10,7 @@
 #import "UnionFind.h"
 #import "solverCellButton.h"
 
-@interface SolverViewController ()
+@interface SolverViewController () <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *sumTextField;
 @property(nonatomic, strong)NSSet* boardDict;
 @property(nonatomic, strong)NSMutableArray* boardCells;
@@ -37,6 +37,15 @@ CGFloat screenHeight;
     self.selectedCells = [[NSMutableArray alloc] init];
     self.sums = [[NSMutableDictionary alloc] init];
     self.uf = [[UnionFind alloc] initWithCapacity: 81];
+    self.sumTextField.delegate = self;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+                                   initWithTarget:self
+                                   action:@selector(dismissKeyboard)];
+    
+    [self.view addGestureRecognizer:tap];
+    NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
+    [center addObserver:self selector:@selector(showKeyboard:) name:UIKeyboardWillShowNotification object:nil];
+    [center addObserver:self selector:@selector(hideKeyboard:) name:UIKeyboardWillHideNotification object:nil];
     
     // No longer need to use swipe gesture
 //    // Set it to support swipe gesture
@@ -132,21 +141,22 @@ CGFloat screenHeight;
  */
 -(NSMutableArray*)findFourNeighborsForCell:(NSInteger)cellIndex {
     NSMutableArray* neighbors = [[NSMutableArray alloc] init];
-    if ((cellIndex + 1) % 9 != 0) {
-        [neighbors addObject:[NSNumber numberWithInteger: cellIndex + 1]];
+    if (cellIndex - 9 >= 0) {
+        [neighbors addObject:[NSNumber numberWithInteger:cellIndex - 9]];
     }
     
     if (cellIndex % 9 != 0) {
         [neighbors addObject:[NSNumber numberWithInteger: cellIndex - 1]];
     }
     
+    if ((cellIndex + 1) % 9 != 0) {
+        [neighbors addObject:[NSNumber numberWithInteger: cellIndex + 1]];
+    }
+    
     if (cellIndex + 9 < 81) {
         [neighbors addObject:[NSNumber numberWithInteger:cellIndex + 9]];
     }
     
-    if (cellIndex - 9 >= 0) {
-        [neighbors addObject:[NSNumber numberWithInteger:cellIndex - 9]];
-    }
     return neighbors;
 }
 
@@ -261,28 +271,55 @@ CGFloat screenHeight;
                 // Add this checked cell to toUnion array
                 [toUnion addObject:checkCell];
             }
-            
-            // Do union in uf model
-                // Identify different cageIDs
-            NSMutableArray* cageIDs = [[NSMutableArray alloc] init];
-            for (NSNumber* index in toUnion) {
-                NSNumber* cageID = [NSNumber numberWithInteger:[self.uf find:[index integerValue]]];
-                if (![cageIDs containsObject:cageID]) {
-                    [cageIDs addObject:cageID];
-                }
-            }
-            
-            // Only process when there is only one cell, or many cells within more than one cage
-            if ([toUnion count] <= 9 && ([toUnion count] == 1 || [cageIDs count] > 1)) {
-                // Union all different cages with the first cage
-                for (int i = 1; i < [cageIDs count]; i++) {
-                    [self.uf connect:[[cageIDs objectAtIndex:0] integerValue] with:[[cageIDs objectAtIndex:i] integerValue]];
-                }
-                
-                // Do union in view
+            ////////////////////////
+            // Join case 1: only one cell
+            if ([toUnion count] == 1) {
                 [self drawInnerLines:toUnion];
+            }
+            // Join case 2: multiple cages
+            else if ([toUnion count] <= 9) {
+                NSMutableArray* cageIDs = [[NSMutableArray alloc] init];
+                for (NSNumber* index in toUnion) {  // Identify different cageIDs
+                    NSNumber* cageID = [NSNumber numberWithInteger:[self.uf find:[index integerValue]]];
+                    if (![cageIDs containsObject:cageID]) {
+                        [cageIDs addObject:cageID];
+                    }
+                }
                 
-                // Deal with the sums
+                if ([cageIDs count] > 1) {  // Only join more than one cages
+                    // Deal with sum
+                        // Set the total sum text for the first cell in the joined whole cage, if not 0
+                    NSInteger totalSum = 0;
+                    for (NSNumber* cageID in cageIDs) {
+                        if ([self.sums objectForKey:cageID] != nil) {   // Sum already set for this cage
+                            // Add to total sum
+                            totalSum += [[self.sums objectForKey:cageID] integerValue];
+                            // Remove the sum from self.sums
+                            [self.sums removeObjectForKey:cageID];
+                            // Remove sum text for this cage
+                            NSNumber* firstCell = [[self.uf getIteratorForComponent:[cageID integerValue]] objectAtIndex:0];
+                            solverCellButton* cell = (solverCellButton*)[self.view viewWithTag:[firstCell integerValue] + 1];
+                            [cell clearSum];
+                        }
+                    }
+                    
+                    // Join in UF model, connect all other cages with the first cage
+                    for (int i = 1; i < [cageIDs count]; i++) {
+                        [self.uf connect:[[cageIDs objectAtIndex:i] integerValue] with:[[cageIDs objectAtIndex:0] integerValue]];
+                    }
+                    
+                    // Join in view
+                    [self drawInnerLines:toUnion];
+                    
+                    // Set the total sum for joined whole cage, if not 0
+                    if (totalSum != 0) {
+                        NSNumber* wholeCageID = [cageIDs objectAtIndex:0];
+                        [self.sums setObject:[NSNumber numberWithInteger:totalSum] forKey:wholeCageID];
+                        NSNumber* firstCell = [[self.uf getIteratorForComponent:[wholeCageID integerValue]] objectAtIndex:0];
+                        solverCellButton* cell = (solverCellButton*)[self.view viewWithTag:[firstCell integerValue] + 1];
+                        [cell setSum:totalSum];
+                    }
+                }
             }
             
             for (NSNumber* index in toUnion) {  // Clear the selection color of the unioned cells
@@ -333,6 +370,7 @@ CGFloat screenHeight;
 
 - (IBAction)enterBtnPressed:(id)sender {
     NSInteger sum = [self.sumTextField.text integerValue];
+    [self.sumTextField resignFirstResponder];
     if (1 <= sum && sum <= 45) {
         // Find all different cageIDs
         NSMutableArray* cageIDs = [[NSMutableArray alloc] init];
@@ -392,6 +430,69 @@ CGFloat screenHeight;
 }
 
 - (IBAction)solveBtnPressed:(id)sender {
+    // Do basic check to ensure the entered game is valid
+    
+    // Build up the unsolved game
+    
+    // Calling solver to solve the game
+    
+    // Fill the game borad with the solution
+    
+}
+
+// Resign sumTextField as first responder when background touched
+-(void)dismissKeyboard {
+    [self.sumTextField resignFirstResponder];
+    self.sumTextField.text = @"";
+}
+
+#pragma mark delegate methods
+
+//- (void)textFieldDidBeginEditing:(UITextField *)textField {
+//    [UIView beginAnimations:nil context:NULL];
+//    [UIView setAnimationDelegate:self];
+//    [UIView setAnimationDuration:0.5];
+//    [UIView setAnimationBeginsFromCurrentState:YES];
+//    self.view.frame = CGRectMake(self.view.frame.origin.x, (self.view.frame.origin.y - 100.0), self.view.frame.size.width, self.view.frame.size.height);
+//    [UIView commitAnimations];
+//}
+//- (void)textFieldDidEndEditing:(UITextField *)textField {
+//    NSLog(@"GOing to stop editing");
+//    [UIView beginAnimations:nil context:NULL];
+//    [UIView setAnimationDelegate:self];
+//    [UIView setAnimationDuration:0.5];
+//    [UIView setAnimationBeginsFromCurrentState:YES];
+//    self.view.frame = CGRectMake(self.view.frame.origin.x, (self.view.frame.origin.y + 100.0), self.view.frame.size.width, self.view.frame.size.height);
+//    [UIView commitAnimations];
+//}
+
+-(void)showKeyboard:(NSNotification*)notification {
+    NSDictionary* info = notification.userInfo;
+    NSValue* value = info[UIKeyboardFrameEndUserInfoKey];
+    CGRect rawFrame = [value CGRectValue];
+    CGRect keyboardFrame = [self.view convertRect:rawFrame fromView:nil];
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDelegate:self];
+    [UIView setAnimationDuration:0.5];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    self.view.frame = CGRectMake(self.view.frame.origin.x, (self.view.frame.origin.y - keyboardFrame.size.height), self.view.frame.size.width, self.view.frame.size.height);
+    [UIView commitAnimations];
+
+}
+
+-(void)hideKeyboard:(NSNotification*)notification {
+    NSDictionary* info = notification.userInfo;
+    NSValue* value = info[UIKeyboardFrameEndUserInfoKey];
+    CGRect rawFrame = [value CGRectValue];
+    CGRect keyboardFrame = [self.view convertRect:rawFrame fromView:nil];
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDelegate:self];
+    [UIView setAnimationDuration:0.1];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    self.view.frame = CGRectMake(self.view.frame.origin.x, (self.view.frame.origin.y + keyboardFrame.size.height), self.view.frame.size.width, self.view.frame.size.height);
+    [UIView commitAnimations];
 }
 
 
