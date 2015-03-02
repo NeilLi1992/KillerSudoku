@@ -132,7 +132,7 @@
     
     NSArray* solutions = [Solver solve:testGame];
     
-    NSLog(@"Game solved with %ld solutions.", [solutions count]);
+    NSLog(@"Game solved with %d solutions.", [solutions count]);
     for (GameBoard* solution in solutions) {
         NSLog(@"%@", solution);
     }

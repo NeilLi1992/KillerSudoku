@@ -9,6 +9,7 @@
 #import "SolverViewController.h"
 #import "UnionFind.h"
 #import "solverCellButton.h"
+#import "GameBoard.h"
 
 @interface SolverViewController () <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *sumTextField;
@@ -308,7 +309,7 @@ CGFloat screenHeight;
             ////////////////////////
             // Join case 1: only one cell
             if ([toUnion count] == 1) {
-                [self drawInnerLines:toUnion];
+                [self drawInnerLines:toUnion];  // Single-cell cage, no need to deal with the UF model
             }
             // Join case 2: multiple cages
             else if ([toUnion count] <= 9) {
@@ -466,6 +467,7 @@ CGFloat screenHeight;
 - (IBAction)solveBtnPressed:(id)sender {
     // Do basic check to ensure the entered game is valid
     if ([self validate]) {
+        NSLog(@"Validated, OK to solve.");
         // Configuration is complete, try to solve now
             // Build up the unsolved game
         
@@ -484,7 +486,48 @@ CGFloat screenHeight;
 }
 
 - (IBAction)debugBtnPressed:(id)sender {
+    NSMutableDictionary* configuration = [[NSMutableDictionary alloc] init];
+    NSMutableString* game_file = [NSMutableString stringWithString:@"/Users/neilli1992/Y3S1/Final Year Project/Code/KillerSudoku/KillerSudoku/"];
+    NSString* game_name = @"level_50";
+    [game_file appendString:game_name];
     
+    NSString* file_content = [[NSString alloc] initWithContentsOfFile:game_file encoding:NSUTF8StringEncoding error:nil];
+    
+    // Do the following process block on each line
+    [file_content enumerateLinesUsingBlock:^(NSString* line, BOOL *stop){
+        NSArray* components = [line componentsSeparatedByString:@":"];
+        NSArray* indices = [[components objectAtIndex:0] componentsSeparatedByString:@","];
+        NSMutableArray* indicesSet = [[NSMutableArray alloc] init];
+        // Extract each index number and store in a set
+        for (NSString* indexStr in indices) {
+            NSNumber* index = [NSNumber numberWithInteger:[indexStr integerValue]];
+            [indicesSet addObject:index];
+        }
+        // Extraact the cage sum number
+        NSNumber* sum = [NSNumber numberWithInteger:[[components objectAtIndex:1] integerValue]];
+        
+        // Add the indices-sum pair into the dictionary
+        [configuration setObject:sum forKey:indicesSet];
+    }];
+    
+    // Construct an empty, unsolved game, and obtain an array of solutions.
+    // In valid situations, there should be only one solution
+    GameBoard* unsolvedGame = [[GameBoard alloc] initWithConfiguration:configuration];
+    
+    // Apply this game directly in the board
+    UnionFind* testUF = [unsolvedGame getUF];
+    NSDictionary* testSums = [unsolvedGame getSum];
+    self.sums = [NSMutableDictionary dictionaryWithDictionary:testSums];
+    self.uf = testUF;
+    
+    for (NSNumber* cageID in [self.uf getAllComponents]) {
+        NSArray* cageCells = [self.uf getIteratorForComponent:[cageID integerValue]];
+        [self drawInnerLines:cageCells];    // Draw inner border lines for each cage
+        NSNumber* firstCell = [cageCells objectAtIndex:0];
+        solverCellButton* cell = (solverCellButton*)[self.view viewWithTag:[firstCell integerValue] + 1];
+        NSNumber* sum = [self.sums objectForKey:cageID];
+        [cell setSum:[sum integerValue]];   // Set sum text for first cell of each cage
+    }
 }
 
 
@@ -501,7 +544,6 @@ CGFloat screenHeight;
     [UIView setAnimationBeginsFromCurrentState:YES];
     self.view.frame = CGRectMake(self.view.frame.origin.x, (self.view.frame.origin.y - keyboardFrame.size.height), self.view.frame.size.width, self.view.frame.size.height);
     [UIView commitAnimations];
-
 }
 
 -(void)hideKeyboard:(NSNotification*)notification {
