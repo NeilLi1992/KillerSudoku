@@ -29,7 +29,7 @@
     }
     
     // Drawing code
-    CGFloat padding = 5.0f;
+    CGFloat padding = 4.0f;
     CGFloat length = self.frame.size.width;
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, 1);
@@ -172,8 +172,8 @@
 
 -(void)setSum:(NSInteger)sum {
     if (self.sumText == nil) {
-        self.sumText = [[UILabel alloc] initWithFrame:CGRectMake(7, 5, 10, 10)];
-        [self.sumText setFont:[UIFont systemFontOfSize:8]];
+        self.sumText = [[UILabel alloc] initWithFrame:CGRectMake(6, 4, 10, 10)];
+        [self.sumText setFont:[UIFont systemFontOfSize:7]];
         [self addSubview:self.sumText];
     }
     

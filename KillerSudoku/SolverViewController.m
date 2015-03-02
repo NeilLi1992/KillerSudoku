@@ -13,6 +13,7 @@
 
 @interface SolverViewController () <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *sumTextField;
+@property (weak, nonatomic) IBOutlet UILabel *erroLabel;
 @property(nonatomic, strong)NSSet* boardDict;
 @property(nonatomic, strong)NSMutableArray* boardCells;
 @property(strong, nonatomic) IBOutlet UIView *gv;
@@ -41,7 +42,7 @@ CGFloat screenHeight;
     self.sumTextField.delegate = self;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
-                                   action:@selector(dismissKeyboard)];
+                                   action:@selector(backgroundTouched:)];
     
     [self.view addGestureRecognizer:tap];
     NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
@@ -227,12 +228,14 @@ CGFloat screenHeight;
 }
 
 -(BOOL)validate {
+    self.erroLabel.text = @"";
     // Checking every cell has joined a cage
     for (int index = 0; index < 81; index++) {
         solverCellButton* cell = (solverCellButton*)[self.view viewWithTag:(index + 1)];
         if (![cell getHasJoined]) {
             // Cell index hasn't joined any cage
             NSLog(@"Cell %d hasn't joined any cage.", index);
+            self.erroLabel.text = @"Error: not all cells joined.";
             return false;
         }
     }
@@ -242,6 +245,7 @@ CGFloat screenHeight;
         if ([self.sums objectForKey:cageID] == nil) {
             // No sum set for cageID
             NSLog(@"CageID %d has no sum.", [cageID integerValue]);
+            self.erroLabel.text = @"Error: not all cages have sum.";
             return false;
         }
     }
@@ -254,10 +258,20 @@ CGFloat screenHeight;
     if (totalSum != 405) {
         // Total sum not equal to 405
         NSLog(@"Total sum doesn't equal to 405.");
+        self.erroLabel.text = @"Error: total sum unequal to 405.";
         return false;
     }
 
     return true;
+}
+
+-(void)clearSelection {
+    // Clear current selections
+    for (NSNumber* index in self.selectedCells) {
+        solverCellButton* cell = (solverCellButton*)[self.view viewWithTag:[index integerValue] + 1];
+        cell.backgroundColor = [UIColor clearColor];
+    }
+    [self.selectedCells removeAllObjects];
 }
 
 #pragma -mark action handlers
@@ -435,10 +449,7 @@ CGFloat screenHeight;
     
     // Clear sum text, clear selection
     self.sumTextField.text = @"";
-    for (NSNumber* index in self.selectedCells) {
-        [self.view viewWithTag:[index integerValue] + 1].backgroundColor = [UIColor clearColor];
-    }
-    [self.selectedCells removeAllObjects];
+    [self clearSelection];
 }
 
 // When clear is pressed, delete sums from selected cages, but keep the cages
@@ -480,12 +491,17 @@ CGFloat screenHeight;
 }
 
 // Resign sumTextField as first responder when background touched
--(void)dismissKeyboard {
+-(void)backgroundTouched:(id)sender {
+    // Hide keyboard for sumtext field
     [self.sumTextField resignFirstResponder];
     self.sumTextField.text = @"";
+    
+    // Clear current selections
+    [self clearSelection];
 }
 
 - (IBAction)debugBtnPressed:(id)sender {
+    [self clearSelection];
     NSMutableDictionary* configuration = [[NSMutableDictionary alloc] init];
     NSMutableString* game_file = [NSMutableString stringWithString:@"/Users/neilli1992/Y3S1/Final Year Project/Code/KillerSudoku/KillerSudoku/"];
     NSString* game_name = @"level_50";
