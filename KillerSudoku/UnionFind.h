@@ -22,7 +22,6 @@
 -(NSInteger)sizeOfComponent:(NSInteger)p;
 -(NSMutableArray*)getIteratorForComponent:(NSInteger)p;
 -(NSMutableArray*)getAllComponents;
--(NSMutableArray*)getComponents;
 -(NSInteger)count;
 
 @end

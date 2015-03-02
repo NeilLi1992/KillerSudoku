@@ -225,6 +225,40 @@ CGFloat screenHeight;
     }
 }
 
+-(BOOL)validate {
+    // Checking every cell has joined a cage
+    for (int index = 0; index < 81; index++) {
+        solverCellButton* cell = (solverCellButton*)[self.view viewWithTag:(index + 1)];
+        if (![cell getHasJoined]) {
+            // Cell index hasn't joined any cage
+            NSLog(@"Cell %d hasn't joined any cage.", index);
+            return false;
+        }
+    }
+    
+    // Checking every cage has a sum
+    for (NSNumber* cageID in [self.uf getAllComponents]) {
+        if ([self.sums objectForKey:cageID] == nil) {
+            // No sum set for cageID
+            NSLog(@"CageID %d has no sum.", [cageID integerValue]);
+            return false;
+        }
+    }
+    
+    // Checking total sum equals 405
+    NSInteger totalSum = 0;
+    for (NSNumber* sum in [self.sums allValues]) {
+        totalSum += [sum integerValue];
+    }
+    if (totalSum != 405) {
+        // Total sum not equal to 405
+        NSLog(@"Total sum doesn't equal to 405.");
+        return false;
+    }
+
+    return true;
+}
+
 #pragma -mark action handlers
 - (void)cellTouched:(solverCellButton *)sender {
     // Add all the cells within the same cage of this pressed cell into selectedCells array
@@ -431,13 +465,16 @@ CGFloat screenHeight;
 
 - (IBAction)solveBtnPressed:(id)sender {
     // Do basic check to ensure the entered game is valid
-    
-    // Build up the unsolved game
-    
-    // Calling solver to solve the game
-    
-    // Fill the game borad with the solution
-    
+    if ([self validate]) {
+        // Configuration is complete, try to solve now
+            // Build up the unsolved game
+        
+            // Calling solver to solve the game
+        
+            // Fill the board with solved solutions
+        
+            // Deal with no solution & multiple solutions
+    }
 }
 
 // Resign sumTextField as first responder when background touched
@@ -446,26 +483,12 @@ CGFloat screenHeight;
     self.sumTextField.text = @"";
 }
 
+- (IBAction)debugBtnPressed:(id)sender {
+    
+}
+
+
 #pragma mark delegate methods
-
-//- (void)textFieldDidBeginEditing:(UITextField *)textField {
-//    [UIView beginAnimations:nil context:NULL];
-//    [UIView setAnimationDelegate:self];
-//    [UIView setAnimationDuration:0.5];
-//    [UIView setAnimationBeginsFromCurrentState:YES];
-//    self.view.frame = CGRectMake(self.view.frame.origin.x, (self.view.frame.origin.y - 100.0), self.view.frame.size.width, self.view.frame.size.height);
-//    [UIView commitAnimations];
-//}
-//- (void)textFieldDidEndEditing:(UITextField *)textField {
-//    NSLog(@"GOing to stop editing");
-//    [UIView beginAnimations:nil context:NULL];
-//    [UIView setAnimationDelegate:self];
-//    [UIView setAnimationDuration:0.5];
-//    [UIView setAnimationBeginsFromCurrentState:YES];
-//    self.view.frame = CGRectMake(self.view.frame.origin.x, (self.view.frame.origin.y + 100.0), self.view.frame.size.width, self.view.frame.size.height);
-//    [UIView commitAnimations];
-//}
-
 -(void)showKeyboard:(NSNotification*)notification {
     NSDictionary* info = notification.userInfo;
     NSValue* value = info[UIKeyboardFrameEndUserInfoKey];

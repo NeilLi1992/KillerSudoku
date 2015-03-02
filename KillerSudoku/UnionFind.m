@@ -179,10 +179,6 @@
     return allComponents;
 }
 
--(NSMutableArray*)getComponents {
-    return self.components;
-}
-
 #pragma mark Description method
 - (NSString*)description {
     NSMutableString* str = [[NSMutableString alloc] init];
