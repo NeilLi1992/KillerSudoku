@@ -18,6 +18,7 @@
 @property(nonatomic)BOOL lb;
 @property(nonatomic)BOOL rb;
 @property(strong, nonatomic)UILabel* sumText;
+@property(strong, nonatomic)UILabel* numText;
 @end
 
 @implementation solverCellButton
@@ -177,7 +178,7 @@
         [self addSubview:self.sumText];
     }
     
-    self.sumText.text = [NSString stringWithFormat:@"%d", sum];
+    self.sumText.text = [NSString stringWithFormat:@"%ld", sum];
 }
 
 -(void)clearSum {
@@ -187,5 +188,33 @@
         self.sumText = nil;
     }
 }
+
+-(void)setNum:(NSNumber*)number {
+    if (self.numText == nil) {
+        self.numText = [[UILabel alloc] initWithFrame:CGRectMake(13, 10, 20, 20)];
+        [self.numText setFont:[UIFont systemFontOfSize:18]];
+        self.numText.backgroundColor = [UIColor clearColor];
+        [self addSubview:self.numText];
+    }
+    
+    self.numText.text = [number stringValue];
+}
+
+-(NSInteger)getNum {
+    if (self.numText == nil) {
+        return 0;
+    } else {
+        return [self.numText.text integerValue];
+    }
+}
+
+-(void)clearNum {
+    if (self.numText != nil) {
+        self.numText.text = @"";
+        [self.numText removeFromSuperview];
+        self.numText = nil;
+    }
+}
+
 
 @end

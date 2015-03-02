@@ -15,5 +15,7 @@
 -(BOOL)getHasJoined;
 -(void)setSum:(NSInteger)sum;
 -(void)clearSum;
-
+-(void)setNum:(NSNumber*)number;
+-(NSInteger)getNum;
+-(void)clearNum;
 @end

@@ -10,18 +10,21 @@
 #import "UnionFind.h"
 #import "solverCellButton.h"
 #import "GameBoard.h"
+#import "Solver.h"
 
 @interface SolverViewController () <UITextFieldDelegate>
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
+@property (weak, nonatomic) IBOutlet UILabel *solvingPromptLabel;
 @property (weak, nonatomic) IBOutlet UITextField *sumTextField;
 @property (weak, nonatomic) IBOutlet UILabel *erroLabel;
-@property(nonatomic, strong)NSSet* boardDict;
-@property(nonatomic, strong)NSMutableArray* boardCells;
-@property(strong, nonatomic) IBOutlet UIView *gv;
+@property (weak, nonatomic) IBOutlet UIButton *nextBtn;
+
 @property(strong, nonatomic)NSMutableArray* selectedCells;  // Store the index NSNumber of each cell during each selection
-@property(strong, nonatomic)UIPanGestureRecognizer* gestureRecognizer;
 @property(strong, nonatomic)UIColor* selectColor;
 @property(nonatomic, strong)NSMutableDictionary* sums;  //represent the sums of cages, store (key=cageId, value=sum) pair
 @property(nonatomic, strong)UnionFind* uf;  // uf object can completely determines the state of the cage
+@property(nonatomic, strong)NSArray* solutions;
+@property(nonatomic)NSInteger solutionIndex;
 @end
 
 @implementation SolverViewController
@@ -48,15 +51,9 @@ CGFloat screenHeight;
     NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
     [center addObserver:self selector:@selector(showKeyboard:) name:UIKeyboardWillShowNotification object:nil];
     [center addObserver:self selector:@selector(hideKeyboard:) name:UIKeyboardWillHideNotification object:nil];
-    
-    // No longer need to use swipe gesture
-//    // Set it to support swipe gesture
-//    self.gv.userInteractionEnabled = YES;
-//    self.gestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
-//    // Only one finger swipe is allowed
-//    self.gestureRecognizer.minimumNumberOfTouches = 1;
-//    self.gestureRecognizer.maximumNumberOfTouches = 1;
-//    [self.gv addGestureRecognizer:self.gestureRecognizer];
+    self.spinner.hidden = true;
+    self.solvingPromptLabel.hidden = true;
+    self.nextBtn.hidden = true;
     
     [self drawBoard];
 }
@@ -91,12 +88,9 @@ CGFloat screenHeight;
     vertiLineView.backgroundColor = [UIColor blackColor];
     vertiLineView.layer.zPosition = 10;
     [self.view addSubview:vertiLineView];
-    
-    [self.boardCells removeAllObjects];
 
     // draw board cells
     for (int i = 0; i < 9; i++) {
-        [self.boardCells addObject:[[NSMutableArray alloc] init]];
         for (int j = 0; j < 9; j++) {
             // Generate a cellView and set it properly
             solverCellButton* cellBtn = [[solverCellButton alloc] initWithFrame:CGRectMake(j * cellLength, i * cellLength + baseY, cellLength, cellLength)];
@@ -104,37 +98,11 @@ CGFloat screenHeight;
             cellBtn.layer.borderWidth = 0.5f;
             cellBtn.tag = i * 9 + j + 1;
 
-            // Save it in the boardCells array
-            [[self.boardCells objectAtIndex:i] addObject:cellBtn];
             [self.view addSubview:cellBtn];
             [cellBtn addTarget:self action:@selector(cellTouched:) forControlEvents:UIControlEventTouchDown];
         }
     }
 }
-
-#pragma mark Gesture handler
-// No longer need to use handleSwipe
-//- (void)handleSwipe:(UIPanGestureRecognizer*)gesture {
-//    if (gesture.state == UIGestureRecognizerStateBegan) {
-//        // The selection starts
-//        NSLog(@"Selection started!\n");
-//        
-//    } else if (gesture.state == UIGestureRecognizerStateEnded) {
-//        // The selection ended
-//        NSLog(@"Selection ended, selected cells:%@\n", self.selectedCells);
-//        
-//    } else {
-//        CGPoint location = [gesture locationInView:self.gv];
-//        NSLog(@"Location: %g, %g\n", location.x, location.y);
-//        
-//        // Check the selection is within the board
-//        if (location.y < baseY + 22) {
-//            NSLog(@"Gesture out of board, recognizer reset.\n");
-//            self.gestureRecognizer.enabled = NO;
-//            self.gestureRecognizer.enabled = YES;
-//        }
-//    }
-//}
 
 #pragma -mark helper methods
 /*!
@@ -228,7 +196,6 @@ CGFloat screenHeight;
 }
 
 -(BOOL)validate {
-    self.erroLabel.text = @"";
     // Checking every cell has joined a cage
     for (int index = 0; index < 81; index++) {
         solverCellButton* cell = (solverCellButton*)[self.view viewWithTag:(index + 1)];
@@ -413,8 +380,6 @@ CGFloat screenHeight;
     
     [self.uf restore:toResotre];
     [self.selectedCells removeAllObjects];
-    
-    NSLog(@"self.sums: \n %@", self.sums);
 }
 
 - (IBAction)enterBtnPressed:(id)sender {
@@ -476,18 +441,79 @@ CGFloat screenHeight;
 }
 
 - (IBAction)solveBtnPressed:(id)sender {
+    self.erroLabel.text = @"";
+    self.solutionIndex = 0;
+    self.nextBtn.hidden = true;
+    
     // Do basic check to ensure the entered game is valid
     if ([self validate]) {
         NSLog(@"Validated, OK to solve.");
-        // Configuration is complete, try to solve now
-            // Build up the unsolved game
+        // Build up the unsolved game
+        GameBoard* unsolvedGame = [[GameBoard alloc] initWithUF:self.uf andSums:self.sums];
         
-            // Calling solver to solve the game
+        // Show spinner and solving prompt label
         
-            // Fill the board with solved solutions
+        self.spinner.hidden = false;
+        [self.spinner startAnimating];
+        self.solvingPromptLabel.hidden = false;
         
-            // Deal with no solution & multiple solutions
+        // Calling solver to solve the game
+        self.solutions = [Solver solve:unsolvedGame];
+        NSLog(@"Solving completed!");
+        for (GameBoard* solution in self.solutions) {
+            NSLog(@"%@", solution);
+        }
+        
+        // Hide spinner and solving prompt label
+        [self.spinner stopAnimating];
+        self.spinner.hidden = true;
+        self.solvingPromptLabel.hidden = true;
+        
+        // Fill the board with solved solutions
+        if ([self.solutions count] == 0) {
+            NSLog(@"No solution.");
+            self.erroLabel.text = @"No solution found!";
+            for (int index = 0; index < 81; index++) {
+                solverCellButton* cell = (solverCellButton*)[self.view viewWithTag:(index + 1)];
+                [cell clearNum];
+            }
+        } else {
+            // Has solutions
+            if ([self.solutions count] == 1) {
+                self.erroLabel.text = @"Unique solution found!";
+            } else {
+                self.erroLabel.text = [NSString stringWithFormat:@"%d solutions, display sol 1.", [self.solutions count]];
+                // Provide a way to show more solutions
+                self.nextBtn.hidden = false;
+            }
+            // Fill the first solution into the board
+            GameBoard* firstSolution = [self.solutions objectAtIndex:0];
+            for (int index = 0; index < 81; index++) {
+                solverCellButton* cell = (solverCellButton*)[self.view viewWithTag:(index + 1)];
+                [cell setNum:[firstSolution getNumAtIndex:[NSNumber numberWithInt:index]]];
+            }
+        }
     }
+}
+
+- (IBAction)nextBtnPressed:(id)sender {
+    // Change solutionIndex
+    self.solutionIndex++;
+    if (self.solutionIndex == [self.solutions count]) {
+        self.solutionIndex = 0;
+    }
+    
+    // Modify cell numbers
+    GameBoard* nextSolution = [self.solutions objectAtIndex:self.solutionIndex];
+    for (int index = 0; index < 81; index++) {
+        solverCellButton* cell = (solverCellButton*)[self.view viewWithTag:(index + 1)];
+        NSNumber* num = [nextSolution getNumAtIndex:[NSNumber numberWithInteger:index]];
+        if ([cell getNum] != [num integerValue]) {
+            [cell setNum:num];
+        }
+    }
+    
+    self.erroLabel.text = [NSString stringWithFormat:@"%d solutions, display sol %d.", [self.solutions count], self.solutionIndex + 1];
 }
 
 // Resign sumTextField as first responder when background touched
@@ -500,11 +526,29 @@ CGFloat screenHeight;
     [self clearSelection];
 }
 
+- (IBAction)resetBtnPressed:(id)sender {
+    self.uf = [[UnionFind alloc] initWithCapacity:81];
+    [self.sums removeAllObjects];
+    [self clearSelection];
+    self.nextBtn.hidden = true;
+    self.erroLabel.text = @"";
+    if (self.solutions != nil) {
+        self.solutions = nil;
+    }
+    
+    for (int index = 0; index < 81; index++) {
+        solverCellButton* cell = (solverCellButton*)[self.view viewWithTag:(index + 1)];
+        [cell clearBorderLines];
+        [cell clearSum];
+        [cell clearNum];
+    }
+}
+
 - (IBAction)debugBtnPressed:(id)sender {
     [self clearSelection];
     NSMutableDictionary* configuration = [[NSMutableDictionary alloc] init];
     NSMutableString* game_file = [NSMutableString stringWithString:@"/Users/neilli1992/Y3S1/Final Year Project/Code/KillerSudoku/KillerSudoku/"];
-    NSString* game_name = @"level_50";
+    NSString* game_name = @"game3";
     [game_file appendString:game_name];
     
     NSString* file_content = [[NSString alloc] initWithContentsOfFile:game_file encoding:NSUTF8StringEncoding error:nil];
