@@ -31,7 +31,6 @@
 		234BA06D1A74FFE300B09F5B /* DfsByCage.m in Sources */ = {isa = PBXBuildFile; fileRef = 234BA06C1A74FFE300B09F5B /* DfsByCage.m */; };
 		2363BC291A1B3E430063F949 /* Solver.m in Sources */ = {isa = PBXBuildFile; fileRef = 2363BC281A1B3E430063F949 /* Solver.m */; };
 		2363BC2D1A1B412F0063F949 /* game1 in Resources */ = {isa = PBXBuildFile; fileRef = 2363BC2C1A1B412F0063F949 /* game1 */; };
-		236783781A124A0A00DF97F2 /* CageDivisionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 236783771A124A0A00DF97F2 /* CageDivisionViewController.m */; };
 		2367837B1A124CB300DF97F2 /* SolverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2367837A1A124CB300DF97F2 /* SolverViewController.m */; };
 		2367B9811A378BAA000852AC /* AlgorithmX.m in Sources */ = {isa = PBXBuildFile; fileRef = 2367B9801A378BAA000852AC /* AlgorithmX.m */; };
 		2371AB511A92003B0098ED5C /* combination.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2371AB4D1A91FE720098ED5C /* combination.txt */; };
@@ -92,8 +91,6 @@
 		2363BC271A1B3E430063F949 /* Solver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Solver.h; sourceTree = "<group>"; };
 		2363BC281A1B3E430063F949 /* Solver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Solver.m; sourceTree = "<group>"; };
 		2363BC2C1A1B412F0063F949 /* game1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game1; sourceTree = "<group>"; };
-		236783761A124A0A00DF97F2 /* CageDivisionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CageDivisionViewController.h; sourceTree = "<group>"; };
-		236783771A124A0A00DF97F2 /* CageDivisionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CageDivisionViewController.m; sourceTree = "<group>"; };
 		236783791A124CB300DF97F2 /* SolverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SolverViewController.h; sourceTree = "<group>"; };
 		2367837A1A124CB300DF97F2 /* SolverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SolverViewController.m; sourceTree = "<group>"; };
 		2367B97F1A378BAA000852AC /* AlgorithmX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlgorithmX.h; sourceTree = "<group>"; };
@@ -232,8 +229,6 @@
 				230134291A9D0E5400023704 /* SolverView */,
 				230AD8EB19ED164E00648B01 /* ViewController.h */,
 				230AD8EC19ED164E00648B01 /* ViewController.m */,
-				236783761A124A0A00DF97F2 /* CageDivisionViewController.h */,
-				236783771A124A0A00DF97F2 /* CageDivisionViewController.m */,
 				230AD8EE19ED164E00648B01 /* Main.storyboard */,
 			);
 			name = View;
@@ -408,7 +403,6 @@
 				231F001A1A666B56005886A1 /* Generator.m in Sources */,
 				234BA06A1A74FFD700B09F5B /* DfsByCell.m in Sources */,
 				230AD8E719ED164E00648B01 /* main.m in Sources */,
-				236783781A124A0A00DF97F2 /* CageDivisionViewController.m in Sources */,
 				23F0FC8E1A8ABCBC0034322F /* NewGameViewController.m in Sources */,
 				2367B9811A378BAA000852AC /* AlgorithmX.m in Sources */,
 				2363BC291A1B3E430063F949 /* Solver.m in Sources */,

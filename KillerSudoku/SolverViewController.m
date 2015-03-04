@@ -547,11 +547,14 @@ CGFloat screenHeight;
 - (IBAction)debugBtnPressed:(id)sender {
     [self clearSelection];
     NSMutableDictionary* configuration = [[NSMutableDictionary alloc] init];
-    NSMutableString* game_file = [NSMutableString stringWithString:@"/Users/neilli1992/Y3S1/Final Year Project/Code/KillerSudoku/KillerSudoku/"];
-    NSString* game_name = @"game3";
-    [game_file appendString:game_name];
+    NSString* filePath = [[NSBundle mainBundle] pathForResource:@"game1" ofType:@""];
+    NSString* file_content = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
     
-    NSString* file_content = [[NSString alloc] initWithContentsOfFile:game_file encoding:NSUTF8StringEncoding error:nil];
+//    NSMutableString* game_file = [NSMutableString stringWithString:@"/Users/neilli1992/Y3S1/Final Year Project/Code/KillerSudoku/KillerSudoku/"];
+//    NSString* game_name = @"game3";
+//    [game_file appendString:game_name];
+    
+//    NSString* file_content = [[NSString alloc] initWithContentsOfFile:game_file encoding:NSUTF8StringEncoding error:nil];
     
     // Do the following process block on each line
     [file_content enumerateLinesUsingBlock:^(NSString* line, BOOL *stop){
