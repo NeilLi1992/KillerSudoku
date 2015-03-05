@@ -25,6 +25,7 @@
 @property(nonatomic, strong)UnionFind* uf;  // uf object can completely determines the state of the cage
 @property(nonatomic, strong)NSArray* solutions;
 @property(nonatomic)NSInteger solutionIndex;
+@property(nonatomic)BOOL isSolving;
 @end
 
 @implementation SolverViewController
@@ -54,7 +55,9 @@ CGFloat screenHeight;
     self.spinner.hidden = true;
     self.solvingPromptLabel.hidden = true;
     self.nextBtn.hidden = true;
+    self.isSolving = false;
     
+    // Draw the board
     [self drawBoard];
 }
 
@@ -452,47 +455,16 @@ CGFloat screenHeight;
         GameBoard* unsolvedGame = [[GameBoard alloc] initWithUF:self.uf andSums:self.sums];
         
         // Show spinner and solving prompt label
-        
         self.spinner.hidden = false;
         [self.spinner startAnimating];
         self.solvingPromptLabel.hidden = false;
+        self.isSolving = true;
         
-        // Calling solver to solve the game
-        self.solutions = [Solver solve:unsolvedGame];
-        NSLog(@"Solving completed!");
-        for (GameBoard* solution in self.solutions) {
-            NSLog(@"%@", solution);
-        }
+        self.view.userInteractionEnabled = false;
         
-        // Hide spinner and solving prompt label
-        [self.spinner stopAnimating];
-        self.spinner.hidden = true;
-        self.solvingPromptLabel.hidden = true;
-        
-        // Fill the board with solved solutions
-        if ([self.solutions count] == 0) {
-            NSLog(@"No solution.");
-            self.erroLabel.text = @"No solution found!";
-            for (int index = 0; index < 81; index++) {
-                solverCellButton* cell = (solverCellButton*)[self.view viewWithTag:(index + 1)];
-                [cell clearNum];
-            }
-        } else {
-            // Has solutions
-            if ([self.solutions count] == 1) {
-                self.erroLabel.text = @"Unique solution found!";
-            } else {
-                self.erroLabel.text = [NSString stringWithFormat:@"%d solutions, display sol 1.", [self.solutions count]];
-                // Provide a way to show more solutions
-                self.nextBtn.hidden = false;
-            }
-            // Fill the first solution into the board
-            GameBoard* firstSolution = [self.solutions objectAtIndex:0];
-            for (int index = 0; index < 81; index++) {
-                solverCellButton* cell = (solverCellButton*)[self.view viewWithTag:(index + 1)];
-                [cell setNum:[firstSolution getNumAtIndex:[NSNumber numberWithInt:index]]];
-            }
-        }
+        // Create a new thread to call the solver, in order not to block the UI
+        NSThread* thread = [[NSThread alloc] initWithTarget:self selector:@selector(callSolver:) object:unsolvedGame];
+        [thread start];
     }
 }
 
@@ -547,7 +519,7 @@ CGFloat screenHeight;
 - (IBAction)debugBtnPressed:(id)sender {
     [self clearSelection];
     NSMutableDictionary* configuration = [[NSMutableDictionary alloc] init];
-    NSString* filePath = [[NSBundle mainBundle] pathForResource:@"game1" ofType:@""];
+    NSString* filePath = [[NSBundle mainBundle] pathForResource:@"game3" ofType:@""];
     NSString* file_content = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
     
 //    NSMutableString* game_file = [NSMutableString stringWithString:@"/Users/neilli1992/Y3S1/Final Year Project/Code/KillerSudoku/KillerSudoku/"];
@@ -591,6 +563,55 @@ CGFloat screenHeight;
         NSNumber* sum = [self.sums objectForKey:cageID];
         [cell setSum:[sum integerValue]];   // Set sum text for first cell of each cage
     }
+}
+
+#pragma mark thead related methods
+- (void)callSolver:(GameBoard*)unsolvedGame {
+    // Calling solver to solve the game
+    NSArray* solutions = [Solver solve:unsolvedGame];
+    NSLog(@"Solving completed!");
+    for (GameBoard* solution in solutions) {
+        NSLog(@"%@", solution);
+    }
+    
+    // Update UI in main thread
+    [self performSelectorOnMainThread:@selector(finishSolving:) withObject:solutions waitUntilDone:YES];
+}
+
+- (void)finishSolving:(NSArray*) solutions {
+    // Hide spinner and solving prompt label
+    [self.spinner stopAnimating];
+    self.spinner.hidden = true;
+    self.solvingPromptLabel.hidden = true;
+
+    self.solutions = solutions;
+    
+    // Fill the board with solved solutions
+    if ([self.solutions count] == 0) {
+        NSLog(@"No solution.");
+        self.erroLabel.text = @"No solution found!";
+        for (int index = 0; index < 81; index++) {
+            solverCellButton* cell = (solverCellButton*)[self.view viewWithTag:(index + 1)];
+            [cell clearNum];
+        }
+    } else {
+        // Has solutions
+        if ([self.solutions count] == 1) {
+            self.erroLabel.text = @"Unique solution found!";
+        } else {
+            self.erroLabel.text = [NSString stringWithFormat:@"%d solutions, display sol 1.", [self.solutions count]];
+            // Provide a way to show more solutions
+            self.nextBtn.hidden = false;
+        }
+        // Fill the first solution into the board
+        GameBoard* firstSolution = [self.solutions objectAtIndex:0];
+        for (int index = 0; index < 81; index++) {
+            solverCellButton* cell = (solverCellButton*)[self.view viewWithTag:(index + 1)];
+            [cell setNum:[firstSolution getNumAtIndex:[NSNumber numberWithInt:index]]];
+        }
+    }
+    
+    self.view.userInteractionEnabled = true;
 }
 
 
