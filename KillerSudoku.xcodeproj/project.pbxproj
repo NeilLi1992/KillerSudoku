@@ -40,6 +40,7 @@
 		2375D0C51A2141690044898A /* easy1 in Resources */ = {isa = PBXBuildFile; fileRef = 2375D0C41A2141690044898A /* easy1 */; };
 		23881DC51A91404E00527917 /* cellButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 23881DC41A91404E00527917 /* cellButton.m */; };
 		23B927E11A38999400A64FAF /* game2 in Resources */ = {isa = PBXBuildFile; fileRef = 23B927E01A38999400A64FAF /* game2 */; };
+		23BFA4BE1AA9CF4400AC3EE5 /* PlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23BFA4BD1AA9CF4400AC3EE5 /* PlayViewController.m */; };
 		23D84A1A1AA916E500F1EE71 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23D84A191AA916E500F1EE71 /* CoreText.framework */; };
 		23D84A4A1AA918D200F1EE71 /* FUIAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D84A231AA918D200F1EE71 /* FUIAlertView.m */; };
 		23D84A4B1AA918D200F1EE71 /* FUIButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D84A251AA918D200F1EE71 /* FUIButton.m */; };
@@ -66,6 +67,8 @@
 		23D84A681AA91C7D00F1EE71 /* Lato-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 23D84A631AA91C7D00F1EE71 /* Lato-Italic.ttf */; };
 		23D84A691AA91C7D00F1EE71 /* Lato-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 23D84A641AA91C7D00F1EE71 /* Lato-Light.ttf */; };
 		23D84A6A1AA91C7D00F1EE71 /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 23D84A651AA91C7D00F1EE71 /* Lato-Regular.ttf */; };
+		23D84A6E1AA920BE00F1EE71 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D84A6D1AA920BE00F1EE71 /* HomeViewController.m */; };
+		23D84A711AA9B46E00F1EE71 /* HelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D84A701AA9B46E00F1EE71 /* HelpViewController.m */; };
 		23E2BC541A1B869C000342CE /* Combination.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E2BC531A1B869C000342CE /* Combination.m */; };
 		23F0FC8E1A8ABCBC0034322F /* NewGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23F0FC8D1A8ABCBC0034322F /* NewGameViewController.m */; };
 		23F0FC931A8ACE870034322F /* multiple_solutions_2 in Resources */ = {isa = PBXBuildFile; fileRef = 23F0FC921A8ACE870034322F /* multiple_solutions_2 */; };
@@ -131,6 +134,8 @@
 		23881DC31A91404E00527917 /* cellButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cellButton.h; sourceTree = "<group>"; };
 		23881DC41A91404E00527917 /* cellButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = cellButton.m; sourceTree = "<group>"; };
 		23B927E01A38999400A64FAF /* game2 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game2; sourceTree = "<group>"; };
+		23BFA4BC1AA9CF4400AC3EE5 /* PlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayViewController.h; sourceTree = "<group>"; };
+		23BFA4BD1AA9CF4400AC3EE5 /* PlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayViewController.m; sourceTree = "<group>"; };
 		23D84A191AA916E500F1EE71 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		23D84A211AA918D200F1EE71 /* FlatUIKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlatUIKit.h; sourceTree = "<group>"; };
 		23D84A221AA918D200F1EE71 /* FUIAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FUIAlertView.h; sourceTree = "<group>"; };
@@ -178,6 +183,10 @@
 		23D84A631AA91C7D00F1EE71 /* Lato-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Italic.ttf"; sourceTree = "<group>"; };
 		23D84A641AA91C7D00F1EE71 /* Lato-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Light.ttf"; sourceTree = "<group>"; };
 		23D84A651AA91C7D00F1EE71 /* Lato-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Regular.ttf"; sourceTree = "<group>"; };
+		23D84A6C1AA920BE00F1EE71 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
+		23D84A6D1AA920BE00F1EE71 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		23D84A6F1AA9B46E00F1EE71 /* HelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpViewController.h; sourceTree = "<group>"; };
+		23D84A701AA9B46E00F1EE71 /* HelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpViewController.m; sourceTree = "<group>"; };
 		23E2BC521A1B869C000342CE /* Combination.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Combination.h; sourceTree = "<group>"; };
 		23E2BC531A1B869C000342CE /* Combination.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 1; path = Combination.m; sourceTree = "<group>"; };
 		23F0FC8C1A8ABCBC0034322F /* NewGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewGameViewController.h; sourceTree = "<group>"; };
@@ -302,6 +311,9 @@
 		2340E5B91A01474B00D56A3A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				23D84A6B1AA920A700F1EE71 /* Home View */,
+				23BFA4BB1AA9CF3600AC3EE5 /* Play View */,
+				23D84A731AA9B4C800F1EE71 /* Help View */,
 				23881DC21A913FE700527917 /* NewGameView */,
 				230134291A9D0E5400023704 /* SolverView */,
 				230AD8EB19ED164E00648B01 /* ViewController.h */,
@@ -353,6 +365,15 @@
 				23881DC41A91404E00527917 /* cellButton.m */,
 			);
 			name = NewGameView;
+			sourceTree = "<group>";
+		};
+		23BFA4BB1AA9CF3600AC3EE5 /* Play View */ = {
+			isa = PBXGroup;
+			children = (
+				23BFA4BC1AA9CF4400AC3EE5 /* PlayViewController.h */,
+				23BFA4BD1AA9CF4400AC3EE5 /* PlayViewController.m */,
+			);
+			name = "Play View";
 			sourceTree = "<group>";
 		};
 		23D84A201AA918B500F1EE71 /* FlatUIKit */ = {
@@ -422,6 +443,24 @@
 				23D84A651AA91C7D00F1EE71 /* Lato-Regular.ttf */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		23D84A6B1AA920A700F1EE71 /* Home View */ = {
+			isa = PBXGroup;
+			children = (
+				23D84A6C1AA920BE00F1EE71 /* HomeViewController.h */,
+				23D84A6D1AA920BE00F1EE71 /* HomeViewController.m */,
+			);
+			name = "Home View";
+			sourceTree = "<group>";
+		};
+		23D84A731AA9B4C800F1EE71 /* Help View */ = {
+			isa = PBXGroup;
+			children = (
+				23D84A6F1AA9B46E00F1EE71 /* HelpViewController.h */,
+				23D84A701AA9B46E00F1EE71 /* HelpViewController.m */,
+			);
+			name = "Help View";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -568,12 +607,15 @@
 				23D84A531AA918D200F1EE71 /* UIColor+FlatUI.m in Sources */,
 				230AD8E719ED164E00648B01 /* main.m in Sources */,
 				23F0FC8E1A8ABCBC0034322F /* NewGameViewController.m in Sources */,
+				23D84A711AA9B46E00F1EE71 /* HelpViewController.m in Sources */,
 				23D84A4C1AA918D200F1EE71 /* FUICellBackgroundView.m in Sources */,
 				23D84A581AA918D200F1EE71 /* UIProgressView+FlatUI.m in Sources */,
+				23BFA4BE1AA9CF4400AC3EE5 /* PlayViewController.m in Sources */,
 				23D84A5A1AA918D200F1EE71 /* UIStepper+FlatUI.m in Sources */,
 				23D84A5B1AA918D200F1EE71 /* UITabBar+FlatUI.m in Sources */,
 				23D84A511AA918D200F1EE71 /* NSString+Icons.m in Sources */,
 				2367B9811A378BAA000852AC /* AlgorithmX.m in Sources */,
+				23D84A6E1AA920BE00F1EE71 /* HomeViewController.m in Sources */,
 				23D84A4B1AA918D200F1EE71 /* FUIButton.m in Sources */,
 				2363BC291A1B3E430063F949 /* Solver.m in Sources */,
 				23D84A591AA918D200F1EE71 /* UISlider+FlatUI.m in Sources */,
