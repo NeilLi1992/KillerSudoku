@@ -11,14 +11,17 @@
 #import "UIColor+FlatUI.h"
 #import "UIFont+FlatUI.h"
 #import "HelpViewController.h"
+#import "FUIAlertView.h"
+#import "PlayViewController.h"
 
-@interface HomeViewController ()
+@interface HomeViewController () <FUIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet FUIButton *playBtn;
 @property (weak, nonatomic) IBOutlet FUIButton *solverBtn;
 @property (weak, nonatomic) IBOutlet FUIButton *settingsBtn;
 @property (weak, nonatomic) IBOutlet FUIButton *helpBtn;
 @property (weak, nonatomic) IBOutlet UILabel *titleLbl;
 @property (weak, nonatomic) IBOutlet FUIButton *debugBtn;
+@property (strong, nonatomic) FUIAlertView *playChooseView;
 
 @end
 
@@ -26,8 +29,36 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    // Stylize with FlatUIKit
     [self stylize];
+    
+    // Build the alert view for play choice
+    self.playChooseView = [[FUIAlertView alloc] initWithTitle:@"Level"
+                                                          message:@"Choose level or load stored games."
+                                                         delegate:self cancelButtonTitle:@"Play Later"
+                                                otherButtonTitles:@"Easy",@"Medium",@"Hard",@"Load",nil];
+    
+    
+    self.playChooseView.titleLabel.textColor = [UIColor cloudsColor];
+    self.playChooseView.titleLabel.font = [UIFont boldFlatFontOfSize:16];
+    self.playChooseView.messageLabel.textColor = [UIColor cloudsColor];
+    self.playChooseView.messageLabel.font = [UIFont flatFontOfSize:14];
+    self.playChooseView.backgroundOverlay.backgroundColor = [[UIColor cloudsColor] colorWithAlphaComponent:0.8];
+    self.playChooseView.alertContainer.backgroundColor = [UIColor midnightBlueColor];
+    self.playChooseView.alertContainer.layer.cornerRadius = 3;
+    self.playChooseView.alertContainer.layer.masksToBounds = YES;
+    self.playChooseView.defaultButtonColor = [UIColor turquoiseColor];
+    self.playChooseView.defaultButtonShadowColor = [UIColor greenSeaColor];
+    self.playChooseView.defaultButtonFont = [UIFont boldFlatFontOfSize:16];
+    self.playChooseView.defaultButtonTitleColor = [UIColor whiteColor];
+    
+    FUIButton* cancelBtn = (FUIButton*)[self.playChooseView.buttons objectAtIndex:self.playChooseView.cancelButtonIndex];
+    cancelBtn.buttonColor = [UIColor cloudsColor];
+    cancelBtn.shadowColor = [UIColor asbestosColor];
+    cancelBtn.tintColor = [UIColor asbestosColor];
+    [cancelBtn setTitleColor:[UIColor asbestosColor] forState:UIControlStateNormal];
+    [cancelBtn setTitleColor:[UIColor asbestosColor] forState:UIControlStateHighlighted];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -87,6 +118,7 @@
 
 # pragma mark Action methods
 - (IBAction)playBtnPressed:(id)sender {
+    [self.playChooseView show];
 }
 
 - (IBAction)solverBtnPressed:(id)sender {
@@ -100,6 +132,38 @@
 
 - (IBAction)debugBtnPressed:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+# pragma mark Delegate methods
+- (void)alertView:(FUIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    // Prepare to push the PlayViewController
+    PlayViewController* vc = [[PlayViewController alloc] init];
+    switch (buttonIndex) {
+        case 1:
+            // Easy
+            vc.level = 0;
+            break;
+        case 2:
+            // Medium
+            vc.level = 1;
+            break;
+        case 3:
+            // Hard
+            vc.level = 2;
+            break;
+        case 4:
+            // Load
+            vc.level = 0;   // Should actually do something else
+            break;
+        case 0:
+            // Play later
+            return;
+        default:
+            break;
+    }
+    
+    // Push vc
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 @end

@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface PlayViewController : UIViewController
-
+@property(nonatomic)NSInteger level;
+@property(nonatomic)BOOL isPlaying;
 @end

@@ -318,7 +318,6 @@
                                 </state>
                                 <connections>
                                     <action selector="playBtnPressed:" destination="1x4-HK-G6U" eventType="touchUpInside" id="ZwD-g9-O92"/>
-                                    <segue destination="7JH-ay-3ye" kind="push" id="CXP-Sd-T84"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DzM-kz-Lq1" customClass="FUIButton">
@@ -399,7 +398,7 @@
             </objects>
             <point key="canvasLocation" x="1704" y="-360"/>
         </scene>
-        <!--Play-->
+        <!--Play View Controller-->
         <scene sceneID="PW9-sO-Iq9">
             <objects>
                 <viewController id="7JH-ay-3ye" customClass="PlayViewController" sceneMemberID="viewController">
@@ -412,14 +411,6 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Play" id="lAX-NQ-6lW">
-                        <barButtonItem key="leftBarButtonItem" title="Back" id="Pc3-Nk-mqH">
-                            <color key="tintColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="deviceRGB"/>
-                            <connections>
-                                <action selector="backBtnPressed:" destination="7JH-ay-3ye" id="adf-kG-juJ"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sZZ-pk-dr1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
