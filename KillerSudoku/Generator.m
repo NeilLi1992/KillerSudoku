@@ -54,8 +54,12 @@
 //        NSLog(@"%@", [solution cagesDescription]);
 //    }
     
-    NSArray* result = [NSArray arrayWithObjects:unsolvedGame, solutionGrid, nil];
-    return result;
+    if (unsolvedGame == nil) {
+        return nil;
+    } else {
+        NSArray* result = [NSArray arrayWithObjects:unsolvedGame, solutionGrid, nil];
+        return result;
+    }
 }
 
 + (NSArray*)generateSolutionGrid {
@@ -246,8 +250,10 @@
     int ite1 = 0;
     // Repeat until we get our desired number of cages
     while ([uf count] > cageNumber) {
-//        NSLog(@"ite1=%d", ite1++);
-        
+        if ([[NSThread currentThread] isCancelled]) {
+            NSLog(@"Generator thread is cancelled!");
+            return nil;
+        }
         // Randomly choose a cage
         NSInteger randomCageID = [uf getRandomComponentUnderSize:maxSize];
         // Calculate the left size for us to union a neighbor component

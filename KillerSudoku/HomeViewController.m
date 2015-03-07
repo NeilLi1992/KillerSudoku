@@ -29,6 +29,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // Check if user preference is set. Set default values if not.
+    NSUserDefaults* preferences = [NSUserDefaults standardUserDefaults];
+    NSString* cellStyle = [preferences stringForKey:@"cellStyle"];
+    if (cellStyle == nil) {
+        [preferences setObject:@"color" forKey:@"cellStyle"];
+    }
     
     // Stylize with FlatUIKit
     [self stylize];
