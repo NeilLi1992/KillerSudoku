@@ -75,7 +75,6 @@ CGFloat innerLineWidth;
     // Load user preferences
     NSUserDefaults* preferences = [NSUserDefaults standardUserDefaults];
     self.cellStyle = [preferences stringForKey:@"cellStyle"];
-    NSLog(@"Get cell style : %@", self.cellStyle);
     
     // Stylize and draw board
     [self stylize];
@@ -241,176 +240,109 @@ CGFloat innerLineWidth;
 
 - (void)addCellBtns {
     // Generation is finished, add cell buttons to board
-    if ([self.cellStyle isEqualToString:@"color"]) {
+    BOOL isColorStyle =  [self.cellStyle isEqualToString:@"color"];
+    
+    
+    // Add cell buttons
+    for (int i = 0; i < 9; i++) {
+        [self.boardCells addObject:[[NSMutableArray alloc] init]];
+        for (int j = 0; j < 9; j++) {
+            CGFloat btnX = j * cellLength + innerLineWidth / 2;
+            CGFloat btnY = i * cellLength + innerLineWidth / 2;
+            CGFloat btnWidth = cellLength - innerLineWidth;
+            CGFloat btnHeight = cellLength - innerLineWidth;
+            
+            // Adjust x, y, width, height to avoid covering thick lines
+            switch (j) {
+                case 0:
+                    btnWidth -= 1.5 * innerLineWidth;
+                    btnX += 1.5 * innerLineWidth;
+                    break;
+                case 2: // Thick line right to cell
+                case 5:
+                    btnWidth -= innerLineWidth / 2;
+                    break;
+                case 3: // Thick line left to cell
+                case 6:
+                    btnWidth -= innerLineWidth / 2;
+                    btnX += innerLineWidth / 2;
+                    break;
+                case 8:
+                    btnWidth -= 1.5 * innerLineWidth;
+                    break;
+                default:
+                    break;
+            }
+            
+            switch (i) {
+                case 0:
+                    btnHeight -= 1.5 * innerLineWidth;
+                    btnY += 1.5 * innerLineWidth;
+                    break;
+                case 2: // Thick line below cell
+                case 5:
+                    btnHeight -= innerLineWidth / 2;
+                    break;
+                case 3: // Thick line above cell
+                case 6:
+                    btnHeight -= innerLineWidth / 2;
+                    btnY += innerLineWidth / 2;
+                    break;
+                case 8:
+                    btnHeight -= 1.5 * innerLineWidth;
+                default:
+                    break;
+            }
+            
+            PlayCellButton* btn = [[PlayCellButton alloc] initWithFrame:CGRectMake(btnX, btnY, btnWidth, btnHeight)];
+            btn.tag = i * 9 + j;
+            btn.titleLabel.text = @" ";
+            [btn addTarget:self action:@selector(cellBtnPressed:) forControlEvents:UIControlEventTouchDown];
+            
+            // Save the cell button in boardCells array
+            [[self.boardCells objectAtIndex:i] addObject:btn];
+            [self.boardView addSubview:btn];
+        }
+    }
+    
+    if (isColorStyle) {
         // Use color block style
         [self loadColors];
         NSArray* colorMatrix = [self buildColorMatrix];
+        
+        // Set the cell's background according to colorMatrix
         for (int i = 0; i < 9; i++) {
-            [self.boardCells addObject:[[NSMutableArray alloc] init]];
             for (int j = 0; j < 9; j++) {
-                CGFloat btnX = j * cellLength + innerLineWidth / 2;
-                CGFloat btnY = i * cellLength + innerLineWidth / 2;
-                CGFloat btnWidth = cellLength - innerLineWidth;
-                CGFloat btnHeight = cellLength - innerLineWidth;
-                
-                // Adjust x, y, width, height to avoid covering thick lines
-                switch (j) {
-                    case 0:
-                        btnWidth -= 1.5 * innerLineWidth;
-                        btnX += 1.5 * innerLineWidth;
-                        break;
-                    case 2: // Thick line right to cell
-                    case 5:
-                        btnWidth -= innerLineWidth / 2;
-                        break;
-                    case 3: // Thick line left to cell
-                    case 6:
-                        btnWidth -= innerLineWidth / 2;
-                        btnX += innerLineWidth / 2;
-                        break;
-                    case 8:
-                        btnWidth -= 1.5 * innerLineWidth;
-                        break;
-                    default:
-                        break;
-                }
-                
-                switch (i) {
-                    case 0:
-                        btnHeight -= 1.5 * innerLineWidth;
-                        btnY += 1.5 * innerLineWidth;
-                        break;
-                    case 2: // Thick line below cell
-                    case 5:
-                        btnHeight -= innerLineWidth / 2;
-                        break;
-                    case 3: // Thick line above cell
-                    case 6:
-                        btnHeight -= innerLineWidth / 2;
-                        btnY += innerLineWidth / 2;
-                        break;
-                    case 8:
-                        btnHeight -= 1.5 * innerLineWidth;
-                    default:
-                        break;
-                }
-                
-                PlayCellButton* btn = [[PlayCellButton alloc] initWithFrame:CGRectMake(btnX, btnY, btnWidth, btnHeight)];
-                btn.tag = i * 9 + j;
-                btn.titleLabel.text = @" ";
-                [btn addTarget:self action:@selector(cellBtnPressed:) forControlEvents:UIControlEventTouchDown];
-                // Set the cell's background according to colorMatrix
+                PlayCellButton* btn = [[self.boardCells objectAtIndex:i] objectAtIndex:j];
                 btn.backgroundColor = [self.candidateColors objectAtIndex:[[[colorMatrix objectAtIndex:i] objectAtIndex:j] integerValue]];
-                
-                // Save the cell button in boardCells array
-                [[self.boardCells objectAtIndex:i] addObject:btn];
-                [self.boardView addSubview:btn];
             }
         }
-        
-        // Add sum number to each cage
-        for (NSArray* indecies in [self.unsolvedGame getIteratorForCages]) {
-            NSNumber* firstIndex = [indecies objectAtIndex:0];
-            NSNumber* cageId = [self.unsolvedGame getCageIdAtIndex:firstIndex];
-            NSInteger row = [firstIndex integerValue] / 9;
-            NSInteger col = [firstIndex integerValue] % 9;
-            NSNumber* sum = [self.unsolvedGame getCageSumAtIndex:cageId];
-            
-            UIButton* btn = [[self.boardCells objectAtIndex:row] objectAtIndex:col];
-            
-            UILabel* sumLabel = [[UILabel alloc] initWithFrame:CGRectMake(2, -5, 20, 20)];
-            [sumLabel setFont:[UIFont systemFontOfSize:8]];
-            sumLabel.text = [sum stringValue];
-            [btn addSubview:sumLabel];
-        }
-
-        
     } else {
         // Use line style
-        for (int i = 0; i < 9; i++) {
-            [self.boardCells addObject:[[NSMutableArray alloc] init]];
-            for (int j = 0; j < 9; j++) {
-                CGFloat btnX = j * cellLength + innerLineWidth / 2;
-                CGFloat btnY = i * cellLength + innerLineWidth / 2;
-                CGFloat btnWidth = cellLength - innerLineWidth;
-                CGFloat btnHeight = cellLength - innerLineWidth;
-                
-                // Adjust x, y, width, height to avoid covering thick lines
-                switch (j) {
-                    case 0:
-                        btnWidth -= 1.5 * innerLineWidth;
-                        btnX += 1.5 * innerLineWidth;
-                        break;
-                    case 2: // Thick line right to cell
-                    case 5:
-                        btnWidth -= innerLineWidth / 2;
-                        break;
-                    case 3: // Thick line left to cell
-                    case 6:
-                        btnWidth -= innerLineWidth / 2;
-                        btnX += innerLineWidth / 2;
-                        break;
-                    case 8:
-                        btnWidth -= 1.5 * innerLineWidth;
-                        break;
-                    default:
-                        break;
-                }
-                
-                switch (i) {
-                    case 0:
-                        btnHeight -= 1.5 * innerLineWidth;
-                        btnY += 1.5 * innerLineWidth;
-                        break;
-                    case 2: // Thick line below cell
-                    case 5:
-                        btnHeight -= innerLineWidth / 2;
-                        break;
-                    case 3: // Thick line above cell
-                    case 6:
-                        btnHeight -= innerLineWidth / 2;
-                        btnY += innerLineWidth / 2;
-                        break;
-                    case 8:
-                        btnHeight -= 1.5 * innerLineWidth;
-                    default:
-                        break;
-                }
-                
-                PlayCellButton* btn = [[PlayCellButton alloc] initWithFrame:CGRectMake(btnX, btnY, btnWidth, btnHeight)];
-                btn.tag = i * 9 + j;
-                btn.titleLabel.text = @" ";
-                [btn addTarget:self action:@selector(cellBtnPressed:) forControlEvents:UIControlEventTouchDown];
-                
-                // Draw lines ?
-                
-                //Save the cell button in board cells array
-                [[self.boardCells objectAtIndex:i] addObject:btn];
-                [self.boardView addSubview:btn];
-            }
-        }
-        
-        // Draw lines
         for (NSArray* indices in [self.unsolvedGame getIteratorForCages]) {
             [self drawInnerLines:indices];
         }
+    }
+    
+    // Add sum number to each cage
+    for (NSArray* indecies in [self.unsolvedGame getIteratorForCages]) {
+        NSNumber* firstIndex = [indecies objectAtIndex:0];
+        NSNumber* cageId = [self.unsolvedGame getCageIdAtIndex:firstIndex];
+        NSInteger row = [firstIndex integerValue] / 9;
+        NSInteger col = [firstIndex integerValue] % 9;
+        NSNumber* sum = [self.unsolvedGame getCageSumAtIndex:cageId];
+        NSInteger x = isColorStyle ? 2 : 3;
+        NSInteger y = isColorStyle ? -5 : -4;
+        NSInteger width = 20;
+        NSInteger height = 20;
+        NSInteger fontSize = isColorStyle ? 8 : 7;
         
-        // Add sum number to each cage
-        for (NSArray* indecies in [self.unsolvedGame getIteratorForCages]) {
-            NSNumber* firstIndex = [indecies objectAtIndex:0];
-            NSNumber* cageId = [self.unsolvedGame getCageIdAtIndex:firstIndex];
-            NSInteger row = [firstIndex integerValue] / 9;
-            NSInteger col = [firstIndex integerValue] % 9;
-            NSNumber* sum = [self.unsolvedGame getCageSumAtIndex:cageId];
-            
-            UIButton* btn = [[self.boardCells objectAtIndex:row] objectAtIndex:col];
-            
-            UILabel* sumLabel = [[UILabel alloc] initWithFrame:CGRectMake(3, -4, 20, 20)];
-            [sumLabel setFont:[UIFont systemFontOfSize:7]];
-            sumLabel.text = [sum stringValue];
-            [btn addSubview:sumLabel];
-        }
-
+        UIButton* btn = [[self.boardCells objectAtIndex:row] objectAtIndex:col];
+        
+        UILabel* sumLabel = [[UILabel alloc] initWithFrame:CGRectMake(x, y, width, height)];
+        [sumLabel setFont:[UIFont systemFontOfSize:fontSize]];
+        sumLabel.text = [sum stringValue];
+        [btn addSubview:sumLabel];
     }
 }
 
