@@ -37,14 +37,14 @@
     }
     
     // Drawing code
-    CGFloat padding = 2.0f;
+    CGFloat padding = 2.3f;
     CGFloat width = self.frame.size.width;
     CGFloat height = self.frame.size.height;
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetLineWidth(context, 1);
+    CGContextSetLineWidth(context, 1.2);
     CGFloat dashes[] = {1,1};
     CGContextSetLineDash(context, 2.0, dashes, 2);
-    CGContextSetStrokeColorWithColor(context, [UIColor blackColor].CGColor);
+    CGContextSetStrokeColorWithColor(context, [UIColor yellowColor].CGColor);
     CGFloat startX, startY, endX, endY;
     // Left border
     if (!self.hasLeft) {

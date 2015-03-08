@@ -69,7 +69,7 @@ CGFloat innerLineWidth;
     self.isPlaying = true;
     self.boardCells = [[NSMutableArray alloc] init];
     self.noteMode = false;
-    self.finishedCount = 80;
+    self.finishedCount = 0;
     
     
     // Load user preferences
@@ -240,7 +240,7 @@ CGFloat innerLineWidth;
 
 - (void)addCellBtns {
     // Generation is finished, add cell buttons to board
-    BOOL isColorStyle =  [self.cellStyle isEqualToString:@"color"];
+    BOOL isColorStyle =  [self.cellStyle isEqualToString:@"Color"];
     
     
     // Add cell buttons

@@ -36,7 +36,7 @@
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
 }
 
-# pragma mark Action methods
+# pragma mark - Action methods
 - (IBAction)backBtnPressed:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }

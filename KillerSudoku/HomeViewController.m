@@ -31,9 +31,11 @@
     [super viewDidLoad];
     // Check if user preference is set. Set default values if not.
     NSUserDefaults* preferences = [NSUserDefaults standardUserDefaults];
-    NSString* cellStyle = [preferences stringForKey:@"cellStyle"];
-    if (cellStyle == nil) {
+    if ([preferences stringForKey:@"cellStyle"] == nil) {
+        // Need to set default settings
         [preferences setObject:@"color" forKey:@"cellStyle"];
+        [preferences setBool:YES forKey:@"playSound"];
+        [preferences setBool:YES forKey:@"playMusic"];
     }
     
     // Stylize with FlatUIKit
