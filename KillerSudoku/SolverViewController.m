@@ -297,7 +297,7 @@ CGFloat itemLineSep;
     debugBtn.titleLabel.font = [UIFont boldFlatFontOfSize:16];
     [debugBtn setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
     [debugBtn setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
-    [debugBtn setTitle:@"debug" forState:UIControlStateNormal];
+    [debugBtn setTitle:@"Demo" forState:UIControlStateNormal];
     [debugBtn addTarget:self action:@selector(debugBtnPressed:) forControlEvents:UIControlEventTouchDown];
     [controlView addSubview:debugBtn];
     
@@ -698,7 +698,7 @@ CGFloat itemLineSep;
 
 - (void)solveBtnPressed:(FUIButton*)sender {
     if (self.solutions != nil && [self.solutions count] == 1) {
-        self.promptLabel.text = @"  Already solved. Reset before solving another one.";
+        self.promptLabel.text = @"  Already solved. Reset firstly.";
         return;
     }
     
@@ -755,7 +755,7 @@ CGFloat itemLineSep;
 - (void)debugBtnPressed:(FUIButton*)sender {
     [self clearSelection];
     NSMutableDictionary* configuration = [[NSMutableDictionary alloc] init];
-    NSString* filePath = [[NSBundle mainBundle] pathForResource:@"level_10" ofType:@""];
+    NSString* filePath = [[NSBundle mainBundle] pathForResource:@"game3" ofType:@""];
     NSString* file_content = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
     
     // Do the following process block on each line
@@ -809,15 +809,13 @@ CGFloat itemLineSep;
 - (void)finishSolving:(NSArray*) solutions {
     self.solutions = solutions;
     
-    if ([self.solutions count] == 0) {
-        self.promptLabel.text = @"  No solution found!";
-    } else {
+    if (self.solutions != nil && [self.solutions count] != 0) {
         // Has solutions
         self.isSolved = true;
         if ([self.solutions count] == 1) {
-            self.promptLabel.text = @"  Unique solution found!";
+            self.promptLabel.text = @"  One solution found!";
         } else {
-            self.promptLabel.text = [NSString stringWithFormat:@"  %ld solutions, display sol 1. Press Solve to see more.", [self.solutions count]];
+            self.promptLabel.text = [NSString stringWithFormat:@"  %d solutions, display sol 1. Press Solve to see more.", [self.solutions count]];
         }
         // Fill the first solution into the board
         GameBoard* firstSolution = [self.solutions objectAtIndex:0];
@@ -825,6 +823,11 @@ CGFloat itemLineSep;
             PlayCellButton* cellBtn = [[self.boardCells objectAtIndex:(index / 9)] objectAtIndex:(index % 9)];
             [cellBtn setNum:[firstSolution getNumAtIndex:[NSNumber numberWithInt:index]]];
         }
+    } else if ([self.solvingThread isCancelled]) {
+        NSLog(@"cancelled");
+        self.promptLabel.text = @"  Solving is stopped.";
+    } else {
+        self.promptLabel.text = @"  No solution found!";
     }
     
     [self.waitView dismissWithClickedButtonIndex:self.waitView.cancelButtonIndex animated:YES];
@@ -870,7 +873,6 @@ CGFloat itemLineSep;
     } else if ([alertView.title isEqualToString:@"Wait"]) {
         // Stop solving
         [self.solvingThread cancel];
-        self.promptLabel.text = @"  Solving is stopped.";
     } else if ([alertView.title isEqualToString:@"Reset"]) {
         if (buttonIndex == 1) {
             // Yes

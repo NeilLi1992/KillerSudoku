@@ -765,9 +765,9 @@ CGFloat innerLineWidth;
     // Dismiss the wait alertView
     [self.waitView dismissWithClickedButtonIndex: self.waitView.cancelButtonIndex
                                           animated: YES];
-    [self addCellBtns];
-    NSLog(@"Generation finished.");
-    NSLog(@"%@", self.solutionGrid);
+    if (![self.generatingThread isCancelled]) {
+        [self addCellBtns];
+    }
 }
 
 /*

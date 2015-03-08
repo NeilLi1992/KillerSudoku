@@ -97,7 +97,7 @@
     
     int seed[9][9];
     int seed_number = arc4random() % 3;
-    NSLog(@"Using seed_number %ld", seed_number);
+    NSLog(@"Using seed_number %d", seed_number);
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
             seed[i][j] = seeds[seed_number][i][j];
@@ -247,7 +247,7 @@
         [sums setObject:[[solutionGrid objectAtIndex:row] objectAtIndex:col] forKey:[NSNumber numberWithInt:index]];
     }
     
-    int ite1 = 0;
+    //int ite1 = 0;
     // Repeat until we get our desired number of cages
     while ([uf count] > cageNumber) {
         if ([[NSThread currentThread] isCancelled]) {
@@ -292,7 +292,7 @@
             [allCageNumbers addObject:[[solutionGrid objectAtIndex:row] objectAtIndex:col]];
         }
         
-        int ite2 = 0;
+        //int ite2 = 0;
         
         // Try to find a neighbor cage which is OK to union
         for (NSNumber* neighborCageID in possibleNeighborCageIDs) {

@@ -7,8 +7,6 @@
 //
 
 #import "AlgorithmX.h"
-static NSInteger iter=0;
-static const NSInteger iterLimit = 20000;
 
 @implementation AlgorithmX
 
@@ -54,7 +52,6 @@ static const NSInteger iterLimit = 20000;
     }
     
     // Solve with Algorithm X
-    iter = 0;
     NSMutableArray* solution = [[NSMutableArray alloc] init];
     NSMutableArray* possible_solutions = [[NSMutableArray alloc] init];
     [AlgorithmX solveWith:X and:Y on:solution with:gb store:possible_solutions];
@@ -216,10 +213,12 @@ static const NSInteger iterLimit = 20000;
 
 #pragma  -mark Algorithm X Core Methods
 + (void)solveWith:(NSMutableDictionary*)X and:(NSMutableDictionary*)Y on:(NSMutableArray*)solution with:(GameBoard*)gb store:(NSMutableArray*)possible_solutions {
-    if (++iter > iterLimit) {
-        NSLog(@"AlgorithmX returns due to iterLimit.");
+    if ([[NSThread currentThread] isCancelled]) {
+        NSLog(@"Solving thread cancelled in Algorithm X");
+        NSLog(@"Already found solution number: %ld", [possible_solutions count]);
         return;
     }
+    
     if ([X count] == 0) {
         for (NSNumber* rowIndex in solution) {
             NSInteger n = [rowIndex integerValue] / 10 % 9 + 1;
@@ -229,7 +228,7 @@ static const NSInteger iterLimit = 20000;
             [gb setNum:[NSNumber numberWithInteger:n] AtRow:r Column:c];
         }
 
-        // Store the found solution is an array
+        // Store the found solution in an array
         [possible_solutions addObject:[gb copy]];
     } else {
         // Find the column col, corresponding to least number of rows
