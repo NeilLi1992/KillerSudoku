@@ -86,7 +86,7 @@ CGFloat innerLineWidth;
     // Create a new thread to call the solver
     self.generatingThread = [[NSThread alloc] initWithTarget:self selector:@selector(callGenerator) object:nil];
     
-    // Create a alertView to mask the screen
+    // Create an alertView to mask the screen
     self.waitView = [[FUIAlertView alloc] initWithTitle:@"Wait" message:@"Game generating, please wait." delegate:self cancelButtonTitle:@"Stop generating" otherButtonTitles:nil];
     self.waitView.titleLabel.textColor = [UIColor cloudsColor];
     self.waitView.titleLabel.font = [UIFont boldFlatFontOfSize:16];

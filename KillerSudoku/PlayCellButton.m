@@ -13,6 +13,8 @@
 @property(nonatomic)NSInteger dupCount;
 @property(strong, nonatomic)NSMutableDictionary* noteNums;
 
+@property(strong, nonatomic)UILabel* sumText;
+
 // Inner line drawing properties
 @property(nonatomic)BOOL needsDraw;
 @property(nonatomic)BOOL hasLeft;
@@ -153,6 +155,11 @@
     CGContextStrokePath(context);
 }
 
+-(void)clearBorderLines {
+    self.needsDraw = false;
+    [self setNeedsDisplay];
+}
+
 - (void)setNum:(NSNumber*)num {
     if (self.noteNums != nil) {
         for (UILabel* noteLabel in [self.noteNums allValues]) {
@@ -177,6 +184,10 @@
             noteLabel.hidden = false;
         }
     }
+}
+
+- (NSInteger)getNum {
+    return [self.titleLabel.text integerValue];
 }
 
 - (void)toggleNote:(NSString*)note {
@@ -217,6 +228,24 @@
     }
 }
 
+- (void)setSum:(NSInteger)sum {
+    if (self.sumText == nil) {
+        self.sumText = [[UILabel alloc] initWithFrame:CGRectMake(3, 2, 10, 10)];
+        [self.sumText setFont:[UIFont systemFontOfSize:7]];
+        [self addSubview:self.sumText];
+    }
+    
+    self.sumText.text = [NSString stringWithFormat:@"%ld", sum];
+}
+
+- (void)clearSum {
+    if (self.sumText != nil) {
+        self.sumText.text = @"";
+        [self.sumText removeFromSuperview];
+        self.sumText = nil;
+    }
+}
+
 - (void)markWrong {
     [self setTitleColor:[UIColor pomegranateColor] forState:UIControlStateNormal];
 }
@@ -253,6 +282,10 @@
     self.rb = rb;
     self.needsDraw = true;
     [self setNeedsDisplay];
+}
+
+-(BOOL)getHasJoined {
+    return self.needsDraw;
 }
 
 @end

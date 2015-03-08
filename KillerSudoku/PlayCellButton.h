@@ -11,13 +11,21 @@
 @interface PlayCellButton : UIButton
 - (void)setNum:(NSNumber*)num;
 - (void)clearNum;
+- (NSInteger)getNum;
 
 - (void)toggleNote:(NSString*)note;
 - (void)clearNote;
+
+- (void)setSum:(NSInteger)sum;
+- (void)clearSum;
 
 - (void)incDupCount;
 - (void)decDupCount;
 
 -(void)setBorderFlagsLeft:(BOOL)left Right:(BOOL)right Top:(BOOL)top Below:(BOOL)below;
 -(void)setCornerFlagsLT:(BOOL)lt RT:(BOOL)rt LB:(BOOL)lb RB:(BOOL)rb;
+-(void)clearBorderLines;
+
+-(BOOL)getHasJoined;
+
 @end

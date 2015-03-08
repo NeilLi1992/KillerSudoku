@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-static  const int baseY = 45;
-static  const float cellLength = 320.0f / 9;
 static  const NSString* defautSearch = @"AlgorithmX";
 
 @interface Constant : NSObject
