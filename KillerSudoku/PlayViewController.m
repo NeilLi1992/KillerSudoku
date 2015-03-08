@@ -69,7 +69,7 @@ CGFloat innerLineWidth;
     self.isPlaying = true;
     self.boardCells = [[NSMutableArray alloc] init];
     self.noteMode = false;
-    self.finishedCount = 0;
+    self.finishedCount = 80;
     
     
     // Load user preferences
@@ -133,7 +133,7 @@ CGFloat innerLineWidth;
     self.boardView.backgroundColor = [UIColor silverColor];
     self.boardView.layer.borderColor = [UIColor midnightBlueColor].CGColor;
     self.boardView.layer.borderWidth = outerLineWidth;
-    self.boardView.layer.cornerRadius = 3;
+    self.boardView.layer.cornerRadius = 6;
     self.boardView.layer.masksToBounds = YES;
 //    boardView.layer.shadowOffset = CGSizeMake(2, 5);
 //    boardView.layer.shadowRadius = 2;
@@ -151,7 +151,7 @@ CGFloat innerLineWidth;
     UIView* hintView = [[UIView alloc] initWithFrame:CGRectMake(hintViewX, hintViewY, hintViewWidth, hintViewHeight)];
     hintView.layer.borderColor = [UIColor midnightBlueColor].CGColor;
     hintView.layer.borderWidth = outerLineWidth;
-    hintView.layer.cornerRadius = 3;
+    hintView.layer.cornerRadius = 6;
     hintView.backgroundColor = [UIColor turquoiseColor];
     
     // Add a hint sum view
@@ -253,6 +253,7 @@ CGFloat innerLineWidth;
                 CGFloat btnWidth = cellLength - innerLineWidth;
                 CGFloat btnHeight = cellLength - innerLineWidth;
                 
+                // Adjust x, y, width, height to avoid covering thick lines
                 switch (j) {
                     case 0:
                         btnWidth -= 1.5 * innerLineWidth;
@@ -317,7 +318,7 @@ CGFloat innerLineWidth;
             
             UIButton* btn = [[self.boardCells objectAtIndex:row] objectAtIndex:col];
             
-            UILabel* sumLabel = [[UILabel alloc] initWithFrame:CGRectMake(3, -4, 20, 20)];
+            UILabel* sumLabel = [[UILabel alloc] initWithFrame:CGRectMake(2, -5, 20, 20)];
             [sumLabel setFont:[UIFont systemFontOfSize:8]];
             sumLabel.text = [sum stringValue];
             [btn addSubview:sumLabel];
@@ -326,10 +327,162 @@ CGFloat innerLineWidth;
         
     } else {
         // Use line style
+        for (int i = 0; i < 9; i++) {
+            [self.boardCells addObject:[[NSMutableArray alloc] init]];
+            for (int j = 0; j < 9; j++) {
+                CGFloat btnX = j * cellLength + innerLineWidth / 2;
+                CGFloat btnY = i * cellLength + innerLineWidth / 2;
+                CGFloat btnWidth = cellLength - innerLineWidth;
+                CGFloat btnHeight = cellLength - innerLineWidth;
+                
+                // Adjust x, y, width, height to avoid covering thick lines
+                switch (j) {
+                    case 0:
+                        btnWidth -= 1.5 * innerLineWidth;
+                        btnX += 1.5 * innerLineWidth;
+                        break;
+                    case 2: // Thick line right to cell
+                    case 5:
+                        btnWidth -= innerLineWidth / 2;
+                        break;
+                    case 3: // Thick line left to cell
+                    case 6:
+                        btnWidth -= innerLineWidth / 2;
+                        btnX += innerLineWidth / 2;
+                        break;
+                    case 8:
+                        btnWidth -= 1.5 * innerLineWidth;
+                        break;
+                    default:
+                        break;
+                }
+                
+                switch (i) {
+                    case 0:
+                        btnHeight -= 1.5 * innerLineWidth;
+                        btnY += 1.5 * innerLineWidth;
+                        break;
+                    case 2: // Thick line below cell
+                    case 5:
+                        btnHeight -= innerLineWidth / 2;
+                        break;
+                    case 3: // Thick line above cell
+                    case 6:
+                        btnHeight -= innerLineWidth / 2;
+                        btnY += innerLineWidth / 2;
+                        break;
+                    case 8:
+                        btnHeight -= 1.5 * innerLineWidth;
+                    default:
+                        break;
+                }
+                
+                PlayCellButton* btn = [[PlayCellButton alloc] initWithFrame:CGRectMake(btnX, btnY, btnWidth, btnHeight)];
+                btn.tag = i * 9 + j;
+                btn.titleLabel.text = @" ";
+                [btn addTarget:self action:@selector(cellBtnPressed:) forControlEvents:UIControlEventTouchDown];
+                
+                // Draw lines ?
+                
+                //Save the cell button in board cells array
+                [[self.boardCells objectAtIndex:i] addObject:btn];
+                [self.boardView addSubview:btn];
+            }
+        }
+        
+        // Draw lines
+        for (NSArray* indices in [self.unsolvedGame getIteratorForCages]) {
+            [self drawInnerLines:indices];
+        }
+        
+        // Add sum number to each cage
+        for (NSArray* indecies in [self.unsolvedGame getIteratorForCages]) {
+            NSNumber* firstIndex = [indecies objectAtIndex:0];
+            NSNumber* cageId = [self.unsolvedGame getCageIdAtIndex:firstIndex];
+            NSInteger row = [firstIndex integerValue] / 9;
+            NSInteger col = [firstIndex integerValue] % 9;
+            NSNumber* sum = [self.unsolvedGame getCageSumAtIndex:cageId];
+            
+            UIButton* btn = [[self.boardCells objectAtIndex:row] objectAtIndex:col];
+            
+            UILabel* sumLabel = [[UILabel alloc] initWithFrame:CGRectMake(3, -4, 20, 20)];
+            [sumLabel setFont:[UIFont systemFontOfSize:7]];
+            sumLabel.text = [sum stringValue];
+            [btn addSubview:sumLabel];
+        }
+
     }
 }
 
-#pragma mark - Helper methods {
+-(void)drawInnerLines:(NSArray*)cells {
+    BOOL hasLeft, hasRight, hasTop, hasBelow, lt, rt, lb, rb;
+    for (NSNumber* index in cells) {
+        NSInteger cellIndex = [index integerValue];
+        NSInteger row = [index integerValue] / 9;
+        NSInteger col = [index integerValue] % 9;
+
+        hasLeft = false;
+        hasRight = false;
+        hasTop = false;
+        hasBelow = false;
+        lt = false;
+        rt = false;
+        lb = false;
+        rb = false;
+        
+        NSNumber* left = [NSNumber numberWithInteger:(cellIndex - 1)];
+        NSNumber* right = [NSNumber numberWithInteger:(cellIndex + 1)];
+        NSNumber* top = [NSNumber numberWithInteger:(cellIndex - 9)];
+        NSNumber* below = [NSNumber numberWithInteger:(cellIndex + 9)];
+        NSNumber* leftTop = [NSNumber numberWithInteger:(cellIndex - 1 - 9)];
+        NSNumber* rightTop = [NSNumber numberWithInteger:(cellIndex + 1 - 9)];
+        NSNumber* leftBelow = [NSNumber numberWithInteger:(cellIndex - 1 + 9)];
+        NSNumber* rightBelow = [NSNumber numberWithInteger:(cellIndex + 1+ 9)];
+        
+        // Has right
+        if ([cells containsObject:right]) {
+            hasRight = true;
+        }
+        // Has left
+        if ([cells containsObject:left]) {
+            hasLeft = true;
+        }
+        // Has below
+        if ([cells containsObject:below]) {
+            hasBelow = true;
+        }
+        // Has top
+        if ([cells containsObject:top]) {
+            hasTop = true;
+        }
+        
+        // Left top corner
+        if ([cells containsObject:left] && [cells containsObject:top] && ![cells containsObject:leftTop]) {
+            lt = true;
+        }
+        
+        // Right top corner
+        if ([cells containsObject:right] && [cells containsObject:top] && ![cells containsObject:rightTop]) {
+            rt = true;
+        }
+        
+        // Left below corner
+        if ([cells containsObject:left] && [cells containsObject:below] && ![cells containsObject:leftBelow]) {
+            lb = true;
+        }
+        
+        // Right below corner
+        if ([cells containsObject:right] && [cells containsObject:below] && ![cells containsObject:rightBelow]) {
+            rb = true;
+        }
+        
+        PlayCellButton* cell = [[self.boardCells objectAtIndex:row] objectAtIndex:col];
+        [cell setBorderFlagsLeft:hasLeft Right:hasRight Top:hasTop Below:hasBelow];
+        [cell setCornerFlagsLT:lt RT:rt LB:lb RB:rb];
+    }
+}
+
+#pragma mark - Helper methods
 - (void)loadColors {
     self.candidateColors = [[NSArray alloc] initWithObjects:
                             [UIColor colorWithRed:240/255.0 green:128/255.0 blue:128/255.0 alpha:1],  // Light coral
@@ -441,13 +594,33 @@ CGFloat innerLineWidth;
 }
 
 - (void)finishGame {
+    // Disable user interaction
+    self.view.userInteractionEnabled = NO;
+    FUIAlertView* finishAlertView = [[FUIAlertView alloc] initWithTitle:@"Finish" message:@"Congradulations!\nYou finished the game! " delegate:self cancelButtonTitle:@"Exit" otherButtonTitles:nil];
     
+    // Stylize the alert view
+    finishAlertView.titleLabel.textColor = [UIColor cloudsColor];
+    finishAlertView.titleLabel.font = [UIFont boldFlatFontOfSize:16];
+    finishAlertView.messageLabel.textColor = [UIColor cloudsColor];
+    finishAlertView.messageLabel.font = [UIFont flatFontOfSize:14];
+    finishAlertView.backgroundOverlay.backgroundColor = [[UIColor cloudsColor] colorWithAlphaComponent:0.8];
+    finishAlertView.alertContainer.backgroundColor = [UIColor midnightBlueColor];
+    finishAlertView.alertContainer.layer.cornerRadius = 3;
+    finishAlertView.alertContainer.layer.masksToBounds = YES;
+    finishAlertView.defaultButtonColor = [UIColor cloudsColor];
+    finishAlertView.defaultButtonShadowColor = [UIColor asbestosColor];
+    finishAlertView.defaultButtonFont = [UIFont boldFlatFontOfSize:16];
+    finishAlertView.defaultButtonTitleColor = [UIColor asbestosColor];
+    
+    [finishAlertView show];
+
 }
 
 
 #pragma mark - Action methods
 - (void)backBtnPressed {
-    if (self.isPlaying) {
+    // Check if the game is ongoing
+    if (self.view.userInteractionEnabled) {
         // Build the alert view for play choice
         FUIAlertView* alertView = [[FUIAlertView alloc] initWithTitle:@"Sure"
                                                               message:@"Game unfinished, sure to exit?"
@@ -622,6 +795,16 @@ CGFloat innerLineWidth;
             case 0:
                 // Stop generating
                 [self.generatingThread cancel];
+                [self.navigationController popViewControllerAnimated:YES];
+                break;
+            default:
+                break;
+        }
+    } else if ([alertView.title isEqualToString:@"Finish"]) {
+        // Game finish alert view
+        switch (buttonIndex) {
+            case 0:
+                // Exit
                 [self.navigationController popViewControllerAnimated:YES];
                 break;
             default:

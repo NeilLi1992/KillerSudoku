@@ -12,17 +12,147 @@
 @interface PlayCellButton ()
 @property(nonatomic)NSInteger dupCount;
 @property(strong, nonatomic)NSMutableDictionary* noteNums;
+
+// Inner line drawing properties
+@property(nonatomic)BOOL needsDraw;
+@property(nonatomic)BOOL hasLeft;
+@property(nonatomic)BOOL hasRight;
+@property(nonatomic)BOOL hasTop;
+@property(nonatomic)BOOL hasBelow;
+@property(nonatomic)BOOL lt;
+@property(nonatomic)BOOL rt;
+@property(nonatomic)BOOL lb;
+@property(nonatomic)BOOL rb;
 @end
 
 @implementation PlayCellButton
 
-/*
+
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
+    if (!self.needsDraw) {
+        NSLog(@"Don't draw");
+        return;
+    }
+    
     // Drawing code
+    CGFloat padding = 2.0f;
+    CGFloat width = self.frame.size.width;
+    CGFloat height = self.frame.size.height;
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetLineWidth(context, 1);
+    CGFloat dashes[] = {1,1};
+    CGContextSetLineDash(context, 2.0, dashes, 2);
+    CGContextSetStrokeColorWithColor(context, [UIColor blackColor].CGColor);
+    CGFloat startX, startY, endX, endY;
+    // Left border
+    if (!self.hasLeft) {
+        startX = padding;
+        startY = self.hasTop ? 0 : padding;
+        endX = padding;
+        endY = self.hasBelow ? height : height - padding;
+        CGContextMoveToPoint(context, startX, startY);
+        CGContextAddLineToPoint(context, endX, endY);
+        
+    }
+    
+    // Right border
+    if (!self.hasRight) {
+        startX = width - padding;
+        startY = self.hasTop ? 0 : padding;
+        endX = width - padding;
+        endY = self.hasBelow ? height : height - padding;
+        CGContextMoveToPoint(context, startX, startY);
+        CGContextAddLineToPoint(context, endX, endY);
+    }
+    
+    // Top border
+    if (!self.hasTop) {
+        startX = self.hasLeft ? 0 : padding;
+        startY = padding;
+        endX = self.hasRight ? width : width - padding;
+        endY = padding;
+        CGContextMoveToPoint(context, startX, startY);
+        CGContextAddLineToPoint(context, endX, endY);
+    }
+    
+    // Below border
+    if (!self.hasBelow) {
+        startX = self.hasLeft ? 0 : padding;
+        startY = height - padding;
+        endX = self.hasRight ? width : width - padding;
+        endY = height - padding;
+        CGContextMoveToPoint(context, startX, startY);
+        CGContextAddLineToPoint(context, endX, endY);
+    }
+    
+    if (self.lt) {
+        startX = 0;
+        startY = padding;
+        endX = padding;
+        endY = padding;
+        CGContextMoveToPoint(context, startX, startY);
+        CGContextAddLineToPoint(context, endX, endY);
+        
+        startX = padding;
+        startY = 0;
+        endX = padding;
+        endY = padding;
+        CGContextMoveToPoint(context, startX, startY);
+        CGContextAddLineToPoint(context, endX, endY);
+    }
+    
+    if (self.rt) {
+        startX = width - padding;
+        startY = 0;
+        endX = height - padding;
+        endY = padding;
+        CGContextMoveToPoint(context, startX, startY);
+        CGContextAddLineToPoint(context, endX, endY);
+        
+        startX = width - padding;
+        startY = padding;
+        endX = width;
+        endY = padding;
+        CGContextMoveToPoint(context, startX, startY);
+        CGContextAddLineToPoint(context, endX, endY);
+    }
+    
+    if (self.lb) {
+        startX = 0;
+        startY = height - padding;
+        endX = padding;
+        endY = height - padding;
+        CGContextMoveToPoint(context, startX, startY);
+        CGContextAddLineToPoint(context, endX, endY);
+        
+        startX = padding;
+        startY = height - padding;
+        endX = padding;
+        endY = height;
+        CGContextMoveToPoint(context, startX, startY);
+        CGContextAddLineToPoint(context, endX, endY);
+    }
+    
+    if (self.rb) {
+        startX = width - padding;
+        startY = height - padding;
+        endX = width;
+        endY = height - padding;
+        CGContextMoveToPoint(context, startX, startY);
+        CGContextAddLineToPoint(context, endX, endY);
+        
+        startX = width - padding;
+        startY = height - padding;
+        endX = width - padding;
+        endY = height;
+        CGContextMoveToPoint(context, startX, startY);
+        CGContextAddLineToPoint(context, endX, endY);
+    }
+    
+    CGContextStrokePath(context);
 }
-*/
 
 - (void)setNum:(NSNumber*)num {
     if (self.noteNums != nil) {
@@ -109,4 +239,21 @@
         [self deMarkWrong];
     }
 }
+
+-(void)setBorderFlagsLeft:(BOOL)left Right:(BOOL)right Top:(BOOL)top Below:(BOOL)below {
+    self.hasLeft = left;
+    self.hasRight = right;
+    self.hasBelow = below;
+    self.hasTop = top;
+}
+
+-(void)setCornerFlagsLT:(BOOL)lt RT:(BOOL)rt LB:(BOOL)lb RB:(BOOL)rb {
+    self.lt = lt;
+    self.rt = rt;
+    self.lb = lb;
+    self.rb = rb;
+    self.needsDraw = true;
+    [self setNeedsDisplay];
+}
+
 @end

@@ -17,4 +17,7 @@
 
 - (void)incDupCount;
 - (void)decDupCount;
+
+-(void)setBorderFlagsLeft:(BOOL)left Right:(BOOL)right Top:(BOOL)top Below:(BOOL)below;
+-(void)setCornerFlagsLT:(BOOL)lt RT:(BOOL)rt LB:(BOOL)lb RB:(BOOL)rb;
 @end
