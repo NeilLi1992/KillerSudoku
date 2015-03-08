@@ -71,7 +71,6 @@ CGFloat innerLineWidth;
     self.noteMode = false;
     self.finishedCount = 0;
     
-    
     // Load user preferences
     NSUserDefaults* preferences = [NSUserDefaults standardUserDefaults];
     self.cellStyle = [preferences stringForKey:@"cellStyle"];

@@ -64,7 +64,7 @@
         <!--Solver-->
         <scene sceneID="eYR-LB-o9m">
             <objects>
-                <viewController id="tK3-FB-xhR" customClass="SolverViewController" sceneMemberID="viewController">
+                <viewController id="tK3-FB-xhR" customClass="DebugSolverViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Yrj-qG-JQ6"/>
                         <viewControllerLayoutGuide type="bottom" id="QCO-DV-KKM"/>
@@ -299,6 +299,32 @@
             </objects>
             <point key="canvasLocation" x="1046" y="1338"/>
         </scene>
+        <!--Solver-->
+        <scene sceneID="3fd-jh-E4v">
+            <objects>
+                <viewController id="dq5-9r-rWg" customClass="SolverViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="row-Ha-PlS"/>
+                        <viewControllerLayoutGuide type="bottom" id="qTC-dg-9bi"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="68r-oD-nIb">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Solver" id="Mrs-e6-4Py">
+                        <barButtonItem key="leftBarButtonItem" title="Back" id="oh7-dU-CG0">
+                            <color key="tintColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="deviceRGB"/>
+                            <connections>
+                                <action selector="backBtnPressed:" destination="dq5-9r-rWg" id="1kc-ZF-wvN"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4qv-cy-Ha1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2502" y="-740"/>
+        </scene>
         <!--Settings-->
         <scene sceneID="4E3-fE-s4P">
             <objects>
@@ -323,7 +349,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pvv-bP-IQ2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2342" y="562"/>
+            <point key="canvasLocation" x="2502" y="-86"/>
         </scene>
         <!--Home View Controller-->
         <scene sceneID="r7W-5n-4W5">
@@ -353,6 +379,7 @@
                                 </state>
                                 <connections>
                                     <action selector="solverBtnPressed:" destination="1x4-HK-G6U" eventType="touchUpInside" id="MmX-7w-dnM"/>
+                                    <segue destination="dq5-9r-rWg" kind="push" id="Vav-Iw-zuM"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D4B-Uf-678" customClass="FUIButton">
@@ -441,7 +468,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sZZ-pk-dr1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2342" y="-802"/>
+            <point key="canvasLocation" x="2508" y="-1408"/>
         </scene>
         <!--Help-->
         <scene sceneID="J91-bn-I0V">
@@ -467,7 +494,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fuy-25-KfY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2330" y="-103"/>
+            <point key="canvasLocation" x="2508" y="665"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="b5V-Pt-sIZ">

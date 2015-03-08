@@ -32,7 +32,6 @@
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
     if (!self.needsDraw) {
-        NSLog(@"Don't draw");
         return;
     }
     

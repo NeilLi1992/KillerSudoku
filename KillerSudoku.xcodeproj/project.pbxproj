@@ -31,7 +31,7 @@
 		234BA06D1A74FFE300B09F5B /* DfsByCage.m in Sources */ = {isa = PBXBuildFile; fileRef = 234BA06C1A74FFE300B09F5B /* DfsByCage.m */; };
 		2363BC291A1B3E430063F949 /* Solver.m in Sources */ = {isa = PBXBuildFile; fileRef = 2363BC281A1B3E430063F949 /* Solver.m */; };
 		2363BC2D1A1B412F0063F949 /* game1 in Resources */ = {isa = PBXBuildFile; fileRef = 2363BC2C1A1B412F0063F949 /* game1 */; };
-		2367837B1A124CB300DF97F2 /* SolverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2367837A1A124CB300DF97F2 /* SolverViewController.m */; };
+		2367837B1A124CB300DF97F2 /* DebugSolverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2367837A1A124CB300DF97F2 /* DebugSolverViewController.m */; };
 		2367B9811A378BAA000852AC /* AlgorithmX.m in Sources */ = {isa = PBXBuildFile; fileRef = 2367B9801A378BAA000852AC /* AlgorithmX.m */; };
 		2371AB511A92003B0098ED5C /* combination.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2371AB4D1A91FE720098ED5C /* combination.txt */; };
 		2374891019F65C3000A0DCE3 /* UnionFind.m in Sources */ = {isa = PBXBuildFile; fileRef = 2374890F19F65C3000A0DCE3 /* UnionFind.m */; };
@@ -73,6 +73,7 @@
 		23E90ABB1AAB310400DA2C4A /* BoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E90ABA1AAB310400DA2C4A /* BoardView.m */; };
 		23E90ABE1AAB8C5900DA2C4A /* PlayCellButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E90ABD1AAB8C5900DA2C4A /* PlayCellButton.m */; };
 		23E90AC31AAC2BB600DA2C4A /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E90AC21AAC2BB600DA2C4A /* SettingsViewController.m */; };
+		23E90ACA1AAC52C100DA2C4A /* SolverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E90AC91AAC52C100DA2C4A /* SolverViewController.m */; };
 		23F0FC8E1A8ABCBC0034322F /* NewGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23F0FC8D1A8ABCBC0034322F /* NewGameViewController.m */; };
 		23F0FC931A8ACE870034322F /* multiple_solutions_2 in Resources */ = {isa = PBXBuildFile; fileRef = 23F0FC921A8ACE870034322F /* multiple_solutions_2 */; };
 /* End PBXBuildFile section */
@@ -123,8 +124,8 @@
 		2363BC271A1B3E430063F949 /* Solver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Solver.h; sourceTree = "<group>"; };
 		2363BC281A1B3E430063F949 /* Solver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Solver.m; sourceTree = "<group>"; };
 		2363BC2C1A1B412F0063F949 /* game1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game1; sourceTree = "<group>"; };
-		236783791A124CB300DF97F2 /* SolverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SolverViewController.h; sourceTree = "<group>"; };
-		2367837A1A124CB300DF97F2 /* SolverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SolverViewController.m; sourceTree = "<group>"; };
+		236783791A124CB300DF97F2 /* DebugSolverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugSolverViewController.h; sourceTree = "<group>"; };
+		2367837A1A124CB300DF97F2 /* DebugSolverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebugSolverViewController.m; sourceTree = "<group>"; };
 		2367B97F1A378BAA000852AC /* AlgorithmX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlgorithmX.h; sourceTree = "<group>"; };
 		2367B9801A378BAA000852AC /* AlgorithmX.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlgorithmX.m; sourceTree = "<group>"; };
 		2371AB4D1A91FE720098ED5C /* combination.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = combination.txt; sourceTree = "<group>"; };
@@ -198,6 +199,8 @@
 		23E90ABD1AAB8C5900DA2C4A /* PlayCellButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayCellButton.m; sourceTree = "<group>"; };
 		23E90AC11AAC2BB600DA2C4A /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		23E90AC21AAC2BB600DA2C4A /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		23E90AC81AAC52C100DA2C4A /* SolverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SolverViewController.h; sourceTree = "<group>"; };
+		23E90AC91AAC52C100DA2C4A /* SolverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SolverViewController.m; sourceTree = "<group>"; };
 		23F0FC8C1A8ABCBC0034322F /* NewGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewGameViewController.h; sourceTree = "<group>"; };
 		23F0FC8D1A8ABCBC0034322F /* NewGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewGameViewController.m; sourceTree = "<group>"; };
 		23F0FC921A8ACE870034322F /* multiple_solutions_2 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = multiple_solutions_2; sourceTree = "<group>"; };
@@ -225,8 +228,8 @@
 		230134291A9D0E5400023704 /* SolverView */ = {
 			isa = PBXGroup;
 			children = (
-				236783791A124CB300DF97F2 /* SolverViewController.h */,
-				2367837A1A124CB300DF97F2 /* SolverViewController.m */,
+				236783791A124CB300DF97F2 /* DebugSolverViewController.h */,
+				2367837A1A124CB300DF97F2 /* DebugSolverViewController.m */,
 				2301342A1A9FCD8300023704 /* solverCellButton.h */,
 				2301342B1A9FCD8300023704 /* solverCellButton.m */,
 			);
@@ -481,6 +484,8 @@
 		23E90ABF1AAC2B7500DA2C4A /* Solver View */ = {
 			isa = PBXGroup;
 			children = (
+				23E90AC81AAC52C100DA2C4A /* SolverViewController.h */,
+				23E90AC91AAC52C100DA2C4A /* SolverViewController.m */,
 			);
 			name = "Solver View";
 			sourceTree = "<group>";
@@ -619,8 +624,9 @@
 				23D84A561AA918D200F1EE71 /* UINavigationBar+FlatUI.m in Sources */,
 				234BA06D1A74FFE300B09F5B /* DfsByCage.m in Sources */,
 				23D84A571AA918D200F1EE71 /* UIPopoverController+FlatUI.m in Sources */,
-				2367837B1A124CB300DF97F2 /* SolverViewController.m in Sources */,
+				2367837B1A124CB300DF97F2 /* DebugSolverViewController.m in Sources */,
 				23D84A4E1AA918D200F1EE71 /* FUISegmentedControl.m in Sources */,
+				23E90ACA1AAC52C100DA2C4A /* SolverViewController.m in Sources */,
 				23D84A5C1AA918D200F1EE71 /* UITableViewCell+FlatUI.m in Sources */,
 				23D84A4F1AA918D200F1EE71 /* FUISwitch.m in Sources */,
 				23E90ABB1AAB310400DA2C4A /* BoardView.m in Sources */,
