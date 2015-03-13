@@ -45,7 +45,7 @@
     CGContextSetLineWidth(context, 1.2);
     CGFloat dashes[] = {1,1};
     CGContextSetLineDash(context, 2.0, dashes, 2);
-    CGContextSetStrokeColorWithColor(context, [UIColor yellowColor].CGColor);
+    CGContextSetStrokeColorWithColor(context, [UIColor redColor].CGColor);
     CGFloat startX, startY, endX, endY;
     // Left border
     if (!self.hasLeft) {

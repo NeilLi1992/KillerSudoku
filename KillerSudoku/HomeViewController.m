@@ -83,6 +83,14 @@
     self.titleLbl.font = [UIFont boldFlatFontOfSize:40];
     
     // Stylize buttons
+    CGFloat btnWidth = [UIScreen mainScreen].bounds.size.width * 0.6;
+    CGFloat btnHeight = btnWidth / 3;
+    CGFloat btnSep = btnHeight;
+    CGFloat btnX = [UIScreen mainScreen].bounds.size.width / 2 - btnWidth / 2;
+    CGFloat btnY = [UIScreen mainScreen].bounds.size.height / 2;
+
+    
+    self.playBtn.frame = CGRectMake(btnX, btnY, 200, btnHeight);
     self.playBtn.buttonColor = [UIColor turquoiseColor];
     self.playBtn.shadowColor = [UIColor greenSeaColor];
     self.playBtn.shadowHeight = 3.0f;
