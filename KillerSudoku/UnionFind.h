@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface UnionFind : NSObject
+@interface UnionFind : NSObject <NSCoding>
 
 -(id)initWithCapacity:(NSInteger)capacity;
 -(UnionFind*)copy;

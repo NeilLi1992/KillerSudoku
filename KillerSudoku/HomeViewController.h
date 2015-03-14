@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "ArchiveWrapper.h"
 @interface HomeViewController : UIViewController
+
+-(void)saveArchive:(ArchiveWrapper*)archive;
 
 @end

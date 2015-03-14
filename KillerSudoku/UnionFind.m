@@ -24,7 +24,7 @@
 
 @implementation UnionFind
 
-#pragma mark Construct methods
+#pragma mark - Construct methods
 /*!
  *Initialize with number of elements as capacity
  *Every element starts as a single component
@@ -53,7 +53,7 @@
     return newUF;
 }
 
-#pragma mark Basic UF operations
+#pragma mark - Basic UF operations
 /*!
  *Quick union
  */
@@ -116,7 +116,7 @@
     return [self.componentNumber integerValue];
 }
 
-#pragma mark Enhanced methods
+#pragma mark - Enhanced methods
 /*!
  *Get the size of component
  *@Returns The size of component
@@ -179,7 +179,7 @@
     return allComponents;
 }
 
-#pragma mark Description method
+#pragma mark - Description method
 - (NSString*)description {
     NSMutableString* str = [[NSMutableString alloc] init];
     [str appendString:@"Index FaIndex\n"];
@@ -189,6 +189,20 @@
     }
     
     return [NSString stringWithString:str];
+}
+
+#pragma mark - Delegate methods
+- (id) initWithCoder: (NSCoder*) coder {
+    self.components = [coder decodeObjectForKey:@"components"];
+    self.componentSizes = [coder decodeObjectForKey:@"componentSizes"];
+    self.componentNumber = [coder decodeObjectForKey:@"componentNumber"];
+    return self;
+}
+
+- (void) encodeWithCoder: (NSCoder*) coder {
+    [coder encodeObject:self.components forKey:@"components"];
+    [coder encodeObject:self.componentSizes forKey:@"componentSizes"];
+    [coder encodeObject:self.componentNumber forKey:@"componentNumber"];
 }
 
 @end

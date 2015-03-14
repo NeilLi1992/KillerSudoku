@@ -18,6 +18,7 @@
 #import "SolverViewController.h"
 #import "SettingsViewController.h"
 #import "HelpViewController.h"
+#import "LoadTableViewController.h"
 
 #import <AudioToolbox/AudioToolbox.h>
 
@@ -31,10 +32,10 @@
 @property (strong, nonatomic)FUIAlertView *playChooseView;
 @property (strong, nonatomic)SoundPlayer* soundPlayer;
 
+@property (strong, nonatomic)NSMutableDictionary* savedGames;
 @end
 
 @implementation HomeViewController
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Check if user preference is set. Set default values if not.
@@ -58,6 +59,17 @@
     // Stylize with FlatUIKit
     [self stylize];
     
+    // Prepare saved games
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* documentsDirectory = [paths objectAtIndex:0];
+    NSString* filePath = [documentsDirectory stringByAppendingPathComponent: @"savedGames.archive"];
+    self.savedGames = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
+
+    if (self.savedGames == nil) {
+        self.savedGames = [[NSMutableDictionary alloc] init];
+    }
+    NSLog(@"Saved games: %@", self.savedGames);
+          
     // Build the alert view for play choice
     self.playChooseView = [[FUIAlertView alloc] initWithTitle:@"Level"
                                                           message:@"Choose level or load stored games."
@@ -78,12 +90,22 @@
     self.playChooseView.defaultButtonFont = [UIFont boldFlatFontOfSize:16];
     self.playChooseView.defaultButtonTitleColor = [UIColor whiteColor];
     
+    FUIButton* loadBtn = (FUIButton*)[self.playChooseView.buttons objectAtIndex:4];
+    loadBtn.buttonColor = [UIColor peterRiverColor];
+    loadBtn.shadowColor = [UIColor belizeHoleColor];
+    loadBtn.tintColor = [UIColor asbestosColor];
+    [loadBtn setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
+    [loadBtn setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
+
+    
     FUIButton* cancelBtn = (FUIButton*)[self.playChooseView.buttons objectAtIndex:self.playChooseView.cancelButtonIndex];
     cancelBtn.buttonColor = [UIColor cloudsColor];
     cancelBtn.shadowColor = [UIColor asbestosColor];
     cancelBtn.tintColor = [UIColor asbestosColor];
     [cancelBtn setTitleColor:[UIColor asbestosColor] forState:UIControlStateNormal];
     [cancelBtn setTitleColor:[UIColor asbestosColor] forState:UIControlStateHighlighted];
+    
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -169,9 +191,19 @@
     self.titleLbl.font = [UIFont boldFlatFontOfSize:40];
 }
 
-# pragma mark Action methods
+# pragma mark - Action methods
 - (void)playBtnPressed:(id)sender {
     [self.soundPlayer playButtonSound];
+    
+    FUIButton* loadBtn = (FUIButton*)[self.playChooseView.buttons objectAtIndex:4];
+    if ([self.savedGames count] == 0) {
+        loadBtn.enabled = false;
+        [loadBtn setTitle:@"No saved games" forState:UIControlStateNormal];
+    } else {
+        loadBtn.enabled = true;
+        [loadBtn setTitle:@"Load" forState:UIControlStateNormal];
+    }
+    
     [self.playChooseView show];
 }
 
@@ -198,27 +230,32 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-# pragma mark Delegate methods
+# pragma mark - Delegate methods
 - (void)alertView:(FUIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     [self.soundPlayer playButtonSound];
     // Prepare to push the PlayViewController
-    PlayViewController* vc = [[PlayViewController alloc] init];
+    PlayViewController* playVC = [[PlayViewController alloc] init];
+    LoadTableViewController* loadVC = [[LoadTableViewController alloc] initWithStyle:UITableViewStylePlain];
     switch (buttonIndex) {
         case 1:
             // Easy
-            vc.level = 0;
+            playVC.level = 0;
+            [self.navigationController pushViewController:playVC animated:YES];
             break;
         case 2:
             // Medium
-            vc.level = 1;
+            playVC.level = 1;
+            [self.navigationController pushViewController:playVC animated:YES];
             break;
         case 3:
             // Hard
-            vc.level = 2;
+            playVC.level = 2;
+            [self.navigationController pushViewController:playVC animated:YES];
             break;
         case 4:
-            // Load
-            vc.level = 0;   // Should actually do something else
+            // Push the load table view
+            [loadVC prepareSavedGames:self.savedGames];
+            [self.navigationController pushViewController:loadVC animated:YES];
             break;
         case 0:
             // Play later
@@ -226,9 +263,17 @@
         default:
             break;
     }
-    
-    // Push vc
-    [self.navigationController pushViewController:vc animated:YES];
+}
+
+# pragma mark - Control center methods
+-(void)saveArchive:(ArchiveWrapper*)archive {
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* documentsDirectory = [paths objectAtIndex:0];
+    NSString* filePath = [documentsDirectory stringByAppendingPathComponent: @"savedGames.archive"];
+    [self.savedGames setObject:archive forKey:archive.date];
+    BOOL flag = [NSKeyedArchiver archiveRootObject:self.savedGames toFile:filePath];
+
+    NSLog(@"Archive save status: %d", flag);
 }
 
 @end

@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "ArchiveWrapper.h"
 @interface PlayViewController : UIViewController
 @property(nonatomic)NSInteger level;
 @property(nonatomic)BOOL isPlaying;
+
+- (void)loadGame:(ArchiveWrapper*)archive;
 @end

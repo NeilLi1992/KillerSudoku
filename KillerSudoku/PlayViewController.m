@@ -19,6 +19,8 @@
 #import "PlayCellButton.h"
 #import "SoundPlayer.h"
 
+#import "HomeViewController.h"
+
 @interface PlayViewController () <FUIAlertViewDelegate>
 // Model related properties
 @property(strong, nonatomic)GameBoard* unsolvedGame;
@@ -41,6 +43,10 @@
 @property(strong, nonatomic)BoardView* boardView;
 @property(strong, nonatomic)UILabel* hintSum;
 @property(strong, nonatomic)UITextView* hintText;
+
+// Save and load properties
+@property(nonatomic)BOOL isLoaded;
+
 @end
 
 @implementation PlayViewController
@@ -71,7 +77,10 @@ CGFloat innerLineWidth;
     self.isPlaying = true;
     self.boardCells = [[NSMutableArray alloc] init];
     self.noteMode = false;
-    self.finishedCount = 0;
+    
+    if (!self.isLoaded) {
+        self.finishedCount = 0;
+    }
     
     self.soundPlayer = [[SoundPlayer alloc] init];
     
@@ -87,26 +96,31 @@ CGFloat innerLineWidth;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    // Create a new thread to call the solver
-    self.generatingThread = [[NSThread alloc] initWithTarget:self selector:@selector(callGenerator) object:nil];
-    
-    // Create an alertView to mask the screen
-    self.waitView = [[FUIAlertView alloc] initWithTitle:@"Wait" message:@"Game generating, please wait." delegate:self cancelButtonTitle:@"Stop generating" otherButtonTitles:nil];
-    self.waitView.titleLabel.textColor = [UIColor cloudsColor];
-    self.waitView.titleLabel.font = [UIFont boldFlatFontOfSize:16];
-    self.waitView.messageLabel.textColor = [UIColor cloudsColor];
-    self.waitView.messageLabel.font = [UIFont flatFontOfSize:14];
-    self.waitView.backgroundOverlay.backgroundColor = [[UIColor cloudsColor] colorWithAlphaComponent:0.8];
-    self.waitView.alertContainer.backgroundColor = [UIColor midnightBlueColor];
-    self.waitView.alertContainer.layer.cornerRadius = 3;
-    self.waitView.alertContainer.layer.masksToBounds = YES;
-    self.waitView.defaultButtonColor = [UIColor cloudsColor];
-    self.waitView.defaultButtonShadowColor = [UIColor asbestosColor];
-    self.waitView.defaultButtonFont = [UIFont boldFlatFontOfSize:16];
-    self.waitView.defaultButtonTitleColor = [UIColor asbestosColor];
-    [self.waitView show];
-    
-    [self.generatingThread start];
+    if (self.isLoaded) {
+        // If the game is loaded, the loadGame method should be already called, all the states have been set up
+        [self addCellBtns];
+    } else {
+        // Create a new thread to call the generator
+        self.generatingThread = [[NSThread alloc] initWithTarget:self selector:@selector(callGenerator) object:nil];
+        
+        // Create an alertView to mask the screen
+        self.waitView = [[FUIAlertView alloc] initWithTitle:@"Wait" message:@"Game generating, please wait." delegate:self cancelButtonTitle:@"Stop generating" otherButtonTitles:nil];
+        self.waitView.titleLabel.textColor = [UIColor cloudsColor];
+        self.waitView.titleLabel.font = [UIFont boldFlatFontOfSize:16];
+        self.waitView.messageLabel.textColor = [UIColor cloudsColor];
+        self.waitView.messageLabel.font = [UIFont flatFontOfSize:14];
+        self.waitView.backgroundOverlay.backgroundColor = [[UIColor cloudsColor] colorWithAlphaComponent:0.8];
+        self.waitView.alertContainer.backgroundColor = [UIColor midnightBlueColor];
+        self.waitView.alertContainer.layer.cornerRadius = 3;
+        self.waitView.alertContainer.layer.masksToBounds = YES;
+        self.waitView.defaultButtonColor = [UIColor cloudsColor];
+        self.waitView.defaultButtonShadowColor = [UIColor asbestosColor];
+        self.waitView.defaultButtonFont = [UIFont boldFlatFontOfSize:16];
+        self.waitView.defaultButtonTitleColor = [UIColor asbestosColor];
+        [self.waitView show];
+        
+        [self.generatingThread start];
+    }
 }
 
 - (void)stylize {
@@ -245,7 +259,6 @@ CGFloat innerLineWidth;
     // Generation is finished, add cell buttons to board
     BOOL isColorStyle =  [self.cellStyle isEqualToString:@"Color"];
     
-    
     // Add cell buttons
     for (int i = 0; i < 9; i++) {
         [self.boardCells addObject:[[NSMutableArray alloc] init]];
@@ -300,6 +313,11 @@ CGFloat innerLineWidth;
             PlayCellButton* btn = [[PlayCellButton alloc] initWithFrame:CGRectMake(btnX, btnY, btnWidth, btnHeight)];
             btn.tag = i * 9 + j;
             btn.titleLabel.text = @" ";
+            
+            if ([[self.unsolvedGame getNumAtRow:i Column:j] integerValue] != 0) {
+                [btn setNum:[self.unsolvedGame getNumAtRow:i Column:j]];
+            }
+            
             [btn addTarget:self action:@selector(cellBtnPressed:) forControlEvents:UIControlEventTouchDown];
             
             // Save the cell button in boardCells array
@@ -663,6 +681,7 @@ CGFloat innerLineWidth;
             }
             [self checkDuplicate:self.selectedCell From:self.selectedCell.titleLabel.text To:@" "];
             [self.selectedCell clearNum];
+            [self.unsolvedGame setNum:[NSNumber numberWithInteger:0] AtRow:row Column:col];
         } else if (![self.selectedCell.titleLabel.text isEqualToString:btnLabel]) {
             if (![self.selectedCell.titleLabel.text isEqualToString:[correctNum stringValue]] && [btnLabel isEqualToString:[correctNum stringValue]]) {
                 self.finishedCount++;
@@ -674,6 +693,7 @@ CGFloat innerLineWidth;
             
             [self checkDuplicate:self.selectedCell From:self.selectedCell.titleLabel.text To:btnLabel];
             [self.selectedCell setNum:[NSNumber numberWithInteger:[btnLabel integerValue]]];
+            [self.unsolvedGame setNum:[NSNumber numberWithInteger:[btnLabel integerValue]] AtRow:row Column:col];
             if (self.finishedCount == 81) {
                 [self finishGame];
             }
@@ -724,6 +744,7 @@ CGFloat innerLineWidth;
                 break;
             case 2:
                 // Save game
+                [self saveGame];
                 [self.navigationController popViewControllerAnimated:YES];
                 break;
             case 0:
@@ -791,5 +812,23 @@ CGFloat innerLineWidth;
     // Pass the selected object to the new view controller.
 }
 */
+
+#pragma mark - Load and Save methods
+- (void)saveGame {
+    HomeViewController* homeViewController = (HomeViewController*)[self.navigationController.viewControllers objectAtIndex:0];
+    
+    // Create an archive
+    ArchiveWrapper* archive = [[ArchiveWrapper alloc] initWithGameBoard:self.unsolvedGame Solution:self.solutionGrid FinishCount:self.finishedCount];
+    [homeViewController saveArchive:archive];
+}
+
+- (void)loadGame:(ArchiveWrapper*)archive {
+    self.isLoaded = true;
+    
+    // Restore play view controller
+    self.unsolvedGame = archive.gameBoard;
+    self.solutionGrid = archive.solutionGrid;
+    self.finishedCount = archive.finishCount;
+}
 
 @end

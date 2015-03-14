@@ -10,7 +10,7 @@
 #import "Combination.h"
 #import "UnionFind.h"
 
-@interface GameBoard : NSObject
+@interface GameBoard : NSObject <NSCoding>
 
 // Construct methods
 -(id)initWithConfiguration:(NSMutableDictionary*)configuration;

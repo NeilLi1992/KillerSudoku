@@ -653,6 +653,8 @@ CGFloat itemLineSep;
     sumAlertView.defaultButtonShadowColor = [UIColor belizeHoleColor];
     sumAlertView.defaultButtonFont = [UIFont boldFlatFontOfSize:16];
     sumAlertView.defaultButtonTitleColor = [UIColor cloudsColor];
+    sumAlertView.alertContainer.layer.cornerRadius = 3;
+    sumAlertView.alertContainer.layer.masksToBounds = YES;
     
     FUIButton* cancelBtn = (FUIButton*)[sumAlertView.buttons objectAtIndex:sumAlertView.cancelButtonIndex];
     cancelBtn.buttonColor = [UIColor cloudsColor];

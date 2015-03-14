@@ -19,7 +19,7 @@
 
 @implementation GameBoard
 
-#pragma mark Construct methods
+#pragma mark - Construct methods
 // A default initializor which constructs an empty board
 -(id)init {
     self = [super init];
@@ -216,7 +216,7 @@
     return newBoard;
 }
 
-#pragma mark Setter & Getter
+#pragma mark - Setter & Getter
 // Get an iterator for all cages. Each cage contains the indices of the cells contained within that cage.
 -(NSArray*)getIteratorForCages {
     return [NSArray arrayWithArray:self.cages];
@@ -295,7 +295,7 @@
     return self.cells;
 }
 
-#pragma mark Helper methods
+#pragma mark - Helper methods
 /*!
  * Find all the candidate numbers at a given position, according to the normal sudoku rules
  */
@@ -482,7 +482,7 @@
 }
 
 
-#pragma mark Description methods
+#pragma mark - Description methods
 
 
 /*!
@@ -586,6 +586,23 @@
  */
 - (NSString*)cagesArrayDescription {
     return [self.cages description];
+}
+
+#pragma mark - Delegate methods
+- (id) initWithCoder: (NSCoder*) coder {
+    self.cells = [coder decodeObjectForKey:@"cells"];
+    self.cages = [coder decodeObjectForKey:@"cages"];
+    self.uf = [coder decodeObjectForKey:@"uf"];
+    self.sums = [coder decodeObjectForKey:@"sums"];
+    self.combination = [[Combination alloc] init];
+    return self;
+}
+
+- (void) encodeWithCoder: (NSCoder*) coder {
+    [coder encodeObject:self.cells forKey:@"cells"];
+    [coder encodeObject:self.cages forKey:@"cages"];
+    [coder encodeObject:self.uf forKey:@"uf"];
+    [coder encodeObject:self.sums forKey:@"sums"];
 }
 
 @end
