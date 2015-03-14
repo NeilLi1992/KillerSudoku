@@ -18,6 +18,7 @@
 #import "FUIAlertView.h"
 #import "GameBoard.h"
 #import "Solver.h"
+#import "SoundPlayer.h"
 
 @interface SolverViewController () <FUIAlertViewDelegate>
 // Model related properties
@@ -29,6 +30,7 @@
 @property(nonatomic)NSInteger solutionIndex;
 @property(strong, nonatomic)NSThread* solvingThread;
 @property(nonatomic)BOOL isSolved;
+@property(strong, nonatomic)SoundPlayer* soundPlayer;
 
 // View related properties
 @property(strong, nonatomic)FUIAlertView* waitView;
@@ -75,6 +77,7 @@ CGFloat itemLineSep;
     self.sums = [[NSMutableDictionary alloc] init];
     self.uf = [[UnionFind alloc] initWithCapacity:81];
     self.isSolved = false;
+    self.soundPlayer = [[SoundPlayer alloc] init];
     
     // Do any additional setup after loading the view.
     [self stylize];
@@ -92,6 +95,12 @@ CGFloat itemLineSep;
     [self.navigationController.navigationBar configureFlatNavigationBarWithColor:[UIColor midnightBlueColor]];
     [self.navigationItem.leftBarButtonItem configureFlatButtonWithColor:[UIColor peterRiverColor] highlightedColor:[UIColor belizeHoleColor] cornerRadius:3];
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back"
+                                                                             style:UIBarButtonItemStylePlain
+                                                                            target:self
+                                                                            action:@selector(backBtnPressed)];
+    [self.navigationItem.leftBarButtonItem configureFlatButtonWithColor:[UIColor peterRiverColor] highlightedColor:[UIColor belizeHoleColor] cornerRadius:3];
+    [self.navigationItem.leftBarButtonItem setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]} forState:UIControlStateNormal];
 }
 
 # pragma mark - Drawing methods
@@ -211,7 +220,7 @@ CGFloat itemLineSep;
     [joinBtn setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
     [joinBtn setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
     [joinBtn setTitle:@"Join" forState:UIControlStateNormal];
-    [joinBtn addTarget:self action:@selector(joinBtnPressed:) forControlEvents:UIControlEventTouchDown];
+    [joinBtn addTarget:self action:@selector(joinBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
     [controlView addSubview:joinBtn];
     
     FUIButton* deleteBtn = [[FUIButton alloc] initWithFrame:CGRectMake((itemWidth + itemSep) * 2, itemHeight + itemLineSep, itemWidth, itemHeight)];
@@ -223,7 +232,7 @@ CGFloat itemLineSep;
     [deleteBtn setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
     [deleteBtn setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
     [deleteBtn setTitle:@"Delete" forState:UIControlStateNormal];
-    [deleteBtn addTarget:self action:@selector(deleteBtnPressed:) forControlEvents:UIControlEventTouchDown];
+    [deleteBtn addTarget:self action:@selector(deleteBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
     [controlView addSubview:deleteBtn];
     
     // Add sum related control parts
@@ -246,7 +255,7 @@ CGFloat itemLineSep;
     [setBtn setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
     [setBtn setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
     [setBtn setTitle:@"Set" forState:UIControlStateNormal];
-    [setBtn addTarget:self action:@selector(setBtnPressed:) forControlEvents:UIControlEventTouchDown];
+    [setBtn addTarget:self action:@selector(setBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
     [controlView addSubview:setBtn];
     
     FUIButton* clearBtn = [[FUIButton alloc] initWithFrame:CGRectMake((itemWidth + itemSep) * 2, (itemHeight + itemLineSep) * 2, itemWidth, itemHeight)];
@@ -258,7 +267,7 @@ CGFloat itemLineSep;
     [clearBtn setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
     [clearBtn setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
     [clearBtn setTitle:@"Clear" forState:UIControlStateNormal];
-    [clearBtn addTarget:self action:@selector(clearBtnPressed:) forControlEvents:UIControlEventTouchDown];
+    [clearBtn addTarget:self action:@selector(clearBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
     [controlView addSubview:clearBtn];
     
     // Add solve related control parts
@@ -273,7 +282,7 @@ CGFloat itemLineSep;
     [solveBtn setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
     [solveBtn setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
     [solveBtn setTitle:@"Solve" forState:UIControlStateNormal];
-    [solveBtn addTarget:self action:@selector(solveBtnPressed:) forControlEvents:UIControlEventTouchDown];
+    [solveBtn addTarget:self action:@selector(solveBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
     [controlView addSubview:solveBtn];
     
     FUIButton* resetBtn = [[FUIButton alloc] initWithFrame:CGRectMake(boardLength - longItemWidth, (itemHeight + itemLineSep) * 3, longItemWidth, itemHeight)];
@@ -285,7 +294,7 @@ CGFloat itemLineSep;
     [resetBtn setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
     [resetBtn setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
     [resetBtn setTitle:@"Reset" forState:UIControlStateNormal];
-    [resetBtn addTarget:self action:@selector(resetBtnPressed:) forControlEvents:UIControlEventTouchDown];
+    [resetBtn addTarget:self action:@selector(resetBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
     [controlView addSubview:resetBtn];
     
     // Add a debug button
@@ -298,7 +307,7 @@ CGFloat itemLineSep;
     [debugBtn setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
     [debugBtn setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
     [debugBtn setTitle:@"Demo" forState:UIControlStateNormal];
-    [debugBtn addTarget:self action:@selector(debugBtnPressed:) forControlEvents:UIControlEventTouchDown];
+    [debugBtn addTarget:self action:@selector(debugBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
     [controlView addSubview:debugBtn];
     
     [self.view addSubview:controlView];
@@ -436,7 +445,8 @@ CGFloat itemLineSep;
 }
 
 # pragma mark - Action methods
-- (IBAction)backBtnPressed:(id)sender {
+- (void)backBtnPressed {
+    [self.soundPlayer playButtonSound];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -445,6 +455,7 @@ CGFloat itemLineSep;
     NSArray* indices = [self.uf getIteratorForComponent:[self.uf find:sender.tag]];
     if ([self.selectedCells containsObject:[NSNumber numberWithInteger:sender.tag]]) {
         // Already selected, remove
+        [self.soundPlayer playDeselectSound];
         for (NSNumber* index in indices) {
             [self.selectedCells removeObject:index];
             UIButton* cellBtn = (UIButton*)[[self.boardCells objectAtIndex:([index integerValue] / 9)] objectAtIndex:([index integerValue] % 9)];
@@ -452,6 +463,7 @@ CGFloat itemLineSep;
         }
     } else {
         // Not selected, add
+        [self.soundPlayer playSelectSound];
         for (NSNumber* index in indices) {
             [self.selectedCells addObject:index];
             UIButton* cellBtn = (UIButton*)[[self.boardCells objectAtIndex:([index integerValue] / 9)] objectAtIndex:([index integerValue] % 9)];
@@ -461,6 +473,8 @@ CGFloat itemLineSep;
 }
 
 - (void)joinBtnPressed:(FUIButton*)sender {
+    [self.soundPlayer playButtonSound];
+    
     if (self.isSolved) {
         self.promptLabel.text = @"  Reset before modify.";
         return;
@@ -550,6 +564,8 @@ CGFloat itemLineSep;
 }
 
 - (void)deleteBtnPressed:(FUIButton*)sender {
+    [self.soundPlayer playButtonSound];
+    
     if (self.isSolved) {
         self.promptLabel.text = @"  Reset before modify.";
         return;
@@ -592,6 +608,8 @@ CGFloat itemLineSep;
 }
 
 - (void)setBtnPressed:(FUIButton*)sender {
+    [self.soundPlayer playButtonSound];
+    
     if (self.isSolved) {
         self.promptLabel.text = @"  Reset before modify.";
         return;
@@ -647,6 +665,8 @@ CGFloat itemLineSep;
 }
 
 - (void)clearBtnPressed:(FUIButton*)sender {
+    [self.soundPlayer playButtonSound];
+    
     if (self.isSolved) {
         self.promptLabel.text = @"  Reset before modify.";
         return;
@@ -672,6 +692,8 @@ CGFloat itemLineSep;
 }
 
 - (void)resetBtnPressed:(FUIButton*)sender {
+    [self.soundPlayer playButtonSound];
+    
     FUIAlertView* confirmAlertView = [[FUIAlertView alloc] initWithTitle:@"Reset" message:@"Are you sure to reset your input puzzle?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
     confirmAlertView.titleLabel.textColor = [UIColor cloudsColor];
     confirmAlertView.titleLabel.font = [UIFont boldFlatFontOfSize:16];
@@ -697,6 +719,8 @@ CGFloat itemLineSep;
 }
 
 - (void)solveBtnPressed:(FUIButton*)sender {
+    [self.soundPlayer playButtonSound];
+    
     if (self.solutions != nil && [self.solutions count] == 1) {
         self.promptLabel.text = @"  Already solved. Reset firstly.";
         return;
@@ -753,6 +777,8 @@ CGFloat itemLineSep;
 }
 
 - (void)debugBtnPressed:(FUIButton*)sender {
+    [self.soundPlayer playButtonSound];
+    
     [self clearSelection];
     NSMutableDictionary* configuration = [[NSMutableDictionary alloc] init];
     NSString* filePath = [[NSBundle mainBundle] pathForResource:@"game3" ofType:@""];
@@ -835,6 +861,8 @@ CGFloat itemLineSep;
 
 #pragma mark - Delegate methods
 - (void)alertView:(FUIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    [self.soundPlayer playButtonSound];
+    
     if ([alertView.title isEqualToString:@"Sum"]) {
         if (buttonIndex == 1) {
             // Enter

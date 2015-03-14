@@ -12,15 +12,19 @@
 #import "UIFont+FlatUI.h"
 #import "UIBarButtonItem+FlatUI.h"
 #import "UINavigationBar+FlatUI.h"
+#import "SoundPlayer.h"
 
 @interface HelpViewController ()
-
+@property(strong, nonatomic)SoundPlayer* soundPlayer;
 @end
 
 @implementation HelpViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.soundPlayer = [[SoundPlayer alloc] init];
+    
     // Do any additional setup after loading the view.
     [self stylize];
 }
@@ -34,10 +38,17 @@
     [self.navigationController.navigationBar configureFlatNavigationBarWithColor:[UIColor midnightBlueColor]];
     [self.navigationItem.leftBarButtonItem configureFlatButtonWithColor:[UIColor peterRiverColor] highlightedColor:[UIColor belizeHoleColor] cornerRadius:3];
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back"
+                                                                             style:UIBarButtonItemStylePlain
+                                                                            target:self
+                                                                            action:@selector(backBtnPressed)];
+    [self.navigationItem.leftBarButtonItem configureFlatButtonWithColor:[UIColor peterRiverColor] highlightedColor:[UIColor belizeHoleColor] cornerRadius:3];
+    [self.navigationItem.leftBarButtonItem setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]} forState:UIControlStateNormal];
 }
 
 # pragma mark - Action methods
-- (IBAction)backBtnPressed:(id)sender {
+- (void)backBtnPressed {
+    [self.soundPlayer playButtonSound];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

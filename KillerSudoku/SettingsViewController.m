@@ -14,9 +14,11 @@
 #import "UIFont+FlatUI.h"
 #import "FUISegmentedControl.h"
 #import "FUISwitch.h"
+#import "SoundPlayer.h"
 
 @interface SettingsViewController ()
 @property(strong, nonatomic)NSUserDefaults* preferences;
+@property(strong, nonatomic)SoundPlayer* soundPlayer;
 @end
 
 // View related parameters
@@ -33,6 +35,7 @@ CGFloat baseY;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     // Initialization
     self.preferences = [NSUserDefaults standardUserDefaults];
     screenWidth = [UIScreen mainScreen].bounds.size.width;
@@ -45,6 +48,7 @@ CGFloat baseY;
     baseY = statusBarHeight + navigationBarHeight;
     itemTextWidth = 100.0f;
     itemTextHeight = 40.0f;
+    self.soundPlayer = [[SoundPlayer alloc] init];
     
     // Stylize
     [self stylize];
@@ -132,10 +136,18 @@ CGFloat baseY;
     [self.navigationController.navigationBar configureFlatNavigationBarWithColor:[UIColor midnightBlueColor]];
     [self.navigationItem.leftBarButtonItem configureFlatButtonWithColor:[UIColor peterRiverColor] highlightedColor:[UIColor belizeHoleColor] cornerRadius:3];
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back"
+                                                                             style:UIBarButtonItemStylePlain
+                                                                            target:self
+                                                                            action:@selector(backBtnPressed)];
+    [self.navigationItem.leftBarButtonItem configureFlatButtonWithColor:[UIColor peterRiverColor] highlightedColor:[UIColor belizeHoleColor] cornerRadius:3];
+    [self.navigationItem.leftBarButtonItem setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]} forState:UIControlStateNormal];
+
 }
 
 # pragma makr - Action methods
-- (IBAction)backBtnPressed:(id)sender {
+- (void)backBtnPressed {
+    [self.soundPlayer playButtonSound];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -163,8 +175,10 @@ CGFloat baseY;
 - (void)musicSwitched:(FUISwitch*)sender {
     if ([sender isOn]) {
         [self.preferences setBool:YES forKey:@"playMusic"];
+        [self.soundPlayer playMusic];
     } else {
         [self.preferences setBool:NO forKey:@"playMusic"];
+        [self.soundPlayer stopMusic];
     }
 }
 

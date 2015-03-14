@@ -17,6 +17,7 @@
 #import "NSString+Icons.h"
 #import "Generator.h"
 #import "PlayCellButton.h"
+#import "SoundPlayer.h"
 
 @interface PlayViewController () <FUIAlertViewDelegate>
 // Model related properties
@@ -30,6 +31,7 @@
 @property(strong, nonatomic)NSNumber* selectedCage;
 @property(nonatomic)BOOL noteMode;
 @property(nonatomic)NSInteger finishedCount;
+@property(strong, nonatomic)SoundPlayer* soundPlayer;
 
 // User preferences
 @property(strong, nonatomic)NSString* cellStyle;
@@ -70,6 +72,8 @@ CGFloat innerLineWidth;
     self.boardCells = [[NSMutableArray alloc] init];
     self.noteMode = false;
     self.finishedCount = 0;
+    
+    self.soundPlayer = [[SoundPlayer alloc] init];
     
     // Load user preferences
     NSUserDefaults* preferences = [NSUserDefaults standardUserDefaults];
@@ -550,6 +554,8 @@ CGFloat innerLineWidth;
 
 #pragma mark - Action methods
 - (void)backBtnPressed {
+    [self.soundPlayer playButtonSound];
+    
     // Check if the game is ongoing
     if (self.view.userInteractionEnabled) {
         // Build the alert view for play choice
@@ -591,6 +597,8 @@ CGFloat innerLineWidth;
         return;
     }
     
+    [self.soundPlayer playSelectSound];
+    
     if (self.selectedCell != nil) {
         // Remove the select border
         self.selectedCell.layer.borderColor = 0;
@@ -626,6 +634,7 @@ CGFloat innerLineWidth;
 }
 
 - (void)ctlBtnPressed:(UIButton*)sender {
+    [self.soundPlayer playButtonSound];
     NSString* btnLabel = sender.titleLabel.text;
     
     if (self.selectedCell == nil) {
@@ -673,6 +682,7 @@ CGFloat innerLineWidth;
 }
 
 - (void)checkBtnPressed:(UIButton*)sender {
+    [self.soundPlayer playButtonSound];
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
             PlayCellButton* cell = [[self.boardCells objectAtIndex:i] objectAtIndex:j];
@@ -688,6 +698,7 @@ CGFloat innerLineWidth;
 }
 
 - (void)noteBtnPressed:(FUIButton*)sender {
+    [self.soundPlayer playButtonSound];
     self.noteMode = !self.noteMode;
     if (self.noteMode) {
         // Change to activated style
@@ -703,6 +714,7 @@ CGFloat innerLineWidth;
 
 #pragma mark - Delegate methods
 -(void)alertView:(FUIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    [self.soundPlayer playButtonSound];
     if ([alertView.title isEqualToString:@"Sure"]) {
         // Back pressed confirm alertView
         switch (buttonIndex) {

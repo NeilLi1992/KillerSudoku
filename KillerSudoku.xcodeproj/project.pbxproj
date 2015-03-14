@@ -41,6 +41,11 @@
 		23881DC51A91404E00527917 /* cellButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 23881DC41A91404E00527917 /* cellButton.m */; };
 		23B927E11A38999400A64FAF /* game2 in Resources */ = {isa = PBXBuildFile; fileRef = 23B927E01A38999400A64FAF /* game2 */; };
 		23BFA4BE1AA9CF4400AC3EE5 /* PlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23BFA4BD1AA9CF4400AC3EE5 /* PlayViewController.m */; };
+		23C92BCB1AB3973800C88B68 /* buttonSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 23C92BCA1AB3973800C88B68 /* buttonSound.wav */; };
+		23C92BCE1AB397C900C88B68 /* SoundPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 23C92BCD1AB397C900C88B68 /* SoundPlayer.m */; };
+		23C92BD61AB3A2FF00C88B68 /* selectSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 23C92BD41AB3A2FF00C88B68 /* selectSound.wav */; };
+		23C92BD81AB3A35700C88B68 /* deselectSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 23C92BD71AB3A35700C88B68 /* deselectSound.wav */; };
+		23C92BDA1AB3A6EF00C88B68 /* silentNight.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 23C92BD91AB3A6EF00C88B68 /* silentNight.mp3 */; };
 		23D84A1A1AA916E500F1EE71 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23D84A191AA916E500F1EE71 /* CoreText.framework */; };
 		23D84A4A1AA918D200F1EE71 /* FUIAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D84A231AA918D200F1EE71 /* FUIAlertView.m */; };
 		23D84A4B1AA918D200F1EE71 /* FUIButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D84A251AA918D200F1EE71 /* FUIButton.m */; };
@@ -140,6 +145,12 @@
 		23B927E01A38999400A64FAF /* game2 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game2; sourceTree = "<group>"; };
 		23BFA4BC1AA9CF4400AC3EE5 /* PlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayViewController.h; sourceTree = "<group>"; };
 		23BFA4BD1AA9CF4400AC3EE5 /* PlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayViewController.m; sourceTree = "<group>"; };
+		23C92BCA1AB3973800C88B68 /* buttonSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = buttonSound.wav; sourceTree = "<group>"; };
+		23C92BCC1AB397C900C88B68 /* SoundPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundPlayer.h; sourceTree = "<group>"; };
+		23C92BCD1AB397C900C88B68 /* SoundPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoundPlayer.m; sourceTree = "<group>"; };
+		23C92BD41AB3A2FF00C88B68 /* selectSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = selectSound.wav; sourceTree = "<group>"; };
+		23C92BD71AB3A35700C88B68 /* deselectSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = deselectSound.wav; sourceTree = "<group>"; };
+		23C92BD91AB3A6EF00C88B68 /* silentNight.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = silentNight.mp3; sourceTree = "<group>"; };
 		23D84A191AA916E500F1EE71 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		23D84A211AA918D200F1EE71 /* FlatUIKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlatUIKit.h; sourceTree = "<group>"; };
 		23D84A221AA918D200F1EE71 /* FUIAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FUIAlertView.h; sourceTree = "<group>"; };
@@ -265,6 +276,8 @@
 				2340E5B91A01474B00D56A3A /* View */,
 				230AD8E819ED164E00648B01 /* AppDelegate.h */,
 				230AD8E919ED164E00648B01 /* AppDelegate.m */,
+				23C92BCC1AB397C900C88B68 /* SoundPlayer.h */,
+				23C92BCD1AB397C900C88B68 /* SoundPlayer.m */,
 				230AD8F119ED164E00648B01 /* Images.xcassets */,
 				230AD8F319ED164E00648B01 /* LaunchScreen.xib */,
 				230AD8E419ED164E00648B01 /* Supporting Files */,
@@ -454,6 +467,10 @@
 		23D84A601AA91C5200F1EE71 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				23C92BD91AB3A6EF00C88B68 /* silentNight.mp3 */,
+				23C92BCA1AB3973800C88B68 /* buttonSound.wav */,
+				23C92BD41AB3A2FF00C88B68 /* selectSound.wav */,
+				23C92BD71AB3A35700C88B68 /* deselectSound.wav */,
 				23D84A611AA91C7D00F1EE71 /* flat-ui-icons-regular.ttf */,
 				23D84A621AA91C7D00F1EE71 /* Lato-Bold.ttf */,
 				23D84A631AA91C7D00F1EE71 /* Lato-Italic.ttf */,
@@ -593,11 +610,15 @@
 				23D84A681AA91C7D00F1EE71 /* Lato-Italic.ttf in Resources */,
 				2375D0C31A2135370044898A /* allSingleGame in Resources */,
 				23D84A671AA91C7D00F1EE71 /* Lato-Bold.ttf in Resources */,
+				23C92BD61AB3A2FF00C88B68 /* selectSound.wav in Resources */,
+				23C92BD81AB3A35700C88B68 /* deselectSound.wav in Resources */,
+				23C92BCB1AB3973800C88B68 /* buttonSound.wav in Resources */,
 				230AD8F019ED164E00648B01 /* Main.storyboard in Resources */,
 				230AD8F519ED164E00648B01 /* LaunchScreen.xib in Resources */,
 				234BA05F1A74FCDB00B09F5B /* level_50 in Resources */,
 				230AD8F219ED164E00648B01 /* Images.xcassets in Resources */,
 				234BA05A1A74F0BD00B09F5B /* multiple_solutions in Resources */,
+				23C92BDA1AB3A6EF00C88B68 /* silentNight.mp3 in Resources */,
 				234BA0671A74FE5400B09F5B /* level_0 in Resources */,
 				234BA0631A74FDC000B09F5B /* level_80 in Resources */,
 				23D84A6A1AA91C7D00F1EE71 /* Lato-Regular.ttf in Resources */,
@@ -640,6 +661,7 @@
 				2374891019F65C3000A0DCE3 /* UnionFind.m in Sources */,
 				230AD8EA19ED164E00648B01 /* AppDelegate.m in Sources */,
 				231F001A1A666B56005886A1 /* Generator.m in Sources */,
+				23C92BCE1AB397C900C88B68 /* SoundPlayer.m in Sources */,
 				23D84A541AA918D200F1EE71 /* UIFont+FlatUI.m in Sources */,
 				23D84A521AA918D200F1EE71 /* UIBarButtonItem+FlatUI.m in Sources */,
 				234BA06A1A74FFD700B09F5B /* DfsByCell.m in Sources */,
