@@ -16,7 +16,7 @@
 @property(strong, nonatomic)NSMutableArray* boardCells;
 @property(strong, nonatomic)GameBoard* unsolvedGame;
 @property(strong, nonatomic)NSArray* solutionGrid;
-@property(strong, nonatomic)cellButton* selectedCell;
+@property(strong, nonatomic)NewGameCellButton* selectedCell;
 @property(strong, nonatomic)Combination* combination;
 @property(strong, nonatomic)NSNumber* selectedCage;
 @property(nonatomic)NSInteger finishedCount;
@@ -140,7 +140,7 @@ CGFloat screenHeight;
         [self.boardCells addObject:[[NSMutableArray alloc] init]];
         for (int j = 0; j < 9; j++) {
             // Generate a cellBtn and set it properly
-            cellButton* cellBtn = [[cellButton alloc] initWithFrame:CGRectMake(j * cellLength, i * cellLength + baseY, cellLength, cellLength)];
+            NewGameCellButton* cellBtn = [[NewGameCellButton alloc] initWithFrame:CGRectMake(j * cellLength, i * cellLength + baseY, cellLength, cellLength)];
             cellBtn.tag = i * 9 + j;
             cellBtn.layer.borderColor = [UIColor blackColor].CGColor;
             cellBtn.layer.borderWidth = 0.5f;
@@ -296,7 +296,7 @@ CGFloat screenHeight;
 }
 
 
-- (void)checkDuplicate:(cellButton*)cell From:(NSString*)ori To:(NSString*)now{
+- (void)checkDuplicate:(NewGameCellButton*)cell From:(NSString*)ori To:(NSString*)now{
     NSInteger index = (NSInteger)cell.tag;
     NSInteger row = index / 9;
     NSInteger col = index % 9;
@@ -305,7 +305,7 @@ CGFloat screenHeight;
 
     // Check for row
     NSMutableArray* checkingRow = [self.boardCells objectAtIndex:row];
-    for (cellButton* cell in checkingRow) {
+    for (NewGameCellButton* cell in checkingRow) {
         if (cell.tag != index) {
             [cellsToCheck addObject:cell];
         }
@@ -313,7 +313,7 @@ CGFloat screenHeight;
     
     // Check for column
     for (int i = 0; i < 9; i++) {
-        cellButton* cell = [[self.boardCells objectAtIndex:i] objectAtIndex:col];
+        NewGameCellButton* cell = [[self.boardCells objectAtIndex:i] objectAtIndex:col];
         if (cell.tag != index) {
             [cellsToCheck addObject:cell];
         }
@@ -325,7 +325,7 @@ CGFloat screenHeight;
     NSInteger j = nonet % 3 * 3;
     for (int delta_i = 0; delta_i < 3; delta_i++) {
         for (int delta_j = 0; delta_j < 3; delta_j++) {
-            cellButton* cell = [[self.boardCells objectAtIndex:(i + delta_i)] objectAtIndex:(j + delta_j)];
+            NewGameCellButton* cell = [[self.boardCells objectAtIndex:(i + delta_i)] objectAtIndex:(j + delta_j)];
             if (cell.tag != index) {
                 [cellsToCheck addObject:cell];
             }
@@ -341,7 +341,7 @@ CGFloat screenHeight;
         }
     }
     
-    for (cellButton* checkingCell in cellsToCheck) {
+    for (NewGameCellButton* checkingCell in cellsToCheck) {
         if (![checkingCell.titleLabel.text isEqualToString:@" "] && [checkingCell.titleLabel.text isEqualToString:now]) {
             [checkingCell incDupCount];
             [cell incDupCount];
@@ -360,7 +360,7 @@ CGFloat screenHeight;
 
 #pragma -mark action handlers
 
-- (void)cellTouched:(cellButton *)sender {
+- (void)cellTouched:(NewGameCellButton *)sender {
     if (self.selectedCell != nil) {
         [[self.selectedCell viewWithTag:101] removeFromSuperview];
     }
@@ -439,7 +439,7 @@ CGFloat screenHeight;
 - (void)checkWithSolution:(UIButton*)sender {
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
-            cellButton* cell = [[self.boardCells objectAtIndex:i] objectAtIndex:j];
+            NewGameCellButton* cell = [[self.boardCells objectAtIndex:i] objectAtIndex:j];
             NSString* cellLabel = cell.titleLabel.text;
             NSNumber* correctNum = [[self.solutionGrid objectAtIndex:i] objectAtIndex:j];
             if (![cellLabel isEqualToString:@""] && ![cellLabel isEqualToString:[correctNum stringValue]]) {

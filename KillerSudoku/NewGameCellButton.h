@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface cellButton : UIButton
+@interface NewGameCellButton : UIButton
 
 @property(nonatomic)BOOL isCrossed;
 - (void)clear;

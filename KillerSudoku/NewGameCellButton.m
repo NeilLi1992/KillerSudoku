@@ -6,14 +6,14 @@
 //  Copyright (c) 2015年 yongli1992. All rights reserved.
 //
 
-#import "cellButton.h"
+#import "NewGameCellButton.h"
 
-@interface cellButton ()
+@interface NewGameCellButton ()
 @property(nonatomic)NSInteger dupCount;
 @property(strong, nonatomic)NSMutableDictionary* noteNums;
 @end
 
-@implementation cellButton
+@implementation NewGameCellButton
 
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

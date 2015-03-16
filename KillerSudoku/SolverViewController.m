@@ -12,7 +12,7 @@
 #import "UIBarButtonItem+FlatUI.h"
 #import "BoardView.h"
 #import "UnionFind.h"
-#import "PlayCellButton.h"
+#import "CellButton.h"
 #import "FUIButton.h"
 #import "UIFont+FlatUI.h"
 #import "FUIAlertView.h"
@@ -171,7 +171,7 @@ CGFloat itemLineSep;
                     break;
             }
             
-            PlayCellButton* btn = [[PlayCellButton alloc] initWithFrame:CGRectMake(btnX, btnY, btnWidth, btnHeight)];
+            CellButton* btn = [[CellButton alloc] initWithFrame:CGRectMake(btnX, btnY, btnWidth, btnHeight)];
             btn.tag = i * 9 + j;
             [btn addTarget:self action:@selector(cellBtnPressed:) forControlEvents:UIControlEventTouchDown];
             
@@ -394,7 +394,7 @@ CGFloat itemLineSep;
             rb = true;
         }
         
-        PlayCellButton* cell = [[self.boardCells objectAtIndex:([index integerValue] / 9)] objectAtIndex:([index integerValue] % 9)];
+        CellButton* cell = [[self.boardCells objectAtIndex:([index integerValue] / 9)] objectAtIndex:([index integerValue] % 9)];
         [cell setBorderFlagsLeft:hasLeft Right:hasRight Top:hasTop Below:hasBelow];
         [cell setCornerFlagsLT:lt RT:rt LB:lb RB:rb];
     }
@@ -403,7 +403,7 @@ CGFloat itemLineSep;
 - (BOOL)validate {
     // Checking every cell has joined a cage
     for (int index = 0; index < 81; index++) {
-        PlayCellButton* cellBtn = [[self.boardCells objectAtIndex:(index / 9)] objectAtIndex:(index % 9)];
+        CellButton* cellBtn = [[self.boardCells objectAtIndex:(index / 9)] objectAtIndex:(index % 9)];
 
         if (![cellBtn getHasJoined]) {
             // Cell index hasn't joined any cage
@@ -438,7 +438,7 @@ CGFloat itemLineSep;
 - (void)clearSelection {
     // Clear current selections;
     for (NSNumber* index in self.selectedCells) {
-        PlayCellButton* cellBtn = [[self.boardCells objectAtIndex:([index integerValue] / 9)] objectAtIndex:([index integerValue] % 9)];
+        CellButton* cellBtn = [[self.boardCells objectAtIndex:([index integerValue] / 9)] objectAtIndex:([index integerValue] % 9)];
         cellBtn.backgroundColor = [UIColor clearColor];
     }
     [self.selectedCells removeAllObjects];
@@ -450,7 +450,7 @@ CGFloat itemLineSep;
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)cellBtnPressed:(PlayCellButton*)sender {
+- (void)cellBtnPressed:(CellButton*)sender {
     // Add all the cells within the same cage of this pressed cell into selectedCells array
     NSArray* indices = [self.uf getIteratorForComponent:[self.uf find:sender.tag]];
     if ([self.selectedCells containsObject:[NSNumber numberWithInteger:sender.tag]]) {
@@ -531,7 +531,7 @@ CGFloat itemLineSep;
                             [self.sums removeObjectForKey:cageID];
                             // Remove sum text for this cage
                             NSNumber* firstCell = [[self.uf getIteratorForComponent:[cageID integerValue]] objectAtIndex:0];
-                            PlayCellButton* cell = [[self.boardCells objectAtIndex:([firstCell integerValue] / 9)] objectAtIndex:([firstCell integerValue] % 9)];
+                            CellButton* cell = [[self.boardCells objectAtIndex:([firstCell integerValue] / 9)] objectAtIndex:([firstCell integerValue] % 9)];
                             [cell clearSum];
                         }
                     }
@@ -549,14 +549,14 @@ CGFloat itemLineSep;
                         NSNumber* wholeCageID = [cageIDs objectAtIndex:0];
                         [self.sums setObject:[NSNumber numberWithInteger:totalSum] forKey:wholeCageID];
                         NSNumber* firstCell = [[self.uf getIteratorForComponent:[wholeCageID integerValue]] objectAtIndex:0];
-                        PlayCellButton* cell = [[self.boardCells objectAtIndex:([firstCell integerValue] / 9)] objectAtIndex:([firstCell integerValue] % 9)];
+                        CellButton* cell = [[self.boardCells objectAtIndex:([firstCell integerValue] / 9)] objectAtIndex:([firstCell integerValue] % 9)];
                         [cell setSum:totalSum];
                     }
                 }
             }
             
             for (NSNumber* index in toUnion) {  // Clear the selection color of the unioned cells
-                PlayCellButton* cellBtn = [[self.boardCells objectAtIndex:([index integerValue] / 9)] objectAtIndex:([index integerValue] % 9)];
+                CellButton* cellBtn = [[self.boardCells objectAtIndex:([index integerValue] / 9)] objectAtIndex:([index integerValue] % 9)];
                 cellBtn.backgroundColor = [UIColor clearColor];
             }
         }
@@ -578,7 +578,7 @@ CGFloat itemLineSep;
     NSMutableArray* cageIDs = [[NSMutableArray alloc] init];
     for (NSNumber* index in self.selectedCells) {
         // Clear the selection background color for every cell
-        PlayCellButton* cellBtn = [[self.boardCells objectAtIndex:([index integerValue] / 9)] objectAtIndex:([index integerValue] % 9)];
+        CellButton* cellBtn = [[self.boardCells objectAtIndex:([index integerValue] / 9)] objectAtIndex:([index integerValue] % 9)];
         cellBtn.backgroundColor = [UIColor clearColor];
         
         // If the cell has joined a cage, remove it
@@ -617,7 +617,7 @@ CGFloat itemLineSep;
     
     BOOL hasNoCage = true;
     for (NSNumber* index in self.selectedCells) {
-        PlayCellButton* cellBtn = [[self.boardCells objectAtIndex:([index integerValue] / 9)] objectAtIndex:([index integerValue] % 9)];
+        CellButton* cellBtn = [[self.boardCells objectAtIndex:([index integerValue] / 9)] objectAtIndex:([index integerValue] % 9)];
         if ([cellBtn getHasJoined]) {
             hasNoCage = false;
             break;
@@ -677,7 +677,7 @@ CGFloat itemLineSep;
     NSMutableArray* cageIDs = [[NSMutableArray alloc] init];
     for (NSNumber* index in self.selectedCells) {
         // Clear the selection background color for every cell
-        PlayCellButton* cellBtn = [[self.boardCells objectAtIndex:([index integerValue] / 9)] objectAtIndex:([index integerValue] % 9)];
+        CellButton* cellBtn = [[self.boardCells objectAtIndex:([index integerValue] / 9)] objectAtIndex:([index integerValue] % 9)];
         cellBtn.backgroundColor = [UIColor clearColor];
         
         if ([cellBtn getHasJoined]) {
@@ -737,7 +737,7 @@ CGFloat itemLineSep;
         // Modify cell numbers
         GameBoard* nextSolution = [self.solutions objectAtIndex:self.solutionIndex];
         for (int index = 0; index < 81; index++) {
-            PlayCellButton* cellBtn = [[self.boardCells objectAtIndex:(index / 9)] objectAtIndex:(index % 9)];
+            CellButton* cellBtn = [[self.boardCells objectAtIndex:(index / 9)] objectAtIndex:(index % 9)];
             NSNumber* num = [nextSolution getNumAtIndex:[NSNumber numberWithInteger:index]];
             
             if ([cellBtn getNum] != [num integerValue]) {
@@ -818,7 +818,7 @@ CGFloat itemLineSep;
         [self drawInnerLines:cageCells];    // Draw inner border lines for each cage
         NSNumber* firstCell = [cageCells objectAtIndex:0];
         
-        PlayCellButton* cellBtn = [[self.boardCells objectAtIndex:([firstCell integerValue] / 9)] objectAtIndex:([firstCell integerValue] %9)];
+        CellButton* cellBtn = [[self.boardCells objectAtIndex:([firstCell integerValue] / 9)] objectAtIndex:([firstCell integerValue] %9)];
 
         NSNumber* sum = [self.sums objectForKey:cageID];
         [cellBtn setSum:[sum integerValue]];   // Set sum text for first cell of each cage
@@ -849,7 +849,7 @@ CGFloat itemLineSep;
         // Fill the first solution into the board
         GameBoard* firstSolution = [self.solutions objectAtIndex:0];
         for (int index = 0; index < 81; index++) {
-            PlayCellButton* cellBtn = [[self.boardCells objectAtIndex:(index / 9)] objectAtIndex:(index % 9)];
+            CellButton* cellBtn = [[self.boardCells objectAtIndex:(index / 9)] objectAtIndex:(index % 9)];
             [cellBtn setNum:[firstSolution getNumAtIndex:[NSNumber numberWithInt:index]]];
         }
     } else if ([self.solvingThread isCancelled]) {
@@ -883,7 +883,7 @@ CGFloat itemLineSep;
                 // Find all different cageIDs
                 NSMutableArray* cageIDs = [[NSMutableArray alloc] init];
                 for (NSNumber* index in self.selectedCells) {
-                    PlayCellButton* cellBtn = [[self.boardCells objectAtIndex:([index integerValue] / 9)] objectAtIndex:([index integerValue] % 9)];
+                    CellButton* cellBtn = [[self.boardCells objectAtIndex:([index integerValue] / 9)] objectAtIndex:([index integerValue] % 9)];
                     
                     if ([cellBtn getHasJoined]) {
                         NSNumber* cageID = [NSNumber numberWithInteger:[self.uf find:[index integerValue]]];
@@ -900,7 +900,7 @@ CGFloat itemLineSep;
                     
                     // Set sum in the view
                     NSNumber* firstCell = [[self.uf getIteratorForComponent:[cageID integerValue]] objectAtIndex:0];
-                    PlayCellButton* cellToAdd = [[self.boardCells objectAtIndex:([firstCell integerValue] / 9)] objectAtIndex:([firstCell integerValue] % 9)];
+                    CellButton* cellToAdd = [[self.boardCells objectAtIndex:([firstCell integerValue] / 9)] objectAtIndex:([firstCell integerValue] % 9)];
                     
                     [cellToAdd setSum:sum];
                 }
@@ -926,7 +926,7 @@ CGFloat itemLineSep;
             }
             
             for (int index = 0; index < 81; index++) {
-                PlayCellButton* cellBtn = [[self.boardCells objectAtIndex:(index / 9)] objectAtIndex:(index % 9)];
+                CellButton* cellBtn = [[self.boardCells objectAtIndex:(index / 9)] objectAtIndex:(index % 9)];
                 [cellBtn clearBorderLines];
                 [cellBtn clearSum];
                 [cellBtn clearNum];

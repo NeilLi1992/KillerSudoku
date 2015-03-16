@@ -16,7 +16,7 @@
 #import "BoardView.h"
 #import "NSString+Icons.h"
 #import "Generator.h"
-#import "PlayCellButton.h"
+#import "CellButton.h"
 #import "SoundPlayer.h"
 
 #import "HomeViewController.h"
@@ -29,7 +29,7 @@
 @property(strong, nonatomic)NSThread* generatingThread;
 @property(strong, nonatomic)NSArray* candidateColors;
 @property(strong, nonatomic)NSMutableArray* boardCells;
-@property(strong, nonatomic)PlayCellButton* selectedCell;
+@property(strong, nonatomic)CellButton* selectedCell;
 @property(strong, nonatomic)NSNumber* selectedCage;
 @property(nonatomic)BOOL noteMode;
 @property(nonatomic)NSInteger finishedCount;
@@ -307,7 +307,7 @@ CGFloat innerLineWidth;
                     break;
             }
             
-            PlayCellButton* btn = [[PlayCellButton alloc] initWithFrame:CGRectMake(btnX, btnY, btnWidth, btnHeight)];
+            CellButton* btn = [[CellButton alloc] initWithFrame:CGRectMake(btnX, btnY, btnWidth, btnHeight)];
             btn.tag = i * 9 + j;
             btn.titleLabel.text = @" ";
             
@@ -331,7 +331,7 @@ CGFloat innerLineWidth;
         // Set the cell's background according to colorMatrix
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                PlayCellButton* btn = [[self.boardCells objectAtIndex:i] objectAtIndex:j];
+                CellButton* btn = [[self.boardCells objectAtIndex:i] objectAtIndex:j];
                 btn.backgroundColor = [self.candidateColors objectAtIndex:[[[colorMatrix objectAtIndex:i] objectAtIndex:j] integerValue]];
             }
         }
@@ -349,18 +349,9 @@ CGFloat innerLineWidth;
         NSInteger row = [firstIndex integerValue] / 9;
         NSInteger col = [firstIndex integerValue] % 9;
         NSNumber* sum = [self.unsolvedGame getCageSumAtIndex:cageId];
-        NSInteger x = isColorStyle ? 2 : 3;
-        NSInteger y = isColorStyle ? -5 : -4;
-        NSInteger width = 20;
-        NSInteger height = 20;
-        NSInteger fontSize = isColorStyle ? 8 : 7;
         
-        UIButton* btn = [[self.boardCells objectAtIndex:row] objectAtIndex:col];
-        
-        UILabel* sumLabel = [[UILabel alloc] initWithFrame:CGRectMake(x, y, width, height)];
-        [sumLabel setFont:[UIFont systemFontOfSize:fontSize]];
-        sumLabel.text = [sum stringValue];
-        [btn addSubview:sumLabel];
+        CellButton* btn = (CellButton*)[[self.boardCells objectAtIndex:row] objectAtIndex:col];
+        [btn setSum:[sum integerValue]];
     }
 }
 
@@ -426,7 +417,7 @@ CGFloat innerLineWidth;
             rb = true;
         }
         
-        PlayCellButton* cell = [[self.boardCells objectAtIndex:row] objectAtIndex:col];
+        CellButton* cell = [[self.boardCells objectAtIndex:row] objectAtIndex:col];
         [cell setBorderFlagsLeft:hasLeft Right:hasRight Top:hasTop Below:hasBelow];
         [cell setCornerFlagsLT:lt RT:rt LB:lb RB:rb];
     }
@@ -485,7 +476,7 @@ CGFloat innerLineWidth;
     return [NSArray arrayWithArray:colorMatrix];
 }
 
-- (void)checkDuplicate:(PlayCellButton*)cell From:(NSString*)ori To:(NSString*)now {
+- (void)checkDuplicate:(CellButton*)cell From:(NSString*)ori To:(NSString*)now {
     NSInteger index = (NSInteger)cell.tag;
     NSInteger row = index / 9;
     NSInteger col = index % 9;
@@ -493,7 +484,7 @@ CGFloat innerLineWidth;
     NSMutableSet* cellsToCheck = [[NSMutableSet alloc] init];
     // Check for row
     NSMutableArray* checkingRow = [self.boardCells objectAtIndex:row];
-    for (PlayCellButton* cell in checkingRow) {
+    for (CellButton* cell in checkingRow) {
         if (cell.tag != index) {
             [cellsToCheck addObject:cell];
         }
@@ -501,7 +492,7 @@ CGFloat innerLineWidth;
     
     // Check for column
     for (int i = 0; i < 9; i++) {
-        PlayCellButton* cell = [[self.boardCells objectAtIndex:i] objectAtIndex:col];
+        CellButton* cell = [[self.boardCells objectAtIndex:i] objectAtIndex:col];
         if (cell.tag != index) {
             [cellsToCheck addObject:cell];
         }
@@ -513,7 +504,7 @@ CGFloat innerLineWidth;
     NSInteger j = nonet % 3 * 3;
     for (int delta_i = 0; delta_i < 3; delta_i++) {
         for (int delta_j = 0; delta_j < 3; delta_j++) {
-            PlayCellButton* cell = [[self.boardCells objectAtIndex:(i + delta_i)] objectAtIndex:(j + delta_j)];
+            CellButton* cell = [[self.boardCells objectAtIndex:(i + delta_i)] objectAtIndex:(j + delta_j)];
             if (cell.tag != index) {
                 [cellsToCheck addObject:cell];
             }
@@ -530,7 +521,7 @@ CGFloat innerLineWidth;
     }
     
     // Do check now
-    for (PlayCellButton* checkingCell in cellsToCheck) {
+    for (CellButton* checkingCell in cellsToCheck) {
         if (![checkingCell.titleLabel.text isEqualToString:@" "] && [checkingCell.titleLabel.text isEqualToString:now]) {
             [checkingCell incDupCount];
             [cell incDupCount];
@@ -622,7 +613,7 @@ CGFloat innerLineWidth;
     }
 }
 
-- (void)cellBtnPressed:(PlayCellButton*)sender {
+- (void)cellBtnPressed:(CellButton*)sender {
     // Don't do anything
     if (self.selectedCell == sender) {
         return;
@@ -718,7 +709,7 @@ CGFloat innerLineWidth;
     [self.soundPlayer playButtonSound];
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
-            PlayCellButton* cell = [[self.boardCells objectAtIndex:i] objectAtIndex:j];
+            CellButton* cell = [[self.boardCells objectAtIndex:i] objectAtIndex:j];
             NSString* cellLabel = cell.titleLabel.text;
             NSNumber* correctNum = [[self.solutionGrid objectAtIndex:i] objectAtIndex:j];
             if (![cellLabel isEqualToString:@""] && ![cellLabel isEqualToString:[correctNum stringValue]]) {

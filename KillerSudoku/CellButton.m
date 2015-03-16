@@ -6,10 +6,10 @@
 //  Copyright (c) 2015年 yongli1992. All rights reserved.
 //
 
-#import "PlayCellButton.h"
+#import "CellButton.h"
 #import "UIColor+FlatUI.h"
 
-@interface PlayCellButton ()
+@interface CellButton ()
 @property(nonatomic)NSInteger dupCount;
 @property(strong, nonatomic)NSMutableDictionary* noteNums;
 
@@ -27,7 +27,7 @@
 @property(nonatomic)BOOL rb;
 @end
 
-@implementation PlayCellButton
+@implementation CellButton
 
 
 // Only override drawRect: if you perform custom drawing.
@@ -230,7 +230,7 @@
 
 - (void)setSum:(NSInteger)sum {
     if (self.sumText == nil) {
-        self.sumText = [[UILabel alloc] initWithFrame:CGRectMake(3, 2, 10, 10)];
+        self.sumText = [[UILabel alloc] initWithFrame:CGRectMake(4, 2, 10, 10)];
         [self.sumText setFont:[UIFont systemFontOfSize:7]];
         [self addSubview:self.sumText];
     }

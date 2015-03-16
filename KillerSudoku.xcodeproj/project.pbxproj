@@ -38,7 +38,7 @@
 		237582961A1417660057C29B /* Constant.m in Sources */ = {isa = PBXBuildFile; fileRef = 237582951A1417660057C29B /* Constant.m */; };
 		2375D0C31A2135370044898A /* allSingleGame in Resources */ = {isa = PBXBuildFile; fileRef = 2375D0C21A2135370044898A /* allSingleGame */; };
 		2375D0C51A2141690044898A /* easy1 in Resources */ = {isa = PBXBuildFile; fileRef = 2375D0C41A2141690044898A /* easy1 */; };
-		23881DC51A91404E00527917 /* cellButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 23881DC41A91404E00527917 /* cellButton.m */; };
+		23881DC51A91404E00527917 /* NewGameCellButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 23881DC41A91404E00527917 /* NewGameCellButton.m */; };
 		23B927E11A38999400A64FAF /* game2 in Resources */ = {isa = PBXBuildFile; fileRef = 23B927E01A38999400A64FAF /* game2 */; };
 		23BFA4BE1AA9CF4400AC3EE5 /* PlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23BFA4BD1AA9CF4400AC3EE5 /* PlayViewController.m */; };
 		23C92BCB1AB3973800C88B68 /* buttonSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 23C92BCA1AB3973800C88B68 /* buttonSound.wav */; };
@@ -78,7 +78,7 @@
 		23D84A711AA9B46E00F1EE71 /* HelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D84A701AA9B46E00F1EE71 /* HelpViewController.m */; };
 		23E2BC541A1B869C000342CE /* Combination.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E2BC531A1B869C000342CE /* Combination.m */; };
 		23E90ABB1AAB310400DA2C4A /* BoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E90ABA1AAB310400DA2C4A /* BoardView.m */; };
-		23E90ABE1AAB8C5900DA2C4A /* PlayCellButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E90ABD1AAB8C5900DA2C4A /* PlayCellButton.m */; };
+		23E90ABE1AAB8C5900DA2C4A /* CellButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E90ABD1AAB8C5900DA2C4A /* CellButton.m */; };
 		23E90AC31AAC2BB600DA2C4A /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E90AC21AAC2BB600DA2C4A /* SettingsViewController.m */; };
 		23E90ACA1AAC52C100DA2C4A /* SolverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23E90AC91AAC52C100DA2C4A /* SolverViewController.m */; };
 		23F0FC8E1A8ABCBC0034322F /* NewGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23F0FC8D1A8ABCBC0034322F /* NewGameViewController.m */; };
@@ -135,15 +135,15 @@
 		2367837A1A124CB300DF97F2 /* DebugSolverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebugSolverViewController.m; sourceTree = "<group>"; };
 		2367B97F1A378BAA000852AC /* AlgorithmX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlgorithmX.h; sourceTree = "<group>"; };
 		2367B9801A378BAA000852AC /* AlgorithmX.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlgorithmX.m; sourceTree = "<group>"; };
-		2371AB4D1A91FE720098ED5C /* combination.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = combination.txt; sourceTree = "<group>"; };
+		2371AB4D1A91FE720098ED5C /* combination.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = combination.txt; path = KillerSudoku/combination.txt; sourceTree = "<group>"; };
 		2374890E19F65C3000A0DCE3 /* UnionFind.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnionFind.h; sourceTree = "<group>"; };
 		2374890F19F65C3000A0DCE3 /* UnionFind.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnionFind.m; sourceTree = "<group>"; };
 		237582941A1417660057C29B /* Constant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constant.h; sourceTree = "<group>"; };
 		237582951A1417660057C29B /* Constant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constant.m; sourceTree = "<group>"; };
 		2375D0C21A2135370044898A /* allSingleGame */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = allSingleGame; sourceTree = "<group>"; };
 		2375D0C41A2141690044898A /* easy1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = easy1; sourceTree = "<group>"; };
-		23881DC31A91404E00527917 /* cellButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cellButton.h; sourceTree = "<group>"; };
-		23881DC41A91404E00527917 /* cellButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = cellButton.m; sourceTree = "<group>"; };
+		23881DC31A91404E00527917 /* NewGameCellButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewGameCellButton.h; sourceTree = "<group>"; };
+		23881DC41A91404E00527917 /* NewGameCellButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewGameCellButton.m; sourceTree = "<group>"; };
 		23B927E01A38999400A64FAF /* game2 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = game2; sourceTree = "<group>"; };
 		23BFA4BC1AA9CF4400AC3EE5 /* PlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayViewController.h; sourceTree = "<group>"; };
 		23BFA4BD1AA9CF4400AC3EE5 /* PlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayViewController.m; sourceTree = "<group>"; };
@@ -212,8 +212,8 @@
 		23E2BC531A1B869C000342CE /* Combination.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 1; path = Combination.m; sourceTree = "<group>"; };
 		23E90AB91AAB310400DA2C4A /* BoardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoardView.h; sourceTree = "<group>"; };
 		23E90ABA1AAB310400DA2C4A /* BoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoardView.m; sourceTree = "<group>"; };
-		23E90ABC1AAB8C5900DA2C4A /* PlayCellButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayCellButton.h; sourceTree = "<group>"; };
-		23E90ABD1AAB8C5900DA2C4A /* PlayCellButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayCellButton.m; sourceTree = "<group>"; };
+		23E90ABC1AAB8C5900DA2C4A /* CellButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellButton.h; sourceTree = "<group>"; };
+		23E90ABD1AAB8C5900DA2C4A /* CellButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellButton.m; sourceTree = "<group>"; };
 		23E90AC11AAC2BB600DA2C4A /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		23E90AC21AAC2BB600DA2C4A /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		23E90AC81AAC52C100DA2C4A /* SolverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SolverViewController.h; sourceTree = "<group>"; };
@@ -277,19 +277,13 @@
 		230AD8E319ED164E00648B01 /* KillerSudoku */ = {
 			isa = PBXGroup;
 			children = (
-				234BA0581A74F04300B09F5B /* Games */,
+				23EFF7281AB78AB9007AF940 /* Auxiliary */,
+				234BA0581A74F04300B09F5B /* Game Examples */,
 				230AD90C19ED190B00648B01 /* Model */,
 				2340E5B91A01474B00D56A3A /* View */,
-				230AD8E819ED164E00648B01 /* AppDelegate.h */,
-				230AD8E919ED164E00648B01 /* AppDelegate.m */,
-				23C92BCC1AB397C900C88B68 /* SoundPlayer.h */,
-				23C92BCD1AB397C900C88B68 /* SoundPlayer.m */,
 				230AD8F119ED164E00648B01 /* Images.xcassets */,
 				230AD8F319ED164E00648B01 /* LaunchScreen.xib */,
 				230AD8E419ED164E00648B01 /* Supporting Files */,
-				237582941A1417660057C29B /* Constant.h */,
-				2371AB4D1A91FE720098ED5C /* combination.txt */,
-				237582951A1417660057C29B /* Constant.m */,
 			);
 			path = KillerSudoku;
 			sourceTree = "<group>";
@@ -344,6 +338,10 @@
 		2340E5B91A01474B00D56A3A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				23E90ABC1AAB8C5900DA2C4A /* CellButton.h */,
+				23E90ABD1AAB8C5900DA2C4A /* CellButton.m */,
+				23E90AB91AAB310400DA2C4A /* BoardView.h */,
+				23E90ABA1AAB310400DA2C4A /* BoardView.m */,
 				23D84A6B1AA920A700F1EE71 /* Home View */,
 				23BFA4BB1AA9CF3600AC3EE5 /* Play View */,
 				23E90ABF1AAC2B7500DA2C4A /* Solver View */,
@@ -358,7 +356,7 @@
 			name = View;
 			sourceTree = "<group>";
 		};
-		234BA0581A74F04300B09F5B /* Games */ = {
+		234BA0581A74F04300B09F5B /* Game Examples */ = {
 			isa = PBXGroup;
 			children = (
 				2375D0C21A2135370044898A /* allSingleGame */,
@@ -375,7 +373,7 @@
 				234BA0661A74FE5400B09F5B /* level_0 */,
 				23F0FC921A8ACE870034322F /* multiple_solutions_2 */,
 			);
-			name = Games;
+			name = "Game Examples";
 			sourceTree = "<group>";
 		};
 		234BA05B1A74F42C00B09F5B /* Solving Algorithms */ = {
@@ -396,8 +394,8 @@
 			children = (
 				23F0FC8C1A8ABCBC0034322F /* NewGameViewController.h */,
 				23F0FC8D1A8ABCBC0034322F /* NewGameViewController.m */,
-				23881DC31A91404E00527917 /* cellButton.h */,
-				23881DC41A91404E00527917 /* cellButton.m */,
+				23881DC31A91404E00527917 /* NewGameCellButton.h */,
+				23881DC41A91404E00527917 /* NewGameCellButton.m */,
 			);
 			name = NewGameView;
 			sourceTree = "<group>";
@@ -407,10 +405,6 @@
 			children = (
 				23BFA4BC1AA9CF4400AC3EE5 /* PlayViewController.h */,
 				23BFA4BD1AA9CF4400AC3EE5 /* PlayViewController.m */,
-				23E90AB91AAB310400DA2C4A /* BoardView.h */,
-				23E90ABA1AAB310400DA2C4A /* BoardView.m */,
-				23E90ABC1AAB8C5900DA2C4A /* PlayCellButton.h */,
-				23E90ABD1AAB8C5900DA2C4A /* PlayCellButton.m */,
 			);
 			name = "Play View";
 			sourceTree = "<group>";
@@ -475,6 +469,7 @@
 		23D84A601AA91C5200F1EE71 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				2371AB4D1A91FE720098ED5C /* combination.txt */,
 				23C92BD91AB3A6EF00C88B68 /* silentNight.mp3 */,
 				23C92BCA1AB3973800C88B68 /* buttonSound.wav */,
 				23C92BD41AB3A2FF00C88B68 /* selectSound.wav */,
@@ -524,6 +519,19 @@
 				23E90AC21AAC2BB600DA2C4A /* SettingsViewController.m */,
 			);
 			name = "Settings View";
+			sourceTree = "<group>";
+		};
+		23EFF7281AB78AB9007AF940 /* Auxiliary */ = {
+			isa = PBXGroup;
+			children = (
+				237582941A1417660057C29B /* Constant.h */,
+				237582951A1417660057C29B /* Constant.m */,
+				230AD8E819ED164E00648B01 /* AppDelegate.h */,
+				230AD8E919ED164E00648B01 /* AppDelegate.m */,
+				23C92BCC1AB397C900C88B68 /* SoundPlayer.h */,
+				23C92BCD1AB397C900C88B68 /* SoundPlayer.m */,
+			);
+			name = Auxiliary;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -649,7 +657,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23E90ABE1AAB8C5900DA2C4A /* PlayCellButton.m in Sources */,
+				23E90ABE1AAB8C5900DA2C4A /* CellButton.m in Sources */,
 				23D84A501AA918D200F1EE71 /* FUITextField.m in Sources */,
 				2301342C1A9FCD8300023704 /* solverCellButton.m in Sources */,
 				23D84A561AA918D200F1EE71 /* UINavigationBar+FlatUI.m in Sources */,
@@ -664,7 +672,7 @@
 				23D84A4A1AA918D200F1EE71 /* FUIAlertView.m in Sources */,
 				230AD91219ED1E9B00648B01 /* GameBoard.m in Sources */,
 				23D84A551AA918D200F1EE71 /* UIImage+FlatUI.m in Sources */,
-				23881DC51A91404E00527917 /* cellButton.m in Sources */,
+				23881DC51A91404E00527917 /* NewGameCellButton.m in Sources */,
 				230AD8ED19ED164E00648B01 /* ViewController.m in Sources */,
 				23D84A5D1AA918D200F1EE71 /* UIToolbar+FlatUI.m in Sources */,
 				23D84A4D1AA918D200F1EE71 /* FUIPopoverBackgroundView.m in Sources */,

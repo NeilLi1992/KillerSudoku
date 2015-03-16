@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PlayCellButton : UIButton
+@interface CellButton : UIButton
 - (void)setNum:(NSNumber*)num;
 - (void)clearNum;
 - (NSInteger)getNum;
