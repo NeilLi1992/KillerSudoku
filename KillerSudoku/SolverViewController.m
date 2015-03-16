@@ -58,8 +58,8 @@ CGFloat itemLineSep;
     [super viewDidLoad];
     
     // Initialization
-    horiPadding = 10;
-    vertPadding = 10;
+    horiPadding = 6;
+    vertPadding = 6;
     boardLength = [UIScreen mainScreen].bounds.size.width - 2 * horiPadding;
     cellLength = boardLength / 9.0f;
     CGFloat statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
@@ -108,7 +108,7 @@ CGFloat itemLineSep;
     // Draw board view
     self.boardView = [[BoardView alloc] initWithFrame:CGRectMake(horiPadding, vertPadding+baseY, boardLength, boardLength)];
     [self.boardView setInnerLineWidth:innerLineWidth];
-    self.boardView.backgroundColor = [UIColor silverColor];
+    self.boardView.backgroundColor = [UIColor cloudsColor];
     self.boardView.layer.borderColor = [UIColor midnightBlueColor].CGColor;
     self.boardView.layer.borderWidth = outerLineWidth;
     self.boardView.layer.cornerRadius = 6;
@@ -184,7 +184,7 @@ CGFloat itemLineSep;
 
 - (void)drawControlParts {
     CGFloat ctlViewX = horiPadding;
-    CGFloat ctlViewY = baseY + boardLength + 2 * vertPadding;
+    CGFloat ctlViewY = baseY + boardLength + 3 * vertPadding;
     CGFloat ctlViewWidth = boardLength;
     CGFloat ctlViewHeight = [UIScreen mainScreen].bounds.size.height - baseY - boardLength - 3 * vertPadding;
     UIView* controlView = [[UIView alloc] initWithFrame:CGRectMake(ctlViewX, ctlViewY, ctlViewWidth, ctlViewHeight)];
@@ -783,7 +783,7 @@ CGFloat itemLineSep;
     
     [self clearSelection];
     NSMutableDictionary* configuration = [[NSMutableDictionary alloc] init];
-    NSString* filePath = [[NSBundle mainBundle] pathForResource:@"game3" ofType:@""];
+    NSString* filePath = [[NSBundle mainBundle] pathForResource:@"multiple_solutions" ofType:@""];
     NSString* file_content = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
     
     // Do the following process block on each line
@@ -843,7 +843,7 @@ CGFloat itemLineSep;
         if ([self.solutions count] == 1) {
             self.promptLabel.text = @"  One solution found!";
         } else {
-            self.promptLabel.text = [NSString stringWithFormat:@"  %d solutions, display sol 1. Press Solve to see more.", [self.solutions count]];
+            self.promptLabel.text = [NSString stringWithFormat:@"  %ld solutions, display sol 1. Press Solve to see more.", [self.solutions count]];
         }
         // Fill the first solution into the board
         GameBoard* firstSolution = [self.solutions objectAtIndex:0];

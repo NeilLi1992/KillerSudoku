@@ -18,10 +18,12 @@
 #import "FUIButton.h"
 #import "PlayViewController.h"
 
+#import "HomeViewController.h"
+
 @interface LoadTableViewController ()
 @property (strong, nonatomic)SoundPlayer* soundPlayer;
 @property (strong, nonatomic)NSMutableDictionary* savedGames;
-@property (strong, nonatomic)NSArray* allDates;
+@property (strong, nonatomic)NSMutableArray* allDates;
 @property (strong, nonatomic)ArchiveWrapper* selectedArchive;
 @end
 
@@ -43,7 +45,7 @@ static NSString * const FUITableViewControllerCellReuseIdentifier = @"FUITableVi
 
 - (void)prepareSavedGames:(NSMutableDictionary*)savedGames {
     self.savedGames = savedGames;
-    self.allDates = [self.savedGames allKeys];
+    self.allDates = [NSMutableArray arrayWithArray:[[self.savedGames allKeys] sortedArrayUsingSelector:@selector(compare:)]];
 }
 
 - (void)stylize {
@@ -135,8 +137,25 @@ static NSString * const FUITableViewControllerCellReuseIdentifier = @"FUITableVi
     ArchiveWrapper* archive = [self.savedGames objectForKey:[self.allDates objectAtIndex:indexPath.row]];
     NSDateFormatter * dateformatter = [[NSDateFormatter alloc]init];
     [dateformatter setLocale:[NSLocale currentLocale]];
-    [dateformatter setDateFormat:@"yyyy-MM-dd HH:mm"];
-    NSString* cellText = [dateformatter stringFromDate:archive.date];
+    [dateformatter setDateFormat:@"yy-MM-dd HH:mm"];
+    NSString* level;
+    switch (archive.level) {
+        case 0:
+            level = @"easy";
+            break;
+        case 1:
+            level = @"medium";
+            break;
+        case 2:
+            level = @"hard";
+            break;
+        default:
+            break;
+    }
+    
+    NSString* completion = [NSString stringWithFormat:@"%ld/81", archive.filledCount];
+    
+    NSString* cellText = [NSString stringWithFormat:@"%@ Level: %@ Done: %@", [dateformatter stringFromDate:archive.date], level, completion];
     
     cell.textLabel.text = cellText;
     return cell;
@@ -147,5 +166,26 @@ static NSString * const FUITableViewControllerCellReuseIdentifier = @"FUITableVi
     self.selectedArchive = [self.savedGames objectForKey:[self.allDates objectAtIndex:indexPath.row]];
 }
 
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // Perform the real delete action here. Note: you may need to check editing style
+    //   if you do not perform delete only.
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // Remove from archive
+        HomeViewController* vc = (HomeViewController*)[self.navigationController.viewControllers objectAtIndex:0];
+        [vc deleteArchiveWithDate:[self.allDates objectAtIndex:indexPath.row]];
+        
+        // Delete the row from the data source
+        [self.savedGames removeObjectForKey:[self.allDates objectAtIndex:indexPath.row]];
+        [self.allDates removeObjectAtIndex:indexPath.row];
+        
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+}
 
 @end

@@ -11,5 +11,5 @@
 @interface HomeViewController : UIViewController
 
 -(void)saveArchive:(ArchiveWrapper*)archive;
-
+-(void)deleteArchiveWithDate:(NSDate*)date;
 @end

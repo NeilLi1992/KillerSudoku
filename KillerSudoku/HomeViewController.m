@@ -42,7 +42,7 @@
     NSUserDefaults* preferences = [NSUserDefaults standardUserDefaults];
     if ([preferences stringForKey:@"cellStyle"] == nil) {
         // Need to set default settings
-        [preferences setObject:@"color" forKey:@"cellStyle"];
+        [preferences setObject:@"line" forKey:@"cellStyle"];
         [preferences setBool:YES forKey:@"playSound"];
         [preferences setBool:YES forKey:@"playMusic"];
     }
@@ -265,7 +265,7 @@
     }
 }
 
-# pragma mark - Control center methods
+# pragma mark - Save and load methods
 -(void)saveArchive:(ArchiveWrapper*)archive {
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* documentsDirectory = [paths objectAtIndex:0];
@@ -274,6 +274,16 @@
     BOOL flag = [NSKeyedArchiver archiveRootObject:self.savedGames toFile:filePath];
 
     NSLog(@"Archive save status: %d", flag);
+}
+
+-(void)deleteArchiveWithDate:(NSDate*)date {
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* documentsDirectory = [paths objectAtIndex:0];
+    NSString* filePath = [documentsDirectory stringByAppendingPathComponent: @"savedGames.archive"];
+    [self.savedGames removeObjectForKey:date];
+    BOOL flag = [NSKeyedArchiver archiveRootObject:self.savedGames toFile:filePath];
+    
+    NSLog(@"Archive delete status: %d", flag);
 }
 
 @end

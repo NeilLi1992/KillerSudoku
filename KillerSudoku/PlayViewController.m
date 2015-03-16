@@ -46,6 +46,7 @@
 
 // Save and load properties
 @property(nonatomic)BOOL isLoaded;
+@property(nonatomic)NSDate* savedDate;
 
 @end
 
@@ -64,8 +65,8 @@ CGFloat innerLineWidth;
     [super viewDidLoad];
     
     // Initialization
-    horiPadding = 10;
-    vertPadding = 10;
+    horiPadding = 6;
+    vertPadding = 6;
     boardLength = [UIScreen mainScreen].bounds.size.width - 2 * horiPadding;
     cellLength = boardLength / 9.0f;
     CGFloat statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
@@ -79,7 +80,7 @@ CGFloat innerLineWidth;
     self.noteMode = false;
     
     if (!self.isLoaded) {
-        self.finishedCount = 0;
+        self.finishedCount = 80;
     }
     
     self.soundPlayer = [[SoundPlayer alloc] init];
@@ -104,7 +105,7 @@ CGFloat innerLineWidth;
         self.generatingThread = [[NSThread alloc] initWithTarget:self selector:@selector(callGenerator) object:nil];
         
         // Create an alertView to mask the screen
-        self.waitView = [[FUIAlertView alloc] initWithTitle:@"Wait" message:@"Game generating, please wait." delegate:self cancelButtonTitle:@"Stop generating" otherButtonTitles:nil];
+        self.waitView = [[FUIAlertView alloc] initWithTitle:@"Wait" message:@"Game generating, please wait.\nIf not finished for quite a time, stop and try again. Hard games can take long time to generate." delegate:self cancelButtonTitle:@"Stop generating" otherButtonTitles:nil];
         self.waitView.titleLabel.textColor = [UIColor cloudsColor];
         self.waitView.titleLabel.font = [UIFont boldFlatFontOfSize:16];
         self.waitView.messageLabel.textColor = [UIColor cloudsColor];
@@ -146,15 +147,11 @@ CGFloat innerLineWidth;
     // Draw board view
     self.boardView = [[BoardView alloc] initWithFrame:CGRectMake(horiPadding, vertPadding+baseY, boardLength, boardLength)];
     [self.boardView setInnerLineWidth:innerLineWidth];
-    self.boardView.backgroundColor = [UIColor silverColor];
+    self.boardView.backgroundColor = [UIColor cloudsColor];
     self.boardView.layer.borderColor = [UIColor midnightBlueColor].CGColor;
     self.boardView.layer.borderWidth = outerLineWidth;
     self.boardView.layer.cornerRadius = 6;
     self.boardView.layer.masksToBounds = YES;
-//    boardView.layer.shadowOffset = CGSizeMake(2, 5);
-//    boardView.layer.shadowRadius = 2;
-//    boardView.layer.shadowOpacity = 1;
-//    boardView.layer.shadowColor = [UIColor midnightBlueColor].CGColor;
     [self.view addSubview:self.boardView];
 }
 
@@ -549,7 +546,16 @@ CGFloat innerLineWidth;
 - (void)finishGame {
     // Disable user interaction
     self.view.userInteractionEnabled = NO;
-    FUIAlertView* finishAlertView = [[FUIAlertView alloc] initWithTitle:@"Finish" message:@"Congradulations!\nYou finished the game! " delegate:self cancelButtonTitle:@"Exit" otherButtonTitles:nil];
+    
+    // Build a finish alert view
+    FUIAlertView* finishAlertView;
+    
+    if (self.isLoaded) {
+        finishAlertView = [[FUIAlertView alloc] initWithTitle:@"Finish" message:@"Congradulations!\nYou finished the game!\nDo you want to delete from save list? " delegate:self cancelButtonTitle:@"No, keep it" otherButtonTitles:@"Yes, delete it", nil];
+    } else {
+        finishAlertView = [[FUIAlertView alloc] initWithTitle:@"Finish" message:@"Congradulations!\nYou finished the game! " delegate:self cancelButtonTitle:@"Exit" otherButtonTitles:nil];
+    }
+
     
     // Stylize the alert view
     finishAlertView.titleLabel.textColor = [UIColor cloudsColor];
@@ -560,10 +566,17 @@ CGFloat innerLineWidth;
     finishAlertView.alertContainer.backgroundColor = [UIColor midnightBlueColor];
     finishAlertView.alertContainer.layer.cornerRadius = 3;
     finishAlertView.alertContainer.layer.masksToBounds = YES;
-    finishAlertView.defaultButtonColor = [UIColor cloudsColor];
-    finishAlertView.defaultButtonShadowColor = [UIColor asbestosColor];
+    finishAlertView.defaultButtonColor = [UIColor peterRiverColor];
+    finishAlertView.defaultButtonShadowColor = [UIColor belizeHoleColor];
     finishAlertView.defaultButtonFont = [UIFont boldFlatFontOfSize:16];
-    finishAlertView.defaultButtonTitleColor = [UIColor asbestosColor];
+    finishAlertView.defaultButtonTitleColor = [UIColor whiteColor];
+    
+    FUIButton* cancelBtn = (FUIButton*)[finishAlertView.buttons objectAtIndex:finishAlertView.cancelButtonIndex];
+    cancelBtn.buttonColor = [UIColor cloudsColor];
+    cancelBtn.shadowColor = [UIColor asbestosColor];
+    cancelBtn.tintColor = [UIColor asbestosColor];
+    [cancelBtn setTitleColor:[UIColor asbestosColor] forState:UIControlStateNormal];
+    [cancelBtn setTitleColor:[UIColor asbestosColor] forState:UIControlStateHighlighted];
     
     [finishAlertView show];
 
@@ -766,11 +779,16 @@ CGFloat innerLineWidth;
         }
     } else if ([alertView.title isEqualToString:@"Finish"]) {
         // Game finish alert view
+        HomeViewController* vc = (HomeViewController*)[self.navigationController.viewControllers objectAtIndex:0];
         switch (buttonIndex) {
             case 0:
                 // Exit
                 [self.navigationController popViewControllerAnimated:YES];
                 break;
+            case 1:
+                // Delete from save list and exit
+                [vc deleteArchiveWithDate:self.savedDate];
+                [self.navigationController popViewControllerAnimated:YES];
             default:
                 break;
         }
@@ -818,17 +836,29 @@ CGFloat innerLineWidth;
     HomeViewController* homeViewController = (HomeViewController*)[self.navigationController.viewControllers objectAtIndex:0];
     
     // Create an archive
-    ArchiveWrapper* archive = [[ArchiveWrapper alloc] initWithGameBoard:self.unsolvedGame Solution:self.solutionGrid FinishCount:self.finishedCount];
+    NSInteger filledCount = 0;
+    
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            if ([[self.unsolvedGame getNumAtRow:i Column:j] integerValue] != 0) {
+                filledCount++;
+            }
+        }
+    }
+    
+    ArchiveWrapper* archive = [[ArchiveWrapper alloc] initWithGameBoard:self.unsolvedGame Solution:self.solutionGrid FinishCount:self.finishedCount FilledCount:filledCount Level:self.level];
     [homeViewController saveArchive:archive];
 }
 
 - (void)loadGame:(ArchiveWrapper*)archive {
     self.isLoaded = true;
+    self.savedDate = archive.date;
     
     // Restore play view controller
     self.unsolvedGame = archive.gameBoard;
     self.solutionGrid = archive.solutionGrid;
     self.finishedCount = archive.finishCount;
+    self.level = archive.level;
 }
 
 @end

@@ -14,8 +14,10 @@
 @property(strong, nonatomic)GameBoard* gameBoard;
 @property(strong, nonatomic)NSArray* solutionGrid;
 @property(nonatomic)NSInteger finishCount;
+@property(nonatomic)NSInteger level;
+@property(nonatomic)NSInteger filledCount;
 
-- (id)initWithGameBoard:(GameBoard*)gameBoard Solution:(NSArray*)solutionGrid FinishCount:(NSInteger)count;
+- (id)initWithGameBoard:(GameBoard*)gameBoard Solution:(NSArray*)solutionGrid FinishCount:(NSInteger)count FilledCount:(NSInteger)count2 Level:(NSInteger)level;
 @end
 
 
