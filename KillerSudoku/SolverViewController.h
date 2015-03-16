@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface SolverViewController : UIViewController
-
+- (void)findSolution:(NSNumber*)count;
 @end

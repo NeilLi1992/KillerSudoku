@@ -9,9 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "GameBoard.h"
 #import "Constant.h"
+#import "SolverViewController.h"
 static NSTimeInterval startTime;
 static NSTimeInterval endTime;
 
 @interface Solver : NSObject
++ (void)setCaller:(SolverViewController*)vc;
 + (NSArray*)solve:(GameBoard*)unsolvedGame;
 @end

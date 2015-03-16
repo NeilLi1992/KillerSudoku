@@ -10,7 +10,14 @@
 
 @implementation AlgorithmX
 
+SolverViewController* caller;
+
++ (void)setCaller:(SolverViewController*)vc {
+    caller = vc;
+}
+
 + (NSArray*)Solve:(GameBoard*)unsolvedGame {
+    
     // Keep the unsolvedGame intact
     GameBoard* gb = [unsolvedGame copy];
     
@@ -227,9 +234,15 @@
             
             [gb setNum:[NSNumber numberWithInteger:n] AtRow:r Column:c];
         }
-
+        
         // Store the found solution in an array
         [possible_solutions addObject:[gb copy]];
+        
+        // Inform the solver on main thread a solution is found
+        if (caller != nil) {
+            [caller performSelectorOnMainThread:@selector(findSolution:) withObject:[NSNumber numberWithInteger:[possible_solutions count]] waitUntilDone:NO];
+        }
+
     } else {
         // Find the column col, corresponding to least number of rows
         NSNumber* col;

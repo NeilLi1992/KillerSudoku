@@ -828,6 +828,7 @@ CGFloat itemLineSep;
 #pragma mark - Thread related methods
 - (void)callSolver:(GameBoard*)unsolvedGame {
     // Call solver to solve the game
+    [Solver setCaller:self];
     NSArray* solutions = [Solver solve:unsolvedGame];
     
     // Update UI in main thread
@@ -859,6 +860,14 @@ CGFloat itemLineSep;
     }
     
     [self.waitView dismissWithClickedButtonIndex:self.waitView.cancelButtonIndex animated:YES];
+}
+
+- (void)findSolution:(NSNumber*)count {
+    if ([count integerValue] == 1) {
+        [self.waitView.messageLabel setText:@"Found 1 solution."];
+    } else if ([count integerValue] > 1) {
+        [self.waitView.messageLabel setText:[NSString stringWithFormat:@"Found %ld solutions.", [count integerValue]]];
+    }
 }
 
 #pragma mark - Delegate methods
