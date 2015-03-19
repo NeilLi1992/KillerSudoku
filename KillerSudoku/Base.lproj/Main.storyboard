@@ -310,7 +310,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Killer Sudoku" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c44-Zw-GCC">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Killer Sudoku" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c44-Zw-GCC">
                                 <rect key="frame" x="48" y="103" width="225" height="62"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="32"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -337,6 +337,7 @@
                             <constraint firstItem="cSn-ha-caR" firstAttribute="top" secondItem="eb1-UM-5Q5" secondAttribute="bottom" constant="8" id="9Sz-nk-WiN"/>
                             <constraint firstItem="eb1-UM-5Q5" firstAttribute="trailing" secondItem="AyK-vY-U0A" secondAttribute="trailingMargin" id="hD0-PK-eQW"/>
                             <constraint firstAttribute="centerX" secondItem="c44-Zw-GCC" secondAttribute="centerX" id="jzX-w4-SZc"/>
+                            <constraint firstItem="c44-Zw-GCC" firstAttribute="top" secondItem="I1G-2J-Z1e" secondAttribute="bottom" constant="39" id="rBO-Zj-8VT"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="V01-af-lqI"/>
@@ -348,24 +349,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tAA-iY-y03" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1704" y="-360"/>
-        </scene>
-        <!--Play View Controller-->
-        <scene sceneID="PW9-sO-Iq9">
-            <objects>
-                <viewController id="7JH-ay-3ye" customClass="PlayViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Qnx-7X-u8A"/>
-                        <viewControllerLayoutGuide type="bottom" id="uG6-l0-F2U"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="JOs-fD-Jjy">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="sZZ-pk-dr1" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2508" y="-1408"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="b5V-Pt-sIZ">

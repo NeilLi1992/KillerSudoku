@@ -282,7 +282,6 @@
 				230AD90C19ED190B00648B01 /* Model */,
 				2340E5B91A01474B00D56A3A /* View */,
 				230AD8F119ED164E00648B01 /* Images.xcassets */,
-				230AD8F319ED164E00648B01 /* LaunchScreen.xib */,
 				230AD8E419ED164E00648B01 /* Supporting Files */,
 			);
 			path = KillerSudoku;
@@ -342,6 +341,7 @@
 				23E90ABD1AAB8C5900DA2C4A /* CellButton.m */,
 				23E90AB91AAB310400DA2C4A /* BoardView.h */,
 				23E90ABA1AAB310400DA2C4A /* BoardView.m */,
+				230AD8F319ED164E00648B01 /* LaunchScreen.xib */,
 				23D84A6B1AA920A700F1EE71 /* Home View */,
 				23BFA4BB1AA9CF3600AC3EE5 /* Play View */,
 				23E90ABF1AAC2B7500DA2C4A /* Solver View */,
