@@ -222,7 +222,7 @@ SolverViewController* caller;
 + (void)solveWith:(NSMutableDictionary*)X and:(NSMutableDictionary*)Y on:(NSMutableArray*)solution with:(GameBoard*)gb store:(NSMutableArray*)possible_solutions {
     if ([[NSThread currentThread] isCancelled]) {
         NSLog(@"Solving thread cancelled in Algorithm X");
-        NSLog(@"Already found solution number: %ld", [possible_solutions count]);
+        NSLog(@"Already found solution number: %d", [possible_solutions count]);
         return;
     }
     

@@ -745,7 +745,7 @@ CGFloat itemLineSep;
             }
         }
         
-        self.promptLabel.text = [NSString stringWithFormat:@"  %ld solutions, display sol %ld. Press Solve to see more.", [self.solutions count], self.solutionIndex + 1];
+        self.promptLabel.text = [NSString stringWithFormat:@"  %ld solutions. Press Solve to see more.", (unsigned long)[self.solutions count]];
         return;
     }
     
@@ -844,7 +844,7 @@ CGFloat itemLineSep;
         if ([self.solutions count] == 1) {
             self.promptLabel.text = @"  One solution found!";
         } else {
-            self.promptLabel.text = [NSString stringWithFormat:@"  %ld solutions, display sol 1. Press Solve to see more.", [self.solutions count]];
+            self.promptLabel.text = [NSString stringWithFormat:@"  %d solutions. Press Solve to see more.", [self.solutions count]];
         }
         // Fill the first solution into the board
         GameBoard* firstSolution = [self.solutions objectAtIndex:0];
@@ -866,7 +866,7 @@ CGFloat itemLineSep;
     if ([count integerValue] == 1) {
         [self.waitView.messageLabel setText:@"Found 1 solution."];
     } else if ([count integerValue] > 1) {
-        [self.waitView.messageLabel setText:[NSString stringWithFormat:@"Found %ld solutions.", [count integerValue]]];
+        [self.waitView.messageLabel setText:[NSString stringWithFormat:@"Found %d solutions.", [count integerValue]]];
     }
 }
 

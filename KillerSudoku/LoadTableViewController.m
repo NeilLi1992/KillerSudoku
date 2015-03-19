@@ -155,7 +155,7 @@ static NSString * const FUITableViewControllerCellReuseIdentifier = @"FUITableVi
     
     NSString* completion = [NSString stringWithFormat:@"%ld/81", archive.filledCount];
     
-    NSString* cellText = [NSString stringWithFormat:@"%@ Level: %@ Done: %@", [dateformatter stringFromDate:archive.date], level, completion];
+    NSString* cellText = [NSString stringWithFormat:@"%@ %@ %@", [dateformatter stringFromDate:archive.date], level, completion];
     
     cell.textLabel.text = cellText;
     return cell;
