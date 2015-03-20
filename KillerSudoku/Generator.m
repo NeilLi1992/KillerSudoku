@@ -63,6 +63,7 @@
 }
 
 + (NSArray*)generateSolutionGrid {
+    // Randomly pick a seed
     int seeds[3][9][9] = {{
         {5,3,4,6,7,8,9,1,2},
         {6,7,2,1,9,5,3,4,8},
@@ -204,7 +205,6 @@
         }
     }
     
-    
     // Transform 6: stack exchange
     for (int i = 0; i < 3; i++) {
         int n = arc4random() % 3;
@@ -247,13 +247,14 @@
         [sums setObject:[[solutionGrid objectAtIndex:row] objectAtIndex:col] forKey:[NSNumber numberWithInt:index]];
     }
     
-    //int ite1 = 0;
     // Repeat until we get our desired number of cages
     while ([uf count] > cageNumber) {
+        // Check if the generation thread is set to cancel
         if ([[NSThread currentThread] isCancelled]) {
             NSLog(@"Generator thread is cancelled!");
             return nil;
         }
+        
         // Randomly choose a cage
         NSInteger randomCageID = [uf getRandomComponentUnderSize:maxSize];
         // Calculate the left size for us to union a neighbor component

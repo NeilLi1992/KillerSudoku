@@ -783,7 +783,7 @@ CGFloat itemLineSep;
     
     [self clearSelection];
     NSMutableDictionary* configuration = [[NSMutableDictionary alloc] init];
-    NSString* filePath = [[NSBundle mainBundle] pathForResource:@"multiple_solutions" ofType:@""];
+    NSString* filePath = [[NSBundle mainBundle] pathForResource:@"level_0" ofType:@""];
     NSString* file_content = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
     
     // Do the following process block on each line
