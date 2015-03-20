@@ -15,6 +15,7 @@
 // Construct methods
 -(id)initWithConfiguration:(NSMutableDictionary*)configuration;
 -(id)initWithUF:(UnionFind*)uf andSums:(NSMutableDictionary*)sums;
+-(id)reuseWithUF:(UnionFind*)uf andSums:(NSMutableDictionary*)sums;
 -(id)initWithCells:(NSArray*)cells;
 -(id)initWithIntegerArray:(int[9][9])array;
 -(GameBoard*)copy;

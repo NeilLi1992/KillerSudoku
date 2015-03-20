@@ -17,7 +17,6 @@ SolverViewController* caller;
 }
 
 + (NSArray*)Solve:(GameBoard*)unsolvedGame {
-    
     // Keep the unsolvedGame intact
     GameBoard* gb = [unsolvedGame copy];
     

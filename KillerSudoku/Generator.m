@@ -247,6 +247,11 @@
         [sums setObject:[[solutionGrid objectAtIndex:row] objectAtIndex:col] forKey:[NSNumber numberWithInt:index]];
     }
     
+    NSMutableArray* iterator;
+    UnionFind* test_uf;
+    NSMutableDictionary* test_sums;
+    GameBoard* test_gb = [[GameBoard alloc] initWithUF:uf andSums:sums];
+    
     // Repeat until we get our desired number of cages
     while ([uf count] > cageNumber) {
         // Check if the generation thread is set to cancel
@@ -265,7 +270,7 @@
         }
         
         // Get the iterator containing all the indices in the randomCageID
-        NSMutableArray* iterator = [uf getIteratorForComponent:randomCageID];
+        iterator = [uf getIteratorForComponent:randomCageID];
         
         // Find all the cageIDs around this cage, which are potentially uninonable
         NSMutableSet* possibleNeighborCageIDs = [[NSMutableSet alloc] init];
@@ -285,41 +290,11 @@
             continue;
         }
         
-        // Record all the numbers in the randomly selected cage
-        NSMutableArray* allCageNumbers = [[NSMutableArray alloc] init];
-        for (NSNumber* index in iterator) {
-            NSInteger row = [index integerValue] / 9;
-            NSInteger col = [index integerValue] % 9;
-            [allCageNumbers addObject:[[solutionGrid objectAtIndex:row] objectAtIndex:col]];
-        }
-        
-        //int ite2 = 0;
-        
         // Try to find a neighbor cage which is OK to union
         for (NSNumber* neighborCageID in possibleNeighborCageIDs) {
-//            NSLog(@"ite2=%d", ite2++);
-            // Check if duplicate numbers exist
-            NSMutableArray* neighborIterator = [uf getIteratorForComponent:[neighborCageID integerValue]];
-            BOOL findDuplicate = false;
-            for (NSNumber* neighborIndex in neighborIterator) {
-                if (findDuplicate) {
-                    break;
-                }
-                NSInteger row = [neighborIndex integerValue] / 9;
-                NSInteger col = [neighborIndex integerValue] % 9;
-                if ([allCageNumbers containsObject:[[solutionGrid objectAtIndex:row] objectAtIndex:col]]) {
-                    // Find duplicate numbers
-                    findDuplicate = true;
-                }
-            }
-            if (findDuplicate) {
-                // Try next cage
-                continue;
-            }
-            
             // Check if solution is unique after uninon
-            UnionFind* test_uf = [uf copy];
-            NSMutableDictionary* test_sums = [NSMutableDictionary dictionaryWithDictionary:sums];
+            test_uf = [uf copy];
+            test_sums = [NSMutableDictionary dictionaryWithDictionary:sums];
             
             [test_uf connect:randomCageID with:[neighborCageID integerValue]];
             NSInteger sum1 = [[test_sums objectForKey:[NSNumber numberWithInteger:randomCageID]] integerValue];
@@ -329,11 +304,10 @@
             [test_sums removeObjectForKey:[NSNumber numberWithInteger:randomCageID]];
             [test_sums setObject:[NSNumber numberWithInteger:(sum1 + sum2)] forKey:[NSNumber numberWithInteger:[test_uf find:randomCageID]]];
             
-            GameBoard* test_gb = [[GameBoard alloc] initWithUF:test_uf andSums:test_sums];
+            [test_gb reuseWithUF:test_uf andSums:test_sums];
             
-//            NSLog(@"Into solver.");
             NSArray* solutions = [Solver solve:test_gb];
-//            NSLog(@"Out of solver.");
+
             if ([solutions count] == 1) {
                 // Ok to union
                 uf = test_uf;

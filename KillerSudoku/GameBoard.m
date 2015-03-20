@@ -88,6 +88,20 @@
     return self;
 }
 
+-(id)reuseWithUF:(UnionFind*)uf andSums:(NSMutableDictionary*)sums {
+    self.uf = uf;
+    self.sums = sums;
+    [self.cages removeAllObjects];
+    
+    NSArray* allCageIDs = [self.uf getAllComponents];
+    for (NSNumber* cageID in allCageIDs) {
+        NSArray* iterator = [self.uf getIteratorForComponent:[cageID integerValue]];
+        [self.cages addObject:iterator];
+    }
+    
+    return self;
+}
+
 -(id)initWithCells:(NSArray*)cells {
     self = [super init];
     self.cells = [[NSMutableArray alloc] init];
