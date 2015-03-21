@@ -247,10 +247,34 @@
         [sums setObject:[[solutionGrid objectAtIndex:row] objectAtIndex:col] forKey:[NSNumber numberWithInt:index]];
     }
     
-    NSMutableArray* iterator;
     UnionFind* test_uf;
     NSMutableDictionary* test_sums;
     GameBoard* test_gb = [[GameBoard alloc] initWithUF:uf andSums:sums];
+    NSMutableSet* possibleNeighborCageIDs = [[NSMutableSet alloc] init];
+    
+    // Build a neighbor cage dictionary for finding neighbors of a cage faster later
+    NSMutableDictionary* neighbors = [[NSMutableDictionary alloc] initWithCapacity:81];
+    for (int index = 0; index < 81; index++) {
+        NSMutableSet* neighbor = [[NSMutableSet alloc] init];
+        
+        if ((index + 1) % 9 != 0) {
+            [neighbor addObject:[NSNumber numberWithInt:index + 1]];
+        }
+        
+        if (index % 9 != 0) {
+            [neighbor addObject:[NSNumber numberWithInt:index - 1]];
+        }
+        
+        if (index + 9 < 81) {
+            [neighbor addObject:[NSNumber numberWithInt:index + 9]];
+        }
+        
+        if (index - 9 >= 0) {
+            [neighbor addObject:[NSNumber numberWithInt:index - 9]];
+        }
+        
+        [neighbors setObject:neighbor forKey:[NSNumber numberWithInt:index]];
+    }
     
     // Repeat until we get our desired number of cages
     while ([uf count] > cageNumber) {
@@ -269,22 +293,29 @@
             continue;
         }
         
-        // Get the iterator containing all the indices in the randomCageID
-        iterator = [uf getIteratorForComponent:randomCageID];
-        
-        // Find all the cageIDs around this cage, which are potentially uninonable
-        NSMutableSet* possibleNeighborCageIDs = [[NSMutableSet alloc] init];
-        for (NSNumber* cellIndex in iterator) {
-            // Find all the 4-way neighbors of this cell. Indices out of range won't be selected
-            NSMutableArray* neighbors = [Generator findFourNeighborsForCell:[cellIndex integerValue]];
-            for (NSNumber* neighborIndex in neighbors) {
-                //NSNumber* neighborCageID = [NSNumber numberWithInteger:[uf find:[neighborIndex integerValue]]];
-                NSInteger neighborCageID = [uf find:[neighborIndex integerValue]];
-                if (neighborCageID != randomCageID && [uf sizeOfComponent:neighborCageID] <= deltaSize) {
-                    [possibleNeighborCageIDs addObject:[NSNumber numberWithInteger:neighborCageID]];
-                }
+        [possibleNeighborCageIDs removeAllObjects];
+        for (NSNumber* neighbor in [neighbors objectForKey:[NSNumber numberWithInteger:randomCageID]]) {
+            if ([uf sizeOfComponent:[neighbor integerValue]] <= deltaSize) {
+                [possibleNeighborCageIDs addObject:neighbor];
             }
         }
+        
+        // Get the iterator containing all the indices in the randomCageID
+//        iterator = [uf getIteratorForComponent:randomCageID];
+        
+//        // Find all the cageIDs around this cage, which are potentially uninonable
+//        NSMutableSet* possibleNeighborCageIDs = [[NSMutableSet alloc] init];
+//        for (NSNumber* cellIndex in iterator) {
+//            // Find all the 4-way neighbors of this cell. Indices out of range won't be selected
+//            NSMutableArray* neighbors = [Generator findFourNeighborsForCell:[cellIndex integerValue]];
+//            for (NSNumber* neighborIndex in neighbors) {
+//                //NSNumber* neighborCageID = [NSNumber numberWithInteger:[uf find:[neighborIndex integerValue]]];
+//                NSInteger neighborCageID = [uf find:[neighborIndex integerValue]];
+//                if (neighborCageID != randomCageID && [uf sizeOfComponent:neighborCageID] <= deltaSize) {
+//                    [possibleNeighborCageIDs addObject:[NSNumber numberWithInteger:neighborCageID]];
+//                }
+//            }
+//        }
         
         if ([possibleNeighborCageIDs count] == 0) {
             continue;
@@ -312,6 +343,34 @@
                 // Ok to union
                 uf = test_uf;
                 sums = test_sums;
+                
+                // Adjust neighbors dictionary
+                NSNumber* postCageID = [NSNumber numberWithInteger:[test_uf find:randomCageID]];
+                NSMutableSet* preUnionSet_one = [neighbors objectForKey:neighborCageID];
+                NSMutableSet* preUnionSet_two = [neighbors objectForKey:[NSNumber numberWithInteger:randomCageID]];
+                
+                [preUnionSet_one removeObject:[NSNumber numberWithInteger:randomCageID]];
+                [preUnionSet_two removeObject:neighborCageID];
+                
+                for (NSNumber* neighbor in preUnionSet_one) {
+                    [[neighbors objectForKey:neighbor] removeObject:neighborCageID];
+                    [[neighbors objectForKey:neighbor] addObject:postCageID];
+                }
+                
+                for (NSNumber* neighbor in preUnionSet_two) {
+                    [[neighbors objectForKey:neighbor] removeObject:[NSNumber numberWithInteger:randomCageID]];
+                    [[neighbors objectForKey:neighbor] addObject:postCageID];
+                }
+                
+                [neighbors removeObjectForKey:neighborCageID];
+                [neighbors removeObjectForKey:[NSNumber numberWithInteger:randomCageID]];
+                
+                [preUnionSet_one unionSet:preUnionSet_two];
+                
+//                NSLog(@"randomCage: %d, neighborCage: %@, preUnionSet_one: %@", randomCageID, neighborCageID, preUnionSet_one);
+                
+                [neighbors setObject:preUnionSet_one forKey:[NSNumber numberWithInteger:[test_uf find:randomCageID]]];
+                
                 break;
             } else {
                 NSLog(@"Multiple solutions, discarded.");

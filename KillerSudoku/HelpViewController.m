@@ -28,7 +28,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.title = @"Game Rules";
     self.soundPlayer = [[SoundPlayer alloc] init];
     
     // Initialization
@@ -86,14 +86,45 @@
     frame.origin.y = 0;
     firstView.frame = frame;
     firstView.backgroundColor = [UIColor concreteColor];
-    [self.scrollView addSubview:firstView];
     
+    CGFloat statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
+    CGFloat navigationBarHeight = self.navigationController.navigationBar.frame.size.height;
+    CGFloat baseY = statusBarHeight + navigationBarHeight;
+    
+    UIImageView* imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sample game"]];
+    CGRect imageFrame = CGRectMake(frame.size.width * 0.1, baseY + frame.size.width * 0.1, frame.size.width * 0.8, frame.size.width * 0.8);
+    imageView.frame = imageFrame;
+    [firstView addSubview:imageView];
+    
+    UITextView* helpText = [[UITextView alloc] initWithFrame:CGRectMake(frame.size.width * 0.1, baseY + frame.size.width * 0.1 + imageFrame.size.height, frame.size.width * 0.8, 200)];
+    [helpText setTextColor:[UIColor whiteColor]];
+    helpText.backgroundColor = [UIColor clearColor];
+    helpText.editable = NO;
+    helpText.textAlignment = NSTextAlignmentJustified;
+    helpText.text = @"Normal sudoku rules still apply.\n\nFill cell with 1 - 9.\n\nNo repeat in one row, column, 3x3 box and cage.\n\nNums in a cage must add up to the given sum.";
+    
+    [firstView addSubview:helpText];
+    [self.scrollView addSubview:firstView];
     
     // 2nd view
     UIView* secondView = [[UIView alloc] init];
     frame.origin.x = CGRectGetWidth(frame) * 1;
     secondView.frame = frame;
     secondView.backgroundColor = [UIColor concreteColor];
+    
+    UIImage* playerView = [UIImage imageNamed:@"player view"];
+    UIImageView* imageView_2 = [[UIImageView alloc] initWithImage:playerView];
+    CGRect imageFrame_2 = CGRectMake(frame.size.width * 0.1, baseY + frame.size.width * 0.1, frame.size.width * 0.8, (frame.size.width * 0.8 / playerView.size.width) * playerView.size.height);
+    imageView_2.frame = imageFrame_2;
+    [secondView addSubview:imageView_2];
+    
+    helpText = [[UITextView alloc] initWithFrame:CGRectMake(frame.size.width * 0.1, baseY + frame.size.width * 0.2 + imageFrame_2.size.height, frame.size.width * 0.8, 200)];
+    [helpText setTextColor:[UIColor whiteColor]];
+    helpText.backgroundColor = [UIColor clearColor];
+    helpText.editable = NO;
+    helpText.textAlignment = NSTextAlignmentJustified;
+    helpText.text = @"Select a cell, use the number pad to fill.\n\nPress note button to switch to note mode.\n\nLeft side lists all possible sum combinations.";
+    [secondView addSubview:helpText];
     [self.scrollView addSubview:secondView];
     
     // 3rd view
@@ -102,6 +133,21 @@
     frame.origin.y = 0;
     thirdView.frame = frame;
     thirdView.backgroundColor = [UIColor concreteColor];
+    
+    UIImage* solverView = [UIImage imageNamed:@"solver view"];
+    UIImageView* imageView_3 = [[UIImageView alloc] initWithImage:solverView];
+    CGRect imageFrame_3 = CGRectMake(frame.size.width * 0.1, baseY + frame.size.width * 0.1, frame.size.width * 0.8, (frame.size.width * 0.8 / solverView.size.width) * solverView.size.height);
+    imageView_3.frame = imageFrame_3;
+    [thirdView addSubview:imageView_3];
+
+    helpText = [[UITextView alloc] initWithFrame:CGRectMake(frame.size.width * 0.1, baseY + frame.size.width * 0.2 + imageFrame_3.size.height, frame.size.width * 0.8, 200)];
+    [helpText setTextColor:[UIColor whiteColor]];
+    helpText.backgroundColor = [UIColor clearColor];
+    helpText.editable = NO;
+    helpText.textAlignment = NSTextAlignmentJustified;
+    helpText.text = @"Use the solver to solve a game you find elsewhere.\n\nSelect cells and press join to make a cage. \n\nSelect a cage and press set to set the sum. \n\nWhen you finish editing, press Solver to solve it.";
+    [thirdView addSubview:helpText];
+    
     [self.scrollView addSubview:thirdView];
 }
 
@@ -121,6 +167,20 @@
     CGFloat pageWidth = CGRectGetWidth(self.scrollView.frame);
     NSUInteger page = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
     self.pageControl.currentPage = page;
+    
+    switch (page) {
+        case 0:
+            self.title = @"Game Rules";
+            break;
+        case 1:
+            self.title = @"How to play";
+            break;
+        case 2:
+            self.title = @"Use solver";
+            break;
+        default:
+            break;
+    }
 }
 
 /*
