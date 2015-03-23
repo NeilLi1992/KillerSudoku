@@ -10,18 +10,19 @@
 #import "Combination.h"
 #import "UnionFind.h"
 
-@interface GameBoard : NSObject
+@interface GameBoard : NSObject <NSCoding>
 
 // Construct methods
 -(id)initWithConfiguration:(NSMutableDictionary*)configuration;
 -(id)initWithUF:(UnionFind*)uf andSums:(NSMutableDictionary*)sums;
+-(id)reuseWithUF:(UnionFind*)uf andSums:(NSMutableDictionary*)sums;
 -(id)initWithCells:(NSArray*)cells;
 -(id)initWithIntegerArray:(int[9][9])array;
 -(GameBoard*)copy;
 
 // Setter & Getter
 -(NSArray*)getIteratorForCages;
-
+-(NSArray*)getIteratorForCageID:(NSNumber*)index;
 -(NSNumber*)getCageIdAtRow:(NSInteger)row Column:(NSInteger)col;
 -(NSNumber*)getCageIdAtIndex:(NSNumber*)index;
 -(NSNumber*)getCageSumAtRow:(NSInteger)row Column:(NSInteger)col;
@@ -30,6 +31,7 @@
 -(NSNumber*)getNumAtRow:(NSInteger)row Column:(NSInteger)col;
 -(NSNumber*)getNumAtIndex:(NSNumber*)index;
 -(Combination*)getCombination;
+-(NSArray*)getCombsForCage:(NSNumber*)cageID;
 
 -(void)setNum:(NSNumber*)number AtRow:(NSInteger)row Column:(NSInteger)col;
 -(void)setNum:(NSNumber *)number AtIndex:(NSNumber*)index;

@@ -13,6 +13,12 @@
 
 @implementation Solver
 
+SolverViewController* caller;
+
++ (void)setCaller:(SolverViewController*)vc {
+    caller = vc;
+}
+
 + (NSArray*)solve:(GameBoard*)unsolvedGame {
     NSString* algorithm = @"AlgorithmX";
 //    NSString* algorithm = @"DfsByCell";
@@ -32,6 +38,7 @@
     startTime = [[NSDate date] timeIntervalSinceReferenceDate];
     
     if ([algorithm isEqualToString:@"AlgorithmX"]) {
+        [AlgorithmX setCaller:caller];
         possible_solutions = [AlgorithmX Solve:unsolvedGame];
     } else if ([algorithm isEqualToString:@"DfsByCell"]) {
         possible_solutions = [DfsByCell Solve:unsolvedGame];

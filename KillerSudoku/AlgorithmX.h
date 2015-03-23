@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "GameBoard.h"
-
+#import "SolverViewController.h"
 @interface AlgorithmX : NSObject
++ (void)setCaller:(SolverViewController*)vc;
 + (NSArray*)Solve:(GameBoard*)gb;
 @end

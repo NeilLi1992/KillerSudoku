@@ -24,7 +24,7 @@
 
 @implementation UnionFind
 
-#pragma mark Construct methods
+#pragma mark - Construct methods
 /*!
  *Initialize with number of elements as capacity
  *Every element starts as a single component
@@ -53,7 +53,7 @@
     return newUF;
 }
 
-#pragma mark Basic UF operations
+#pragma mark - Basic UF operations
 /*!
  *Quick union
  */
@@ -86,6 +86,21 @@
     return p;
 }
 
+-(void)restore:(NSArray*)indices {
+    // Restore indices
+    for (NSNumber* index in indices) {
+        NSInteger component = [self find:[index integerValue]];
+        
+        if (![[self.componentSizes objectAtIndex:component] isEqualToNumber:[NSNumber numberWithInteger:1]]) {
+            [self.componentSizes replaceObjectAtIndex:component withObject:[NSNumber numberWithInteger:1]];
+        }
+        
+        [self.components replaceObjectAtIndex:[index integerValue] withObject:index];
+        [self.componentSizes replaceObjectAtIndex:[index integerValue] withObject:[NSNumber numberWithInteger:1]];
+    }
+    self.componentNumber = [NSNumber numberWithInteger:[indices count] + [self.componentNumber integerValue]];
+}
+
 /*!
  *Test if p and q are connected
  */
@@ -101,7 +116,7 @@
     return [self.componentNumber integerValue];
 }
 
-#pragma mark Enhanced methods
+#pragma mark - Enhanced methods
 /*!
  *Get the size of component
  *@Returns The size of component
@@ -164,11 +179,7 @@
     return allComponents;
 }
 
--(NSMutableArray*)getComponents {
-    return self.components;
-}
-
-#pragma mark Description method
+#pragma mark - Description method
 - (NSString*)description {
     NSMutableString* str = [[NSMutableString alloc] init];
     [str appendString:@"Index FaIndex\n"];
@@ -178,6 +189,20 @@
     }
     
     return [NSString stringWithString:str];
+}
+
+#pragma mark - Delegate methods
+- (id) initWithCoder: (NSCoder*) coder {
+    self.components = [coder decodeObjectForKey:@"components"];
+    self.componentSizes = [coder decodeObjectForKey:@"componentSizes"];
+    self.componentNumber = [coder decodeObjectForKey:@"componentNumber"];
+    return self;
+}
+
+- (void) encodeWithCoder: (NSCoder*) coder {
+    [coder encodeObject:self.components forKey:@"components"];
+    [coder encodeObject:self.componentSizes forKey:@"componentSizes"];
+    [coder encodeObject:self.componentNumber forKey:@"componentNumber"];
 }
 
 @end

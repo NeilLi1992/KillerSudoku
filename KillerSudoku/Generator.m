@@ -13,7 +13,8 @@
 @implementation Generator
 
 //level: 0-easy, 1-midieum, 2-hard
-+ (GameBoard*)generate:(NSInteger)level {
+// Return an array with two objects. 1st is the unsolved GameBoard. 2nd is the solution grid array
++ (NSArray*)generate:(NSInteger)level {
     NSArray* solutionGrid = [Generator generateSolutionGrid];
     NSInteger cageNum = 0;
     NSInteger maxSize = 0;
@@ -53,10 +54,16 @@
 //        NSLog(@"%@", [solution cagesDescription]);
 //    }
     
-    return unsolvedGame;
+    if (unsolvedGame == nil) {
+        return nil;
+    } else {
+        NSArray* result = [NSArray arrayWithObjects:unsolvedGame, solutionGrid, nil];
+        return result;
+    }
 }
 
 + (NSArray*)generateSolutionGrid {
+    // Randomly pick a seed
     int seeds[3][9][9] = {{
         {5,3,4,6,7,8,9,1,2},
         {6,7,2,1,9,5,3,4,8},
@@ -91,7 +98,7 @@
     
     int seed[9][9];
     int seed_number = arc4random() % 3;
-    NSLog(@"Using seed_number %ld", seed_number);
+    NSLog(@"Using seed_number %d", seed_number);
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
             seed[i][j] = seeds[seed_number][i][j];
@@ -198,7 +205,6 @@
         }
     }
     
-    
     // Transform 6: stack exchange
     for (int i = 0; i < 3; i++) {
         int n = arc4random() % 3;
@@ -241,10 +247,42 @@
         [sums setObject:[[solutionGrid objectAtIndex:row] objectAtIndex:col] forKey:[NSNumber numberWithInt:index]];
     }
     
-    int ite1 = 0;
+    UnionFind* test_uf;
+    NSMutableDictionary* test_sums;
+    GameBoard* test_gb = [[GameBoard alloc] initWithUF:uf andSums:sums];
+    NSMutableSet* possibleNeighborCageIDs = [[NSMutableSet alloc] init];
+    
+    // Build a neighbor cage dictionary for finding neighbors of a cage faster later
+    NSMutableDictionary* neighbors = [[NSMutableDictionary alloc] initWithCapacity:81];
+    for (int index = 0; index < 81; index++) {
+        NSMutableSet* neighbor = [[NSMutableSet alloc] init];
+        
+        if ((index + 1) % 9 != 0) {
+            [neighbor addObject:[NSNumber numberWithInt:index + 1]];
+        }
+        
+        if (index % 9 != 0) {
+            [neighbor addObject:[NSNumber numberWithInt:index - 1]];
+        }
+        
+        if (index + 9 < 81) {
+            [neighbor addObject:[NSNumber numberWithInt:index + 9]];
+        }
+        
+        if (index - 9 >= 0) {
+            [neighbor addObject:[NSNumber numberWithInt:index - 9]];
+        }
+        
+        [neighbors setObject:neighbor forKey:[NSNumber numberWithInt:index]];
+    }
+    
     // Repeat until we get our desired number of cages
     while ([uf count] > cageNumber) {
-//        NSLog(@"ite1=%d", ite1++);
+        // Check if the generation thread is set to cancel
+        if ([[NSThread currentThread] isCancelled]) {
+            NSLog(@"Generator thread is cancelled!");
+            return nil;
+        }
         
         // Randomly choose a cage
         NSInteger randomCageID = [uf getRandomComponentUnderSize:maxSize];
@@ -255,62 +293,39 @@
             continue;
         }
         
-        // Get the iterator containing all the indices in the randomCageID
-        NSMutableArray* iterator = [uf getIteratorForComponent:randomCageID];
-        
-        // Find all the cageIDs around this cage, which are potentially uninonable
-        NSMutableSet* possibleNeighborCageIDs = [[NSMutableSet alloc] init];
-        for (NSNumber* cellIndex in iterator) {
-            // Find all the 4-way neighbors of this cell. Indices out of range won't be selected
-            NSMutableArray* neighbors = [Generator findFourNeighborsForCell:[cellIndex integerValue]];
-            for (NSNumber* neighborIndex in neighbors) {
-                //NSNumber* neighborCageID = [NSNumber numberWithInteger:[uf find:[neighborIndex integerValue]]];
-                NSInteger neighborCageID = [uf find:[neighborIndex integerValue]];
-                if (neighborCageID != randomCageID && [uf sizeOfComponent:neighborCageID] <= deltaSize) {
-                    [possibleNeighborCageIDs addObject:[NSNumber numberWithInteger:neighborCageID]];
-                }
+        [possibleNeighborCageIDs removeAllObjects];
+        for (NSNumber* neighbor in [neighbors objectForKey:[NSNumber numberWithInteger:randomCageID]]) {
+            if ([uf sizeOfComponent:[neighbor integerValue]] <= deltaSize) {
+                [possibleNeighborCageIDs addObject:neighbor];
             }
         }
+        
+        // Get the iterator containing all the indices in the randomCageID
+//        iterator = [uf getIteratorForComponent:randomCageID];
+        
+//        // Find all the cageIDs around this cage, which are potentially uninonable
+//        NSMutableSet* possibleNeighborCageIDs = [[NSMutableSet alloc] init];
+//        for (NSNumber* cellIndex in iterator) {
+//            // Find all the 4-way neighbors of this cell. Indices out of range won't be selected
+//            NSMutableArray* neighbors = [Generator findFourNeighborsForCell:[cellIndex integerValue]];
+//            for (NSNumber* neighborIndex in neighbors) {
+//                //NSNumber* neighborCageID = [NSNumber numberWithInteger:[uf find:[neighborIndex integerValue]]];
+//                NSInteger neighborCageID = [uf find:[neighborIndex integerValue]];
+//                if (neighborCageID != randomCageID && [uf sizeOfComponent:neighborCageID] <= deltaSize) {
+//                    [possibleNeighborCageIDs addObject:[NSNumber numberWithInteger:neighborCageID]];
+//                }
+//            }
+//        }
         
         if ([possibleNeighborCageIDs count] == 0) {
             continue;
         }
         
-        // Record all the numbers in the randomly selected cage
-        NSMutableArray* allCageNumbers = [[NSMutableArray alloc] init];
-        for (NSNumber* index in iterator) {
-            NSInteger row = [index integerValue] / 9;
-            NSInteger col = [index integerValue] % 9;
-            [allCageNumbers addObject:[[solutionGrid objectAtIndex:row] objectAtIndex:col]];
-        }
-        
-        int ite2 = 0;
-        
         // Try to find a neighbor cage which is OK to union
         for (NSNumber* neighborCageID in possibleNeighborCageIDs) {
-//            NSLog(@"ite2=%d", ite2++);
-            // Check if duplicate numbers exist
-            NSMutableArray* neighborIterator = [uf getIteratorForComponent:[neighborCageID integerValue]];
-            BOOL findDuplicate = false;
-            for (NSNumber* neighborIndex in neighborIterator) {
-                if (findDuplicate) {
-                    break;
-                }
-                NSInteger row = [neighborIndex integerValue] / 9;
-                NSInteger col = [neighborIndex integerValue] % 9;
-                if ([allCageNumbers containsObject:[[solutionGrid objectAtIndex:row] objectAtIndex:col]]) {
-                    // Find duplicate numbers
-                    findDuplicate = true;
-                }
-            }
-            if (findDuplicate) {
-                // Try next cage
-                continue;
-            }
-            
             // Check if solution is unique after uninon
-            UnionFind* test_uf = [uf copy];
-            NSMutableDictionary* test_sums = [NSMutableDictionary dictionaryWithDictionary:sums];
+            test_uf = [uf copy];
+            test_sums = [NSMutableDictionary dictionaryWithDictionary:sums];
             
             [test_uf connect:randomCageID with:[neighborCageID integerValue]];
             NSInteger sum1 = [[test_sums objectForKey:[NSNumber numberWithInteger:randomCageID]] integerValue];
@@ -320,15 +335,42 @@
             [test_sums removeObjectForKey:[NSNumber numberWithInteger:randomCageID]];
             [test_sums setObject:[NSNumber numberWithInteger:(sum1 + sum2)] forKey:[NSNumber numberWithInteger:[test_uf find:randomCageID]]];
             
-            GameBoard* test_gb = [[GameBoard alloc] initWithUF:test_uf andSums:test_sums];
+            [test_gb reuseWithUF:test_uf andSums:test_sums];
             
-//            NSLog(@"Into solver.");
             NSArray* solutions = [Solver solve:test_gb];
-//            NSLog(@"Out of solver.");
+
             if ([solutions count] == 1) {
                 // Ok to union
                 uf = test_uf;
                 sums = test_sums;
+                
+                // Adjust neighbors dictionary
+                NSNumber* postCageID = [NSNumber numberWithInteger:[test_uf find:randomCageID]];
+                NSMutableSet* preUnionSet_one = [neighbors objectForKey:neighborCageID];
+                NSMutableSet* preUnionSet_two = [neighbors objectForKey:[NSNumber numberWithInteger:randomCageID]];
+                
+                [preUnionSet_one removeObject:[NSNumber numberWithInteger:randomCageID]];
+                [preUnionSet_two removeObject:neighborCageID];
+                
+                for (NSNumber* neighbor in preUnionSet_one) {
+                    [[neighbors objectForKey:neighbor] removeObject:neighborCageID];
+                    [[neighbors objectForKey:neighbor] addObject:postCageID];
+                }
+                
+                for (NSNumber* neighbor in preUnionSet_two) {
+                    [[neighbors objectForKey:neighbor] removeObject:[NSNumber numberWithInteger:randomCageID]];
+                    [[neighbors objectForKey:neighbor] addObject:postCageID];
+                }
+                
+                [neighbors removeObjectForKey:neighborCageID];
+                [neighbors removeObjectForKey:[NSNumber numberWithInteger:randomCageID]];
+                
+                [preUnionSet_one unionSet:preUnionSet_two];
+                
+//                NSLog(@"randomCage: %d, neighborCage: %@, preUnionSet_one: %@", randomCageID, neighborCageID, preUnionSet_one);
+                
+                [neighbors setObject:preUnionSet_one forKey:[NSNumber numberWithInteger:[test_uf find:randomCageID]]];
+                
                 break;
             } else {
                 NSLog(@"Multiple solutions, discarded.");

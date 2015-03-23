@@ -8,20 +8,20 @@
 
 #import <Foundation/Foundation.h>
 
-@interface UnionFind : NSObject
+@interface UnionFind : NSObject <NSCoding>
 
 -(id)initWithCapacity:(NSInteger)capacity;
 -(UnionFind*)copy;
 
 -(void)connect:(NSInteger)p with:(NSInteger)q;
 -(NSInteger)find:(NSInteger)p;
+-(void)restore:(NSArray*)indices;
 
 -(BOOL)isConnected:(NSInteger)p with:(NSInteger)q;
 -(NSInteger)getRandomComponentUnderSize:(NSInteger)sizeLimit;
 -(NSInteger)sizeOfComponent:(NSInteger)p;
 -(NSMutableArray*)getIteratorForComponent:(NSInteger)p;
 -(NSMutableArray*)getAllComponents;
--(NSMutableArray*)getComponents;
 -(NSInteger)count;
 
 @end
